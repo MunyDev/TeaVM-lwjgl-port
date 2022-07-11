@@ -119,161 +119,293 @@ public final class GL13 {
 	private GL13() {}
 
 	public static void glActiveTexture(int texture) {
-		ctx.activeTexture(ConstantMapper.cmTexture.mapRealToWebGL(texture));
+		
 	}
 	static native void nglActiveTexture(int texture, long function_pointer);
 
 	public static void glClientActiveTexture(int texture) {
-		System.out.println("Client textures are not supported");
+		ContextCapabilities caps = GLContext.getCapabilities();
+		long function_pointer = caps.glClientActiveTexture;
+		BufferChecks.checkFunctionAddress(function_pointer);
+		StateTracker.getReferences(caps).glClientActiveTexture = texture - GL_TEXTURE0;
+		nglClientActiveTexture(texture, function_pointer);
 	}
 	static native void nglClientActiveTexture(int texture, long function_pointer);
 
 	public static void glCompressedTexImage1D(int target, int level, int internalformat, int width, int border, ByteBuffer data) {
-		System.out.println("1D textures are not supported");
+		ContextCapabilities caps = GLContext.getCapabilities();
+		long function_pointer = caps.glCompressedTexImage1D;
+		BufferChecks.checkFunctionAddress(function_pointer);
+		GLChecks.ensureUnpackPBOdisabled(caps);
+		BufferChecks.checkDirect(data);
+		nglCompressedTexImage1D(target, level, internalformat, width, border, data.remaining(), MemoryUtil.getAddress(data), function_pointer);
 	}
 	static native void nglCompressedTexImage1D(int target, int level, int internalformat, int width, int border, int data_imageSize, long data, long function_pointer);
 	public static void glCompressedTexImage1D(int target, int level, int internalformat, int width, int border, int data_imageSize, long data_buffer_offset) {
-		System.out.println("1D textures are not supported");
+		ContextCapabilities caps = GLContext.getCapabilities();
+		long function_pointer = caps.glCompressedTexImage1D;
+		BufferChecks.checkFunctionAddress(function_pointer);
+		GLChecks.ensureUnpackPBOenabled(caps);
+		nglCompressedTexImage1DBO(target, level, internalformat, width, border, data_imageSize, data_buffer_offset, function_pointer);
 	}
 	static native void nglCompressedTexImage1DBO(int target, int level, int internalformat, int width, int border, int data_imageSize, long data_buffer_offset, long function_pointer);
 
 	/** Overloads glCompressedTexImage1D. */
 	public static void glCompressedTexImage1D(int target, int level, int internalformat, int width, int border, int imageSize) {
-		System.out.println("1D Textures are not supported");
+		ContextCapabilities caps = GLContext.getCapabilities();
+		long function_pointer = caps.glCompressedTexImage1D;
+		BufferChecks.checkFunctionAddress(function_pointer);
+		GLChecks.ensureUnpackPBOdisabled(caps);
+		nglCompressedTexImage1D(target, level, internalformat, width, border, imageSize, 0L, function_pointer);
 	}
 
 	public static void glCompressedTexImage2D(int target, int level, int internalformat, int width, int height, int border, ByteBuffer data) {
-		
+		ContextCapabilities caps = GLContext.getCapabilities();
+		long function_pointer = caps.glCompressedTexImage2D;
+		BufferChecks.checkFunctionAddress(function_pointer);
+		GLChecks.ensureUnpackPBOdisabled(caps);
+		BufferChecks.checkDirect(data);
+		nglCompressedTexImage2D(target, level, internalformat, width, height, border, data.remaining(), MemoryUtil.getAddress(data), function_pointer);
 	}
 	static native void nglCompressedTexImage2D(int target, int level, int internalformat, int width, int height, int border, int data_imageSize, long data, long function_pointer);
 	public static void glCompressedTexImage2D(int target, int level, int internalformat, int width, int height, int border, int data_imageSize, long data_buffer_offset) {
-		
+		ContextCapabilities caps = GLContext.getCapabilities();
+		long function_pointer = caps.glCompressedTexImage2D;
+		BufferChecks.checkFunctionAddress(function_pointer);
+		GLChecks.ensureUnpackPBOenabled(caps);
+		nglCompressedTexImage2DBO(target, level, internalformat, width, height, border, data_imageSize, data_buffer_offset, function_pointer);
 	}
 	static native void nglCompressedTexImage2DBO(int target, int level, int internalformat, int width, int height, int border, int data_imageSize, long data_buffer_offset, long function_pointer);
 
 	/** Overloads glCompressedTexImage2D. */
 	public static void glCompressedTexImage2D(int target, int level, int internalformat, int width, int height, int border, int imageSize) {
-		
+		ContextCapabilities caps = GLContext.getCapabilities();
+		long function_pointer = caps.glCompressedTexImage2D;
+		BufferChecks.checkFunctionAddress(function_pointer);
+		GLChecks.ensureUnpackPBOdisabled(caps);
+		nglCompressedTexImage2D(target, level, internalformat, width, height, border, imageSize, 0L, function_pointer);
 	}
 
 	public static void glCompressedTexImage3D(int target, int level, int internalformat, int width, int height, int depth, int border, ByteBuffer data) {
-		
+		ContextCapabilities caps = GLContext.getCapabilities();
+		long function_pointer = caps.glCompressedTexImage3D;
+		BufferChecks.checkFunctionAddress(function_pointer);
+		GLChecks.ensureUnpackPBOdisabled(caps);
+		BufferChecks.checkDirect(data);
+		nglCompressedTexImage3D(target, level, internalformat, width, height, depth, border, data.remaining(), MemoryUtil.getAddress(data), function_pointer);
 	}
 	static native void nglCompressedTexImage3D(int target, int level, int internalformat, int width, int height, int depth, int border, int data_imageSize, long data, long function_pointer);
 	public static void glCompressedTexImage3D(int target, int level, int internalformat, int width, int height, int depth, int border, int data_imageSize, long data_buffer_offset) {
-		
+		ContextCapabilities caps = GLContext.getCapabilities();
+		long function_pointer = caps.glCompressedTexImage3D;
+		BufferChecks.checkFunctionAddress(function_pointer);
+		GLChecks.ensureUnpackPBOenabled(caps);
+		nglCompressedTexImage3DBO(target, level, internalformat, width, height, depth, border, data_imageSize, data_buffer_offset, function_pointer);
 	}
 	static native void nglCompressedTexImage3DBO(int target, int level, int internalformat, int width, int height, int depth, int border, int data_imageSize, long data_buffer_offset, long function_pointer);
 
 	/** Overloads glCompressedTexImage3D. */
 	public static void glCompressedTexImage3D(int target, int level, int internalformat, int width, int height, int depth, int border, int imageSize) {
-		
+		ContextCapabilities caps = GLContext.getCapabilities();
+		long function_pointer = caps.glCompressedTexImage3D;
+		BufferChecks.checkFunctionAddress(function_pointer);
+		GLChecks.ensureUnpackPBOdisabled(caps);
+		nglCompressedTexImage3D(target, level, internalformat, width, height, depth, border, imageSize, 0L, function_pointer);
 	}
 
 	public static void glCompressedTexSubImage1D(int target, int level, int xoffset, int width, int format, ByteBuffer data) {
-		
+		ContextCapabilities caps = GLContext.getCapabilities();
+		long function_pointer = caps.glCompressedTexSubImage1D;
+		BufferChecks.checkFunctionAddress(function_pointer);
+		GLChecks.ensureUnpackPBOdisabled(caps);
+		BufferChecks.checkDirect(data);
+		nglCompressedTexSubImage1D(target, level, xoffset, width, format, data.remaining(), MemoryUtil.getAddress(data), function_pointer);
 	}
 	static native void nglCompressedTexSubImage1D(int target, int level, int xoffset, int width, int format, int data_imageSize, long data, long function_pointer);
 	public static void glCompressedTexSubImage1D(int target, int level, int xoffset, int width, int format, int data_imageSize, long data_buffer_offset) {
-		
+		ContextCapabilities caps = GLContext.getCapabilities();
+		long function_pointer = caps.glCompressedTexSubImage1D;
+		BufferChecks.checkFunctionAddress(function_pointer);
+		GLChecks.ensureUnpackPBOenabled(caps);
+		nglCompressedTexSubImage1DBO(target, level, xoffset, width, format, data_imageSize, data_buffer_offset, function_pointer);
 	}
 	static native void nglCompressedTexSubImage1DBO(int target, int level, int xoffset, int width, int format, int data_imageSize, long data_buffer_offset, long function_pointer);
 
 	public static void glCompressedTexSubImage2D(int target, int level, int xoffset, int yoffset, int width, int height, int format, ByteBuffer data) {
-		
+		ContextCapabilities caps = GLContext.getCapabilities();
+		long function_pointer = caps.glCompressedTexSubImage2D;
+		BufferChecks.checkFunctionAddress(function_pointer);
+		GLChecks.ensureUnpackPBOdisabled(caps);
+		BufferChecks.checkDirect(data);
+		nglCompressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format, data.remaining(), MemoryUtil.getAddress(data), function_pointer);
 	}
 	static native void nglCompressedTexSubImage2D(int target, int level, int xoffset, int yoffset, int width, int height, int format, int data_imageSize, long data, long function_pointer);
 	public static void glCompressedTexSubImage2D(int target, int level, int xoffset, int yoffset, int width, int height, int format, int data_imageSize, long data_buffer_offset) {
-		
+		ContextCapabilities caps = GLContext.getCapabilities();
+		long function_pointer = caps.glCompressedTexSubImage2D;
+		BufferChecks.checkFunctionAddress(function_pointer);
+		GLChecks.ensureUnpackPBOenabled(caps);
+		nglCompressedTexSubImage2DBO(target, level, xoffset, yoffset, width, height, format, data_imageSize, data_buffer_offset, function_pointer);
 	}
 	static native void nglCompressedTexSubImage2DBO(int target, int level, int xoffset, int yoffset, int width, int height, int format, int data_imageSize, long data_buffer_offset, long function_pointer);
 
 	public static void glCompressedTexSubImage3D(int target, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, int format, ByteBuffer data) {
-		
+		ContextCapabilities caps = GLContext.getCapabilities();
+		long function_pointer = caps.glCompressedTexSubImage3D;
+		BufferChecks.checkFunctionAddress(function_pointer);
+		GLChecks.ensureUnpackPBOdisabled(caps);
+		BufferChecks.checkDirect(data);
+		nglCompressedTexSubImage3D(target, level, xoffset, yoffset, zoffset, width, height, depth, format, data.remaining(), MemoryUtil.getAddress(data), function_pointer);
 	}
 	static native void nglCompressedTexSubImage3D(int target, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, int format, int data_imageSize, long data, long function_pointer);
 	public static void glCompressedTexSubImage3D(int target, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, int format, int data_imageSize, long data_buffer_offset) {
-		
+		ContextCapabilities caps = GLContext.getCapabilities();
+		long function_pointer = caps.glCompressedTexSubImage3D;
+		BufferChecks.checkFunctionAddress(function_pointer);
+		GLChecks.ensureUnpackPBOenabled(caps);
+		nglCompressedTexSubImage3DBO(target, level, xoffset, yoffset, zoffset, width, height, depth, format, data_imageSize, data_buffer_offset, function_pointer);
 	}
 	static native void nglCompressedTexSubImage3DBO(int target, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, int format, int data_imageSize, long data_buffer_offset, long function_pointer);
 
 	public static void glGetCompressedTexImage(int target, int lod, ByteBuffer img) {
-		
+		ContextCapabilities caps = GLContext.getCapabilities();
+		long function_pointer = caps.glGetCompressedTexImage;
+		BufferChecks.checkFunctionAddress(function_pointer);
+		GLChecks.ensurePackPBOdisabled(caps);
+		BufferChecks.checkDirect(img);
+		nglGetCompressedTexImage(target, lod, MemoryUtil.getAddress(img), function_pointer);
 	}
 	public static void glGetCompressedTexImage(int target, int lod, IntBuffer img) {
-		
+		ContextCapabilities caps = GLContext.getCapabilities();
+		long function_pointer = caps.glGetCompressedTexImage;
+		BufferChecks.checkFunctionAddress(function_pointer);
+		GLChecks.ensurePackPBOdisabled(caps);
+		BufferChecks.checkDirect(img);
+		nglGetCompressedTexImage(target, lod, MemoryUtil.getAddress(img), function_pointer);
 	}
 	public static void glGetCompressedTexImage(int target, int lod, ShortBuffer img) {
-		
+		ContextCapabilities caps = GLContext.getCapabilities();
+		long function_pointer = caps.glGetCompressedTexImage;
+		BufferChecks.checkFunctionAddress(function_pointer);
+		GLChecks.ensurePackPBOdisabled(caps);
+		BufferChecks.checkDirect(img);
+		nglGetCompressedTexImage(target, lod, MemoryUtil.getAddress(img), function_pointer);
 	}
 	static native void nglGetCompressedTexImage(int target, int lod, long img, long function_pointer);
 	public static void glGetCompressedTexImage(int target, int lod, long img_buffer_offset) {
-
+		ContextCapabilities caps = GLContext.getCapabilities();
+		long function_pointer = caps.glGetCompressedTexImage;
+		BufferChecks.checkFunctionAddress(function_pointer);
+		GLChecks.ensurePackPBOenabled(caps);
+		nglGetCompressedTexImageBO(target, lod, img_buffer_offset, function_pointer);
 	}
 	static native void nglGetCompressedTexImageBO(int target, int lod, long img_buffer_offset, long function_pointer);
 
 	public static void glMultiTexCoord1f(int target, float s) {
-		
+		ContextCapabilities caps = GLContext.getCapabilities();
+		long function_pointer = caps.glMultiTexCoord1f;
+		BufferChecks.checkFunctionAddress(function_pointer);
+		nglMultiTexCoord1f(target, s, function_pointer);
 	}
 	static native void nglMultiTexCoord1f(int target, float s, long function_pointer);
 
 	public static void glMultiTexCoord1d(int target, double s) {
-		
+		ContextCapabilities caps = GLContext.getCapabilities();
+		long function_pointer = caps.glMultiTexCoord1d;
+		BufferChecks.checkFunctionAddress(function_pointer);
+		nglMultiTexCoord1d(target, s, function_pointer);
 	}
 	static native void nglMultiTexCoord1d(int target, double s, long function_pointer);
 
 	public static void glMultiTexCoord2f(int target, float s, float t) {
-	
+		ContextCapabilities caps = GLContext.getCapabilities();
+		long function_pointer = caps.glMultiTexCoord2f;
+		BufferChecks.checkFunctionAddress(function_pointer);
+		nglMultiTexCoord2f(target, s, t, function_pointer);
 	}
 	static native void nglMultiTexCoord2f(int target, float s, float t, long function_pointer);
 
 	public static void glMultiTexCoord2d(int target, double s, double t) {
-		
+		ContextCapabilities caps = GLContext.getCapabilities();
+		long function_pointer = caps.glMultiTexCoord2d;
+		BufferChecks.checkFunctionAddress(function_pointer);
+		nglMultiTexCoord2d(target, s, t, function_pointer);
 	}
 	static native void nglMultiTexCoord2d(int target, double s, double t, long function_pointer);
 
 	public static void glMultiTexCoord3f(int target, float s, float t, float r) {
-		
+		ContextCapabilities caps = GLContext.getCapabilities();
+		long function_pointer = caps.glMultiTexCoord3f;
+		BufferChecks.checkFunctionAddress(function_pointer);
+		nglMultiTexCoord3f(target, s, t, r, function_pointer);
 	}
 	static native void nglMultiTexCoord3f(int target, float s, float t, float r, long function_pointer);
 
 	public static void glMultiTexCoord3d(int target, double s, double t, double r) {
-		
+		ContextCapabilities caps = GLContext.getCapabilities();
+		long function_pointer = caps.glMultiTexCoord3d;
+		BufferChecks.checkFunctionAddress(function_pointer);
+		nglMultiTexCoord3d(target, s, t, r, function_pointer);
 	}
 	static native void nglMultiTexCoord3d(int target, double s, double t, double r, long function_pointer);
 
 	public static void glMultiTexCoord4f(int target, float s, float t, float r, float q) {
-		
+		ContextCapabilities caps = GLContext.getCapabilities();
+		long function_pointer = caps.glMultiTexCoord4f;
+		BufferChecks.checkFunctionAddress(function_pointer);
+		nglMultiTexCoord4f(target, s, t, r, q, function_pointer);
 	}
 	static native void nglMultiTexCoord4f(int target, float s, float t, float r, float q, long function_pointer);
 
 	public static void glMultiTexCoord4d(int target, double s, double t, double r, double q) {
-		
+		ContextCapabilities caps = GLContext.getCapabilities();
+		long function_pointer = caps.glMultiTexCoord4d;
+		BufferChecks.checkFunctionAddress(function_pointer);
+		nglMultiTexCoord4d(target, s, t, r, q, function_pointer);
 	}
 	static native void nglMultiTexCoord4d(int target, double s, double t, double r, double q, long function_pointer);
 
 	public static void glLoadTransposeMatrix(FloatBuffer m) {
-		
+		ContextCapabilities caps = GLContext.getCapabilities();
+		long function_pointer = caps.glLoadTransposeMatrixf;
+		BufferChecks.checkFunctionAddress(function_pointer);
+		BufferChecks.checkBuffer(m, 16);
+		nglLoadTransposeMatrixf(MemoryUtil.getAddress(m), function_pointer);
 	}
 	static native void nglLoadTransposeMatrixf(long m, long function_pointer);
 
 	public static void glLoadTransposeMatrix(DoubleBuffer m) {
-		
+		ContextCapabilities caps = GLContext.getCapabilities();
+		long function_pointer = caps.glLoadTransposeMatrixd;
+		BufferChecks.checkFunctionAddress(function_pointer);
+		BufferChecks.checkBuffer(m, 16);
+		nglLoadTransposeMatrixd(MemoryUtil.getAddress(m), function_pointer);
 	}
 	static native void nglLoadTransposeMatrixd(long m, long function_pointer);
 
 	public static void glMultTransposeMatrix(FloatBuffer m) {
-		
+		ContextCapabilities caps = GLContext.getCapabilities();
+		long function_pointer = caps.glMultTransposeMatrixf;
+		BufferChecks.checkFunctionAddress(function_pointer);
+		BufferChecks.checkBuffer(m, 16);
+		nglMultTransposeMatrixf(MemoryUtil.getAddress(m), function_pointer);
 	}
 	static native void nglMultTransposeMatrixf(long m, long function_pointer);
 
 	public static void glMultTransposeMatrix(DoubleBuffer m) {
-		
+		ContextCapabilities caps = GLContext.getCapabilities();
+		long function_pointer = caps.glMultTransposeMatrixd;
+		BufferChecks.checkFunctionAddress(function_pointer);
+		BufferChecks.checkBuffer(m, 16);
+		nglMultTransposeMatrixd(MemoryUtil.getAddress(m), function_pointer);
 	}
 	static native void nglMultTransposeMatrixd(long m, long function_pointer);
 
 	public static void glSampleCoverage(float value, boolean invert) {
-		
+		ContextCapabilities caps = GLContext.getCapabilities();
+		long function_pointer = caps.glSampleCoverage;
+		BufferChecks.checkFunctionAddress(function_pointer);
+		nglSampleCoverage(value, invert, function_pointer);
 	}
 	static native void nglSampleCoverage(float value, boolean invert, long function_pointer);
 }

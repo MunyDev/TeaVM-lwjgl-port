@@ -152,16 +152,13 @@ public class Batch {
 	
 	public void vertex2f(float x, float y) {
 		batch.put(x).put(y).put(0).put(curColor).put(curNormal).put(curTexCoord);
-		numVertices += 1;
 		
 	}
 	public void vertex3f(float x, float y, float z) {
-		numVertices += 1;
 		batch.put(x).put(y).put(z).put(curColor).put(curNormal).put(curTexCoord);
 		
 	}
 	public void vertex4f(float x, float y, float z, float w) {
-		numVertices += 1;
 		batch.put(x).put(y).put(z).put(curColor).put(curNormal).put(curTexCoord);
 		
 	}
