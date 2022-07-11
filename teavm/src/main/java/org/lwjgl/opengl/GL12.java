@@ -3,6 +3,9 @@
 package org.lwjgl.opengl;
 
 import org.lwjgl.*;
+import org.munydev.teavm.lwjgl.CurrentContext;
+import org.teavm.webgl2.WebGL2RenderingContext;
+
 import java.nio.*;
 
 /**
@@ -14,7 +17,7 @@ import java.nio.*;
  *           $Id$
  */
 public final class GL12 {
-
+	private static WebGL2RenderingContext ctx = (WebGL2RenderingContext) CurrentContext.getContext();
 	public static final int GL_TEXTURE_BINDING_3D = 0x806A,
 		GL_PACK_SKIP_IMAGES = 0x806B,
 		GL_PACK_IMAGE_HEIGHT = 0x806C,
@@ -60,12 +63,7 @@ public final class GL12 {
 	private GL12() {}
 
 	public static void glDrawRangeElements(int mode, int start, int end, ByteBuffer indices) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glDrawRangeElements;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		GLChecks.ensureElementVBOdisabled(caps);
-		BufferChecks.checkDirect(indices);
-		nglDrawRangeElements(mode, start, end, indices.remaining(), GL11.GL_UNSIGNED_BYTE, MemoryUtil.getAddress(indices), function_pointer);
+		ctx.drawRangeElements(ConstantMapper.cmRenderModes.mapRealToWebGL(mode), start, end, indices);
 	}
 	public static void glDrawRangeElements(int mode, int start, int end, IntBuffer indices) {
 		ContextCapabilities caps = GLContext.getCapabilities();
