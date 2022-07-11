@@ -12,7 +12,6 @@ import org.teavm.jso.dom.html.HTMLCanvasElement;
 import org.teavm.jso.dom.html.HTMLDocument;
 import org.teavm.jso.dom.xml.Document;
 import org.teavm.jso.webgl.WebGLRenderingContext;
-import org.teavm.webgl2.WebGL2RenderingContext;
 import org.munydev.teavm.lwjgl.CurrentContext;
 import org.teavm.jso.browser.Window;
 import org.teavm.jso.dom.events.*;
@@ -114,7 +113,6 @@ public class Mouse {
 	private static final int	BUFFER_SIZE									= 50;
 
 	private static boolean		isGrabbed;
-	public static boolean isSupposedToBeGrabbed = true;
 
 //	private static InputImplementation implementation;
 
@@ -124,8 +122,6 @@ public class Mouse {
 	private static  boolean clipMouseCoordinatesToWindow = true;
 
 	private static boolean[] buttonArray = new boolean[5];
-
-	protected static boolean isInsideWindow = true;
 	/**
 	 * Mouse cannot be constructed.
 	 */
@@ -257,16 +253,14 @@ public class Mouse {
 			@Override
 			public void handleEvent(MouseEvent evt) {
 				// TODO Auto-generated method stub
-				
+				if (isGrabbed) {
+					((WebGLRenderingContext)CurrentContext.getContext()).getCanvas().requestPointerLock();
+				}
 				buttonArray[evt.getButton()] = true;
 				eventButton = evt.getButton();
 				eventState = true;
-				if (isSupposedToBeGrabbed) {
-					((WebGLRenderingContext)CurrentContext.getContext()).getCanvas().requestPointerLock();
-				}
 				evt.preventDefault();
 				evt.stopPropagation();
-				
 			}
 			
 		});
@@ -280,7 +274,6 @@ public class Mouse {
 				eventState = false;
 				evt.preventDefault();
 				evt.stopPropagation();
-				
 			}
 			
 		});
@@ -299,28 +292,7 @@ public class Mouse {
 			}
 			
 		});
-		hce.addEventListener("mouseleave", new EventListener<WheelEvent>() {
-
-			@Override
-			public void handleEvent(WheelEvent evt) {
-				// TODO Auto-generated method stub
-				isInsideWindow = false;
-				evt.preventDefault();
-				evt.stopPropagation();
-			}
-			
-		});
-		hce.addEventListener("mouseenter", new EventListener<WheelEvent>() {
-
-			@Override
-			public void handleEvent(WheelEvent evt) {
-				// TODO Auto-generated method stub
-				isInsideWindow = true;
-				evt.preventDefault();
-				evt.stopPropagation();
-			}
-			
-		});
+		
 	}
 
 	/**
@@ -546,11 +518,9 @@ public class Mouse {
 		if (grab) {
 //			((WebGLRenderingContext)CurrentContext.getContext()).getCanvas().requestPointerLock();
 			isGrabbed = true;
-			isSupposedToBeGrabbed = true;
 		}else {
 			HTMLDocument.current().exitPointerLock();
 			isGrabbed = false;
-			isSupposedToBeGrabbed = false;
 		}
 	}
 
@@ -582,6 +552,6 @@ public class Mouse {
     public static boolean isInsideWindow() {
     	
     	
-    	return isInsideWindow;
+    	return true;
     }
 }
