@@ -3,13 +3,10 @@ package org.lwjgl.opengl;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.BiConsumer;
 
 import org.teavm.webgl2.WebGL2RenderingContext;
 
-import static org.lwjgl.opengl.RealOGLConstants.*;
 
-import sun.misc.Unsafe;
 /**
  * This is a massive class mapping real constants to webgl constants
  * @author MunyDev
@@ -576,7 +573,7 @@ public class BridgeConstants {
 		// It would take me then hours to store them in a file and loop'em in the system.
 		Class<WebGLConstants> c = WebGLConstants.class;
 		for (Field f : c.getFields()) {
-			if (f.getType().getName() == "int") {
+			if (f.getType().getName().equals("int")) {
 				try {
 					int i = (Integer)f.get(null);
 					System.out.println(f.getName());
@@ -590,6 +587,7 @@ public class BridgeConstants {
 				}
 			}
 		}
+
 		ogltowgl.put("GL_DEPTH_BUFFER_BIT","DEPTH_BUFFER_BIT");
 		ogltowgl.put("GL_STENCIL_BUFFER_BIT","STENCIL_BUFFER_BIT");
 		ogltowgl.put("GL_COLOR_BUFFER_BIT","COLOR_BUFFER_BIT");
@@ -891,21 +889,18 @@ public class BridgeConstants {
 	}
 	public static void readOverClass(Class<?> cl) {
 		for (Field f : cl.getFields()) {
-			if (f.getType().getName() == "int") {
+			if (f.getType().getName().equals("int")){
 				try {
 					int t = (int) f.get(null);
 					String s = f.getName();
 					
 					m.put(s, t);
-				} catch (IllegalArgumentException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
+				} catch (IllegalArgumentException | IllegalAccessException e)  {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
-		};
+		}
 	}
 	public static void readOverClass(Class<?> cl, Map<String, String> ogltowgl) {
 		for (Field f : cl.getFields()) {
@@ -914,5 +909,5 @@ public class BridgeConstants {
 				ogltowgl.put(s, "GL_"+ s);
 			}
 		}
-	};
+	}
 }
