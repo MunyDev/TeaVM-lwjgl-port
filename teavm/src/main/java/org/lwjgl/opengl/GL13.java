@@ -3,6 +3,7 @@
 package org.lwjgl.opengl;
 
 import org.lwjgl.*;
+import org.lwjgl.util.GLUtil;
 import org.munydev.teavm.lwjgl.CurrentContext;
 import org.teavm.jso.typedarrays.DataView;
 import org.teavm.jso.typedarrays.Uint8Array;
@@ -146,12 +147,13 @@ public final class GL13 {
 
 	public static void glCompressedTexImage2D(int target, int level, int internalformat, int width, int height, int border, ByteBuffer data) {
 		
-		ctx.compressedTexImage2D(ConstantMapper.cmTexture.mapRealToWebGL(target), level, ConstantMapper.cmTexture.mapRealToWebGL(internalformat), width, height, border, arr);
+		ctx.compressedTexImage2D(ConstantMapper.cmTexture.mapRealToWebGL(target), level, ConstantMapper.cmTexture.mapRealToWebGL(internalformat), width, height, border, GLUtil.glCreateBufferFromJava(data));
 		
 	}
 	static native void nglCompressedTexImage2D(int target, int level, int internalformat, int width, int height, int border, int data_imageSize, long data, long function_pointer);
 	public static void glCompressedTexImage2D(int target, int level, int internalformat, int width, int height, int border, int data_imageSize, long data_buffer_offset) {
-		
+//		ctx.compressedTexImage2D(ConstantMapper.cmTexture.mapRealToWebGL(target), ConstantMapper.cmTexture.mapRealToWebGL(level), ConstantMapper.cmTexture.mapRealToWebGL(internalformat), width, height, border, null);
+		System.out.println("Unsupported");
 	}
 	static native void nglCompressedTexImage2DBO(int target, int level, int internalformat, int width, int height, int border, int data_imageSize, long data_buffer_offset, long function_pointer);
 
