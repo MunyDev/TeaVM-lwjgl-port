@@ -66,48 +66,22 @@ public final class GL12 {
 		ctx.drawRangeElements(ConstantMapper.cmRenderModes.mapRealToWebGL(mode), start, end, indices);
 	}
 	public static void glDrawRangeElements(int mode, int start, int end, IntBuffer indices) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glDrawRangeElements;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		GLChecks.ensureElementVBOdisabled(caps);
-		BufferChecks.checkDirect(indices);
-		nglDrawRangeElements(mode, start, end, indices.remaining(), GL11.GL_UNSIGNED_INT, MemoryUtil.getAddress(indices), function_pointer);
+		
 	}
 	public static void glDrawRangeElements(int mode, int start, int end, ShortBuffer indices) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glDrawRangeElements;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		GLChecks.ensureElementVBOdisabled(caps);
-		BufferChecks.checkDirect(indices);
-		nglDrawRangeElements(mode, start, end, indices.remaining(), GL11.GL_UNSIGNED_SHORT, MemoryUtil.getAddress(indices), function_pointer);
+		
 	}
 	static native void nglDrawRangeElements(int mode, int start, int end, int indices_count, int type, long indices, long function_pointer);
 	public static void glDrawRangeElements(int mode, int start, int end, int indices_count, int type, long indices_buffer_offset) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glDrawRangeElements;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		GLChecks.ensureElementVBOenabled(caps);
-		nglDrawRangeElementsBO(mode, start, end, indices_count, type, indices_buffer_offset, function_pointer);
+		
 	}
 	static native void nglDrawRangeElementsBO(int mode, int start, int end, int indices_count, int type, long indices_buffer_offset, long function_pointer);
 
 	public static void glTexImage3D(int target, int level, int internalFormat, int width, int height, int depth, int border, int format, int type, ByteBuffer pixels) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glTexImage3D;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		GLChecks.ensureUnpackPBOdisabled(caps);
-		if (pixels != null)
-			BufferChecks.checkBuffer(pixels, GLChecks.calculateTexImage3DStorage(pixels, format, type, width, height, depth));
-		nglTexImage3D(target, level, internalFormat, width, height, depth, border, format, type, MemoryUtil.getAddressSafe(pixels), function_pointer);
+		
 	}
 	public static void glTexImage3D(int target, int level, int internalFormat, int width, int height, int depth, int border, int format, int type, DoubleBuffer pixels) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glTexImage3D;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		GLChecks.ensureUnpackPBOdisabled(caps);
-		if (pixels != null)
-			BufferChecks.checkBuffer(pixels, GLChecks.calculateTexImage3DStorage(pixels, format, type, width, height, depth));
-		nglTexImage3D(target, level, internalFormat, width, height, depth, border, format, type, MemoryUtil.getAddressSafe(pixels), function_pointer);
+		
 	}
 	public static void glTexImage3D(int target, int level, int internalFormat, int width, int height, int depth, int border, int format, int type, FloatBuffer pixels) {
 		ContextCapabilities caps = GLContext.getCapabilities();

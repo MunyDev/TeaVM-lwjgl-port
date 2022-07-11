@@ -4,6 +4,8 @@ package org.lwjgl.opengl;
 
 import org.lwjgl.*;
 import org.munydev.teavm.lwjgl.CurrentContext;
+import org.teavm.jso.typedarrays.DataView;
+import org.teavm.jso.typedarrays.Uint8Array;
 import org.teavm.jso.webgl.*;
 
 import java.nio.*;
@@ -143,6 +145,13 @@ public final class GL13 {
 	}
 
 	public static void glCompressedTexImage2D(int target, int level, int internalformat, int width, int height, int border, ByteBuffer data) {
+		Uint8Array arr = Uint8Array.create(data.remaining());
+		DataView dv = DataView.create(arr);
+		
+		for (int i = 0; i < arr.getLength(); i++) {
+			arr.set(i, data.get(i));
+		}
+		ctx.compressedTexImage2D(ConstantMapper.cmTexture.mapRealToWebGL(target), level, ConstantMapper.cmTexture.mapRealToWebGL(internalformat), width, height, border, arr);
 		
 	}
 	static native void nglCompressedTexImage2D(int target, int level, int internalformat, int width, int height, int border, int data_imageSize, long data, long function_pointer);

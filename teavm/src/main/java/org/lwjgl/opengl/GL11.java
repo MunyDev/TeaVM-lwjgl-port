@@ -15,10 +15,13 @@ import org.teavm.jso.webgl.WebGLShader;
 import org.teavm.jso.webgl.WebGLTexture;
 import org.teavm.webgl2.WebGL2RenderingContext;
 
+import java.nio.Buffer;
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.RealOGLConstants;
+import org.lwjgl.util.GLUtil;
 import org.teavm.jso.*;
 /**
  * This class attempts to simulate the LWJGL2/LWJGL3 GL11 class
@@ -858,7 +861,7 @@ public class GL11 {
 
     }
 	static int	glGenLists(int range){
-		
+		return 0;
     }
 	static WebGLTexture glGenTextures(){
 		return ctx.createTexture();
@@ -876,7 +879,7 @@ public class GL11 {
 		params.flip();
     }
 	static void	glGetClipPlane(int plane, java.nio.DoubleBuffer equation){
-		
+
     }
 	static double	glGetDouble(int pname){
 		return (double) ctx.getParameterf(ConstantMapper.cmGLParamsInfo.mapRealToWebGL(pname));
@@ -898,7 +901,8 @@ public class GL11 {
 		return ctx.getParameteri(ConstantMapper.cmGLParamsInfo.mapRealToWebGL(pname));
     }
 	static void	glGetInteger(int pname, java.nio.IntBuffer params){
-		params.get()
+		params.put(ctx.getParameteri(ConstantMapper.cmGLParamsInfo.mapRealToWebGL(pname)));
+		params.flip();
     }
 	static void	glGetLight(int light, int pname, java.nio.FloatBuffer params){
 
@@ -1342,19 +1346,38 @@ public class GL11 {
 
     }
 	static void	glReadPixels(int x, int y, int width, int height, int format, int type, java.nio.ByteBuffer pixels){
-		Uint8ClampedArray ua = Uint8ClampedArray.create(pixels.capacity());
 		
 		
 		
-		ctx.readPixels(x, y, width, height, WebGLRenderingContext.RGBA, WebGLRenderingContext.RGBA, ua);
 		
-		for (int i = 0; i < ua.getLength(); i++ ) {
-			pixels.put((byte) ua.get(i));
-		}
+		ctx.readPixels(x, y, width, height, WebGLRenderingContext.RGBA, WebGLRenderingContext.RGBA, GLUtil.glCreateBufferFromJava(pixels));
+		
+		
+		
 		
 		
 		
 	}
+	static Uint8Array glCreateBufferFromJava(ByteBuffer data) {
+		Uint8Array arr = Uint8Array.create(data.remaining());
+		DataView dv = DataView.create(arr);
+		
+		for (int i = 0; i < arr.getLength(); i++) {
+			dv.setUint8(i, data.get(i));
+		}
+		return arr;
+	}
+	static Uint8Array glCreateBufferFromJava(FloatBuffer data) {
+		Uint8Array arr = Uint8Array.create(data.remaining());
+		DataView dv = DataView.create(arr);
+		
+		for (int i = 0; i < arr.getLength(); i++) {
+			dv.setFloat32(i*4, data.get(i));
+		}
+		return arr;
+	}
+	
+	
 	static void	glReadPixels(int x, int y, int width, int height, int format, int type, java.nio.DoubleBuffer pixels){
 		int pixelSize = 0;
 		switch (format) {
@@ -1363,6 +1386,10 @@ public class GL11 {
 		}
 //		glReadPixels(x, y, width, height, format, type, )
     }
+	static void glConvertBufferToWebGL(FloatBuffer pixels) {
+		Uint8Array s = Uint8Array.create(pixels.remaining());
+		s.set(pixels.array());
+	}
 	static void	glReadPixels(int x, int y, int width, int height, int format, int type, java.nio.FloatBuffer pixels){
 		ctx.readPixels(x, y, width, height, format, type, pixels.);
     }
