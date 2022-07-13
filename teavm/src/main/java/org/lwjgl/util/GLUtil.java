@@ -26,6 +26,12 @@ public class GLUtil {
 //		
 //		
 //	}
+	public static int glNewBuffer
+	public static Uint8Array glNewBuffer(ByteBuffer data) {
+		Uint8Array arr = Uint8Array.create(data.remaining() * Byte.BYTES);
+		
+		return arr;
+	}
 	public static Uint8Array glCreateBufferFromJava(ByteBuffer data) {
 		Uint8Array arr = Uint8Array.create(data.remaining() * Byte.BYTES);
 		DataView dv = DataView.create(arr);

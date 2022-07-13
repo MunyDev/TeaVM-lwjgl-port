@@ -4,6 +4,7 @@ import org.munydev.teavm.lwjgl.CurrentContext;
 import org.teavm.jso.core.JSArray;
 import org.teavm.jso.core.JSBoolean;
 import org.teavm.jso.core.JSNumber;
+import org.teavm.jso.typedarrays.ArrayBuffer;
 import org.teavm.jso.typedarrays.DataView;
 import org.teavm.jso.typedarrays.Float32Array;
 import org.teavm.jso.typedarrays.Int8Array;
@@ -565,10 +566,10 @@ public class GL11 {
 	private static Batch currentBatch;
 	private static WebGLTexture[] texBatch = new WebGLTexture[4096];
 	private static WebGLShader[] s = new WebGLShader[4096];
-	static void	glAccum(int op, float value){
+	public static void	glAccum(int op, float value){
 		System.out.println("stub");
     }
-	static void	glAlphaFunc(int func, float ref){
+	public static void	glAlphaFunc(int func, float ref){
 		System.out.println("currently a stub!");
 		
 		return;
@@ -579,13 +580,13 @@ public class GL11 {
 
 		return false;
     }
-	static void	glArrayElement(int i){
+	public static void	glArrayElement(int i){
 		System.out.println("currently a stub!");
     }
-	static void	glBegin(int mode){
+	public static void	glBegin(int mode){
 		currentBatch = new Batch(mode);
     }
-	static void	glBindTexture(int target, WebGLTexture texture){
+	public static void	glBindTexture(int target, WebGLTexture texture){
 		ConstantMapper cm = new ConstantMapper(new String[] {
 				"GL_TEXTURE_1D", "GL_TEXTURE_2D", "GL_TEXTURE_3D", "GL_TEXTURE_1D_ARRAY", "GL_TEXTURE_2D_ARRAY", "GL_TEXTURE_RECTANGLE", "GL_TEXTURE_CUBE_MAP", "GL_TEXTURE_CUBE_MAP_ARRAY", "GL_TEXTURE_BUFFER", "GL_TEXTURE_2D_MULTISAMPLE", "GL_TEXTURE_2D_MULTISAMPLE_ARRAY"
 		});
@@ -594,270 +595,270 @@ public class GL11 {
 		
 		ctx.bindTexture(realTarget, texture);
     }
-	static void	glBitmap(int width, int height, float xorig, float yorig, float xmove, float ymove, java.nio.ByteBuffer bitmap){
+	public static void	glBitmap(int width, int height, float xorig, float yorig, float xmove, float ymove, java.nio.ByteBuffer bitmap){
 		System.out.println("currently a stub!");
     }
-	static void	glBitmap(int width, int height, float xorig, float yorig, float xmove, float ymove, long bitmap_buffer_offset){
+	public static void	glBitmap(int width, int height, float xorig, float yorig, float xmove, float ymove, long bitmap_buffer_offset){
 		System.out.println("currently a stub!");
     }
-	static void	glBlendFunc(int sfactor, int dfactor){
+	public static void	glBlendFunc(int sfactor, int dfactor){
 		ctx.blendFunc(ConstantMapper.cmBlendFuncEnums.mapRealToWebGL(sfactor), ConstantMapper.cmBlendFuncEnums.mapRealToWebGL(dfactor));
 		
     }
-	static void	glCallList(int list){
+	public static void	glCallList(int list){
 		System.out.println("currently a stub!");
     }
-	static void	glCallLists(java.nio.ByteBuffer lists){
+	public static void	glCallLists(java.nio.ByteBuffer lists){
 		System.out.println("currently a stub!");
     }
-	static void	glCallLists(java.nio.IntBuffer lists){
+	public static void	glCallLists(java.nio.IntBuffer lists){
 		System.out.println("currently a stub!");
     }
-	static void	glCallLists(java.nio.ShortBuffer lists){
+	public static void	glCallLists(java.nio.ShortBuffer lists){
 		System.out.println("currently a stub!");
     }
-	static void	glClear(int mask){
+	public static void	glClear(int mask){
 		ctx.clear(ConstantMapper.cmBufferBits.mapRealToWebGL(mask));
     }
-	static void	glClearAccum(float red, float green, float blue, float alpha){
+	public static void	glClearAccum(float red, float green, float blue, float alpha){
 		System.out.println("currently a stub!");
     }
-	static void	glClearColor(float red, float green, float blue, float alpha){
+	public static void	glClearColor(float red, float green, float blue, float alpha){
 		ctx.clearColor(red, green, blue, alpha);
     }
-	static void	glClearDepth(double depth){
+	public static void	glClearDepth(double depth){
 		ctx.clearDepth((float) depth);
     }
-	static void	glClearStencil(int s){
+	public static void	glClearStencil(int s){
 		ctx.clearStencil(s);
     }
-	static void	glClipPlane(int plane, java.nio.DoubleBuffer equation){
+	public static void	glClipPlane(int plane, java.nio.DoubleBuffer equation){
 		System.out.println("currently a stub!");
 		
     }
-	static void	glColor3b(byte red, byte green, byte blue){
+	public static void	glColor3b(byte red, byte green, byte blue){
 		if (currentBatch == null) {
 			System.out.println("You must use glBegin");
 		}
 		currentBatch.color3f(red, green, blue);
     }
-	static void	glColor3d(double red, double green, double blue){
+	public static void	glColor3d(double red, double green, double blue){
 		if (currentBatch == null) {
 			System.out.println("You must use glBegin");
 		}
 		currentBatch.color3f((float) red,(float) green,(float) blue);
     }
-	static void	glColor3f(float red, float green, float blue){
+	public static void	glColor3f(float red, float green, float blue){
 		if (currentBatch == null) {
 			System.out.println("You must use glBegin");
 		}
 		currentBatch.color3f(red, green, blue);
     }
-	static void	glColor3ub(byte red, byte green, byte blue){
+	public static void	glColor3ub(byte red, byte green, byte blue){
 		if (currentBatch == null) {
 			System.out.println("You must use glBegin");
 		}
 		currentBatch.color3f(red, green, blue);
     }
-	static void	glColor4b(byte red, byte green, byte blue, byte alpha){
+	public static void	glColor4b(byte red, byte green, byte blue, byte alpha){
 		if (currentBatch == null) {
 			System.out.println("You must use glBegin");
 		}
 		currentBatch.color4f(red, green, blue, alpha);
     }
-	static void	glColor4d(double red, double green, double blue, double alpha){
+	public static void	glColor4d(double red, double green, double blue, double alpha){
 		if (currentBatch == null) {
 			System.out.println("You must use glBegin");
 		}
 		currentBatch.color4f((float) red, (float) green, (float) blue, (float) alpha);
     }
-	static void	glColor4f(float red, float green, float blue, float alpha){
+	public static void	glColor4f(float red, float green, float blue, float alpha){
 		if (currentBatch == null) {
 			System.out.println("You must use glBegin");
 		}
 		currentBatch.color4f(red, green, blue, alpha);
     }
-	static void	glColor4ub(byte red, byte green, byte blue, byte alpha){
+	public static void	glColor4ub(byte red, byte green, byte blue, byte alpha){
 		currentBatch.color4f(red, green, blue, alpha);
     }
-	static void	glColorMask(boolean red, boolean green, boolean blue, boolean alpha){
+	public static void	glColorMask(boolean red, boolean green, boolean blue, boolean alpha){
 		ctx.colorMask(red, green, blue, alpha);
 		return;
     }
-	static void	glColorMaterial(int face, int mode){
+	public static void	glColorMaterial(int face, int mode){
 		return;
     }
-	static void	glColorPointer(int size, boolean unsigned, int stride, java.nio.ByteBuffer pointer){
+	public static void	glColorPointer(int size, boolean unsigned, int stride, java.nio.ByteBuffer pointer){
 		
     }
-	static void	glColorPointer(int size, int stride, java.nio.DoubleBuffer pointer){
+	public static void	glColorPointer(int size, int stride, java.nio.DoubleBuffer pointer){
 		
     }
-	static void	glColorPointer(int size, int stride, java.nio.FloatBuffer pointer){
+	public static void	glColorPointer(int size, int stride, java.nio.FloatBuffer pointer){
 		return;
     }
-	static void	glColorPointer(int size, int type, int stride, java.nio.ByteBuffer pointer){
+	public static void	glColorPointer(int size, int type, int stride, java.nio.ByteBuffer pointer){
 		
     }
 	
-	static void	glColorPointer(int size, int type, int stride, long pointer_buffer_offset){
+	public static void	glColorPointer(int size, int type, int stride, long pointer_buffer_offset){
 
     }
-	static void	glCopyPixels(int x, int y, int width, int height, int type){
+	public static void	glCopyPixels(int x, int y, int width, int height, int type){
 		
     }
-	static void	glCopyTexImage1D(int target, int level, int internalFormat, int x, int y, int width, int border){
+	public static void	glCopyTexImage1D(int target, int level, int internalFormat, int x, int y, int width, int border){
 		
     }
-	static void	glCopyTexImage2D(int target, int level, int internalFormat, int x, int y, int width, int height, int border){
+	public static void	glCopyTexImage2D(int target, int level, int internalFormat, int x, int y, int width, int height, int border){
 		ConstantMapper cm = ConstantMapper.cmTexture;
 		ctx.copyTexImage2D(cm.mapRealToWebGL(target), cm.mapRealToWebGL(level), cm.mapRealToWebGL(internalFormat), x, y, width, height, border);
     }
-	static void	glCopyTexSubImage1D(int target, int level, int xoffset, int x, int y, int width){
+	public static void	glCopyTexSubImage1D(int target, int level, int xoffset, int x, int y, int width){
 		System.out.println("unsupported operation in context");
     }
-	static void	glCopyTexSubImage2D(int target, int level, int xoffset, int yoffset, int x, int y, int width, int height){
+	public static void	glCopyTexSubImage2D(int target, int level, int xoffset, int yoffset, int x, int y, int width, int height){
 		ConstantMapper cm = ConstantMapper.cmTexture;
 		ctx.copyTexSubImage2D(cm.mapRealToWebGL(target), level, xoffset, yoffset, x, y, width, height);
 		
     }
-	static void	glCullFace(int mode){
+	public static void	glCullFace(int mode){
 		ctx.cullFace(ConstantMapper.cmCullFace.mapRealToWebGL(mode));
     }
-	static void	glDeleteLists(int list, int range){
+	public static void	glDeleteLists(int list, int range){
 		
     }
-	static void	glDeleteTextures(WebGLTexture texture){
+	public static void	glDeleteTextures(WebGLTexture texture){
 		ctx.deleteTexture(texture);
     }
-	static void	glDeleteTextures(WebGLTexture[] textures){
+	public static void	glDeleteTextures(WebGLTexture[] textures){
 		for (WebGLTexture wgl : textures) {
 			
 			ctx.deleteTexture(wgl);
 		}
     }
-	static void	glDepthFunc(int func){
+	public static void	glDepthFunc(int func){
 		
 		ctx.depthFunc(ConstantMapper.cmFunc.mapRealToWebGL(func));
 		
 		
     }
-	static void	glDepthMask(boolean flag){
+	public static void	glDepthMask(boolean flag){
 		ctx.depthMask(flag);
     }
-	static void	glDepthRange(double zNear, double zFar){
+	public static void	glDepthRange(double zNear, double zFar){
 		ctx.depthRange((float) zNear,(float) zFar);
     }
-	static void	glDisable(int cap){
+	public static void	glDisable(int cap){
 		return;
     }
-	static void	glDisableClientState(int cap){
+	public static void	glDisableClientState(int cap){
 		return;
     }
-	static void	glDrawArrays(int mode, int first, int count){
+	public static void	glDrawArrays(int mode, int first, int count){
 		
 		ctx.drawArrays(ConstantMapper.cmRenderModes.mapRealToWebGL(mode), first, count);
     }
-	static void	glDrawBuffer(int mode){
+	public static void	glDrawBuffer(int mode){
 		
     }
-	static void	glDrawElements(int mode, java.nio.ByteBuffer indices){
+	public static void	glDrawElements(int mode, java.nio.ByteBuffer indices){
 		System.out.println("unsupported");
     }
-	static void	glDrawElements(int mode, java.nio.IntBuffer indices){
+	public static void	glDrawElements(int mode, java.nio.IntBuffer indices){
 
     }
-	static void	glDrawElements(int mode, int count, int type, java.nio.ByteBuffer indices) {
+	public static void	glDrawElements(int mode, int count, int type, java.nio.ByteBuffer indices) {
 
     }
-	static void	glDrawElements(int mode, int indices_count, int type, long indices_buffer_offset){
+	public static void	glDrawElements(int mode, int indices_count, int type, long indices_buffer_offset){
 
     }
-	static void	glDrawElements(int mode, java.nio.ShortBuffer indices){
+	public static void	glDrawElements(int mode, java.nio.ShortBuffer indices){
 
     }
-	static void	glDrawPixels(int width, int height, int format, int type, java.nio.ByteBuffer pixels){
+	public static void	glDrawPixels(int width, int height, int format, int type, java.nio.ByteBuffer pixels){
 
     }
-	static void	glDrawPixels(int width, int height, int format, int type, java.nio.IntBuffer pixels){
+	public static void	glDrawPixels(int width, int height, int format, int type, java.nio.IntBuffer pixels){
 
     }
-	static void	glDrawPixels(int width, int height, int format, int type, long pixels_buffer_offset){
+	public static void	glDrawPixels(int width, int height, int format, int type, long pixels_buffer_offset){
 
     }
-	static void	glDrawPixels(int width, int height, int format, int type, java.nio.ShortBuffer pixels){
+	public static void	glDrawPixels(int width, int height, int format, int type, java.nio.ShortBuffer pixels){
 
     }
-	static void	glEdgeFlag(boolean flag){
+	public static void	glEdgeFlag(boolean flag){
 
     }
-	static void	glEdgeFlagPointer(int stride, java.nio.ByteBuffer pointer){
+	public static void	glEdgeFlagPointer(int stride, java.nio.ByteBuffer pointer){
 
     }
-	static void	glEdgeFlagPointer(int stride, long pointer_buffer_offset){
+	public static void	glEdgeFlagPointer(int stride, long pointer_buffer_offset){
 
     }
-	static void	glEnable(int cap){
-		
+	public static void	glEnable(int cap){
+		ctx.enable(ConstantMapper.cmEnableDisable.mapRealToWebGL(cap));
     }
-	static void	glEnableClientState(int cap){
-
+	public static void	glEnableClientState(int cap){
+		GL11.glEnable(ConstantMapper.cmEnableDisable.mapRealToWebGL(cap));
     }
-	static void	glEnd(){
+	public static void	glEnd(){
 		currentBatch.drawAndFinish();
     }
-	static void	glEndList(){
+	public static void	glEndList(){
+		
+    }
+	public static void	glEvalCoord1d(double u){
 
     }
-	static void	glEvalCoord1d(double u){
+	public static void	glEvalCoord1f(float u){
 
     }
-	static void	glEvalCoord1f(float u){
+	public static void	glEvalCoord2d(double u, double v){
+		
+    }
+	public static void	glEvalCoord2f(float u, float v){
 
     }
-	static void	glEvalCoord2d(double u, double v){
+	public static void	glEvalMesh1(int mode, int i1, int i2){
 
     }
-	static void	glEvalCoord2f(float u, float v){
+	public static void	glEvalMesh2(int mode, int i1, int i2, int j1, int j2){
 
     }
-	static void	glEvalMesh1(int mode, int i1, int i2){
+	public static void	glEvalPoint1(int i){
 
     }
-	static void	glEvalMesh2(int mode, int i1, int i2, int j1, int j2){
+	public static void	glEvalPoint2(int i, int j){
 
     }
-	static void	glEvalPoint1(int i){
+	public static void	glFeedbackBuffer(int type, java.nio.FloatBuffer buffer){
 
     }
-	static void	glEvalPoint2(int i, int j){
+	public static void	glFinish(){
 
     }
-	static void	glFeedbackBuffer(int type, java.nio.FloatBuffer buffer){
+	public static void	glFlush(){
 
     }
-	static void	glFinish(){
+	public static void	glFog(int pname, java.nio.FloatBuffer params){
 
     }
-	static void	glFlush(){
+	public static void	glFog(int pname, java.nio.IntBuffer params){
 
     }
-	static void	glFog(int pname, java.nio.FloatBuffer params){
+	public static void	glFogf(int pname, float param){
 
     }
-	static void	glFog(int pname, java.nio.IntBuffer params){
+	public static void	glFogi(int pname, int param){
 
     }
-	static void	glFogf(int pname, float param){
+	public static void	glFrontFace(int mode){
 
     }
-	static void	glFogi(int pname, int param){
-
-    }
-	static void	glFrontFace(int mode){
-
-    }
-	static void	glFrustum(double left, double right, double bottom, double top, double zNear, double zFar){
+	public static void	glFrustum(double left, double right, double bottom, double top, double zNear, double zFar){
 
     }
 	static int	glGenLists(int range){
@@ -866,25 +867,25 @@ public class GL11 {
 	static WebGLTexture glGenTextures(){
 		return ctx.createTexture();
     }
-	static void	glGenTextures(java.nio.IntBuffer textures){
+	public static void	glGenTextures(java.nio.IntBuffer textures){
 
     }
 	static boolean	glGetBoolean(int pname){
 		return ctx.getParameter(ConstantMapper.cmGLParamsInfo.mapRealToWebGL(pname)).<JSBoolean> cast().booleanValue();
     }
-	static void	glGetBoolean(int pname, java.nio.ByteBuffer params){
+	public static void	glGetBoolean(int pname, java.nio.ByteBuffer params){
 		boolean b = ctx.getParameter(ConstantMapper.cmGLParamsInfo.mapRealToWebGL(pname)).<JSBoolean> cast().booleanValue();
 		
 		params.putInt(b ? 1 : 0);
 		params.flip();
     }
-	static void	glGetClipPlane(int plane, java.nio.DoubleBuffer equation){
+	public static void	glGetClipPlane(int plane, java.nio.DoubleBuffer equation){
 
     }
 	static double	glGetDouble(int pname){
 		return (double) ctx.getParameterf(ConstantMapper.cmGLParamsInfo.mapRealToWebGL(pname));
     }
-	static void	glGetDouble(int pname, java.nio.DoubleBuffer params){
+	public static void	glGetDouble(int pname, java.nio.DoubleBuffer params){
 		params.put((double) ctx.getParameterf(ConstantMapper.cmGLParamsInfo.mapRealToWebGL(pname)));
 		params.flip();
     }
@@ -894,63 +895,63 @@ public class GL11 {
 	static float glGetFloat(int pname) {
 		return ctx.getParameterf(ConstantMapper.cmGLParamsInfo.mapRealToWebGL(pname));
     }
-	static void	glGetFloat(int pname, java.nio.FloatBuffer params){
+	public static void	glGetFloat(int pname, java.nio.FloatBuffer params){
 		params.put(ctx.getParameterf(ConstantMapper.cmGLParamsInfo.mapRealToWebGL(pname)));
     }
 	static int	glGetInteger(int pname){
 		return ctx.getParameteri(ConstantMapper.cmGLParamsInfo.mapRealToWebGL(pname));
     }
-	static void	glGetInteger(int pname, java.nio.IntBuffer params){
+	public static void	glGetInteger(int pname, java.nio.IntBuffer params){
 		params.put(ctx.getParameteri(ConstantMapper.cmGLParamsInfo.mapRealToWebGL(pname)));
 		params.flip();
     }
-	static void	glGetLight(int light, int pname, java.nio.FloatBuffer params){
+	public static void	glGetLight(int light, int pname, java.nio.FloatBuffer params){
 
     }
-	static void	glGetLight(int light, int pname, java.nio.IntBuffer params){
+	public static void	glGetLight(int light, int pname, java.nio.IntBuffer params){
 
     }
-	static void	glGetMap(int target, int query, java.nio.DoubleBuffer v){
+	public static void	glGetMap(int target, int query, java.nio.DoubleBuffer v){
 
     }
-	static void	glGetMap(int target, int query, java.nio.FloatBuffer v){
+	public static void	glGetMap(int target, int query, java.nio.FloatBuffer v){
 
     }
-	static void	glGetMap(int target, int query, java.nio.IntBuffer v){
+	public static void	glGetMap(int target, int query, java.nio.IntBuffer v){
 
     }
-	static void	glGetMaterial(int face, int pname, java.nio.FloatBuffer params){
+	public static void	glGetMaterial(int face, int pname, java.nio.FloatBuffer params){
 
     }
-	static void	glGetMaterial(int face, int pname, java.nio.IntBuffer params){
+	public static void	glGetMaterial(int face, int pname, java.nio.IntBuffer params){
 
     }
-	static void	glGetPixelMap(int map, java.nio.FloatBuffer values){
+	public static void	glGetPixelMap(int map, java.nio.FloatBuffer values){
 
     }
-	static void	glGetPixelMapfv(int map, long values_buffer_offset){
+	public static void	glGetPixelMapfv(int map, long values_buffer_offset){
 
     }
-	static void	glGetPixelMapu(int map, java.nio.IntBuffer values){
+	public static void	glGetPixelMapu(int map, java.nio.IntBuffer values){
 
     }
-	static void	glGetPixelMapu(int map, java.nio.ShortBuffer values){
+	public static void	glGetPixelMapu(int map, java.nio.ShortBuffer values){
 
     }
-	static void	glGetPixelMapuiv(int map, long values_buffer_offset){
+	public static void	glGetPixelMapuiv(int map, long values_buffer_offset){
 
     }
-	static void	glGetPixelMapusv(int map, long values_buffer_offset){
+	public static void	glGetPixelMapusv(int map, long values_buffer_offset){
 
     }
 	static java.nio.ByteBuffer	glGetPointer(int pname, long result_size){
 		
 		return null;
     }
-	static void	glGetPolygonStipple(java.nio.ByteBuffer mask){
+	public static void	glGetPolygonStipple(java.nio.ByteBuffer mask){
 
     }
-	static void	glGetPolygonStipple(long mask_buffer_offset){
+	public static void	glGetPolygonStipple(long mask_buffer_offset){
 
     }
 	static java.lang.String	glGetString(int name){
@@ -969,10 +970,10 @@ public class GL11 {
 			return "";
 		}
     }
-	static void	glGetTexEnv(int coord, int pname, java.nio.FloatBuffer params){
+	public static void	glGetTexEnv(int coord, int pname, java.nio.FloatBuffer params){
 		return;
     }
-	static void	glGetTexEnv(int coord, int pname, java.nio.IntBuffer params){
+	public static void	glGetTexEnv(int coord, int pname, java.nio.IntBuffer params){
 		return;
     }
 	static float glGetTexEnvf(int coord, int pname){
@@ -982,13 +983,13 @@ public class GL11 {
 	static int	glGetTexEnvi(int coord, int pname){
 		return 0;
     }
-	static void	glGetTexGen(int coord, int pname, java.nio.DoubleBuffer params){
+	public static void	glGetTexGen(int coord, int pname, java.nio.DoubleBuffer params){
 		return;
     }
-	static void	glGetTexGen(int coord, int pname, java.nio.FloatBuffer params){
+	public static void	glGetTexGen(int coord, int pname, java.nio.FloatBuffer params){
 		return;
     }
-	static void	glGetTexGen(int coord, int pname, java.nio.IntBuffer params){
+	public static void	glGetTexGen(int coord, int pname, java.nio.IntBuffer params){
 		return;
     }
 	static double	glGetTexGend(int coord, int pname){
@@ -1000,29 +1001,29 @@ public class GL11 {
 	static int	glGetTexGeni(int coord, int pname){
 		return 0;
     }
-	static void	glGetTexImage(int target, int level, int format, int type, java.nio.ByteBuffer pixels){
+	public static void	glGetTexImage(int target, int level, int format, int type, java.nio.ByteBuffer pixels){
 		return;
     }
-	static void	glGetTexImage(int target, int level, int format, int type, java.nio.DoubleBuffer pixels){
+	public static void	glGetTexImage(int target, int level, int format, int type, java.nio.DoubleBuffer pixels){
 		return;
     }
-	static void	glGetTexImage(int target, int level, int format, int type, java.nio.FloatBuffer pixels){
+	public static void	glGetTexImage(int target, int level, int format, int type, java.nio.FloatBuffer pixels){
 		return;
     }
-	static void	glGetTexImage(int target, int level, int format, int type, java.nio.IntBuffer pixels){
+	public static void	glGetTexImage(int target, int level, int format, int type, java.nio.IntBuffer pixels){
 		return;
     }
-	static void	glGetTexImage(int target, int level, int format, int type, long pixels_buffer_offset){
+	public static void	glGetTexImage(int target, int level, int format, int type, long pixels_buffer_offset){
 		return;
     }
-	static void	glGetTexImage(int target, int level, int format, int type, java.nio.ShortBuffer pixels){
+	public static void	glGetTexImage(int target, int level, int format, int type, java.nio.ShortBuffer pixels){
 		return;
     }
-	static void	glGetTexLevelParameter(int target, int level, int pname, java.nio.FloatBuffer params){
+	public static void	glGetTexLevelParameter(int target, int level, int pname, java.nio.FloatBuffer params){
 		
 		return;
     }
-	static void	glGetTexLevelParameter(int target, int level, int pname, java.nio.IntBuffer params){
+	public static void	glGetTexLevelParameter(int target, int level, int pname, java.nio.IntBuffer params){
 
     }
 	static float glGetTexLevelParameterf(int target, int level, int pname){
@@ -1031,12 +1032,12 @@ public class GL11 {
 	static int	glGetTexLevelParameteri(int target, int level, int pname){
 		return 0;
     }
-	static void	glGetTexParameter(int target, int pname, java.nio.FloatBuffer params){
+	public static void	glGetTexParameter(int target, int pname, java.nio.FloatBuffer params){
 		JSNumber s = ctx.getTexParameter(ConstantMapper.cmTexture.mapRealToWebGL(target), ConstantMapper.cmTexture.mapRealToWebGL(pname)).<JSNumber> cast();
 		params.put(s.floatValue());
 		params.flip();
     }
-	static void	glGetTexParameter(int target, int pname, java.nio.IntBuffer params){
+	public static void	glGetTexParameter(int target, int pname, java.nio.IntBuffer params){
 		JSNumber s = ctx.getTexParameter(target, pname).<JSNumber> cast();
 		params.put(s.intValue());
 		params.flip();
@@ -1052,15 +1053,15 @@ public class GL11 {
 		
 		
     }
-	static void	glHint(int target, int mode){
+	public static void	glHint(int target, int mode){
 		ctx.hint(ConstantMapper.cmHint.mapRealToWebGL(target), ConstantMapper.cmHint.mapRealToWebGL(mode));
 		
     }
-	static void	glInitNames(){
+	public static void	glInitNames(){
 		
     }
-	static void	glInterleavedArrays(int format, int stride, java.nio.ByteBuffer pointer){
-		FloatBuffer buf = pointer.asFloatBuffer();
+	public static void	glInterleavedArrays(int format, int stride, java.nio.ByteBuffer pointer){
+//		FloatBuffer buf = pointer.asFloatBuffer();
 		
 		switch (format){
 	    case GL_V2F:
@@ -1081,22 +1082,22 @@ public class GL11 {
 	    case GL_T4F_C4F_N3F_V4F:
 	}
     }
-	private static void bufferLoadInterleaved() {
+//	private public static void bufferLoadInterleaved() {
+//		
+//	}
+	public static void	glInterleavedArrays(int format, int stride, java.nio.DoubleBuffer pointer){
 		
-	}
-	static void	glInterleavedArrays(int format, int stride, java.nio.DoubleBuffer pointer){
+    }
+	public static void	glInterleavedArrays(int format, int stride, java.nio.FloatBuffer pointer){
 
     }
-	static void	glInterleavedArrays(int format, int stride, java.nio.FloatBuffer pointer){
+	public static void	glInterleavedArrays(int format, int stride, java.nio.IntBuffer pointer){
 
     }
-	static void	glInterleavedArrays(int format, int stride, java.nio.IntBuffer pointer){
+	public static void	glInterleavedArrays(int format, int stride, long pointer_buffer_offset){
 
     }
-	static void	glInterleavedArrays(int format, int stride, long pointer_buffer_offset){
-
-    }
-	static void	glInterleavedArrays(int format, int stride, java.nio.ShortBuffer pointer){
+	public static void	glInterleavedArrays(int format, int stride, java.nio.ShortBuffer pointer){
 
     }
 	static boolean	glIsEnabled(int cap){
@@ -1108,244 +1109,244 @@ public class GL11 {
 	static boolean	glIsTexture(int texture){
 		return true;
     }
-	static void	glLight(int light, int pname, java.nio.FloatBuffer params){
+	public static void	glLight(int light, int pname, java.nio.FloatBuffer params){
 		
     }
-	static void	glLight(int light, int pname, java.nio.IntBuffer params){
+	public static void	glLight(int light, int pname, java.nio.IntBuffer params){
 
     }
-	static void	glLightf(int light, int pname, float param){
-
-    }
-	static void	glLighti(int light, int pname, int param){
-
-    }
-	static void	glLightModel(int pname, java.nio.FloatBuffer params){
-
-    }
-	static void	glLightModel(int pname, java.nio.IntBuffer params){
-
-    }
-	static void	glLightModelf(int pname, float param){
-
-    }
-	static void	glLightModeli(int pname, int param){
-
-    }
-	static void	glLineStipple(int factor, short pattern){
-
-    }
-	static void	glLineWidth(float width){
-
-    }
-	static void	glListBase(int base){
-
-    }
-	static void	glLoadIdentity(){
+	public static void	glLightf(int light, int pname, float param){
 		
     }
-	static void	glLoadMatrix(java.nio.DoubleBuffer m){
+	public static void	glLighti(int light, int pname, int param){
 
     }
-	static void	glLoadMatrix(java.nio.FloatBuffer m){
+	public static void	glLightModel(int pname, java.nio.FloatBuffer params){
 
     }
-	static void	glLoadName(int name){
+	public static void	glLightModel(int pname, java.nio.IntBuffer params){
 
     }
-	static void	glLogicOp(int opcode){
+	public static void	glLightModelf(int pname, float param){
 
     }
-	static void	glMap1d(int target, double u1, double u2, int stride, int order, java.nio.DoubleBuffer points){
+	public static void	glLightModeli(int pname, int param){
 
     }
-	static void	glMap1f(int target, float u1, float u2, int stride, int order, java.nio.FloatBuffer points){
+	public static void	glLineStipple(int factor, short pattern){
 
     }
-	static void	glMap2d(int target, double u1, double u2, int ustride, int uorder, double v1, double v2, int vstride, int vorder, java.nio.DoubleBuffer points){
+	public static void	glLineWidth(float width){
 
     }
-	static void	glMap2f(int target, float u1, float u2, int ustride, int uorder, float v1, float v2, int vstride, int vorder, java.nio.FloatBuffer points){
+	public static void	glListBase(int base){
 
     }
-	static void	glMapGrid1d(int un, double u1, double u2){
+	public static void	glLoadIdentity(){
+		
+    }
+	public static void	glLoadMatrix(java.nio.DoubleBuffer m){
 
     }
-	static void	glMapGrid1f(int un, float u1, float u2){
+	public static void	glLoadMatrix(java.nio.FloatBuffer m){
 
     }
-	static void	glMapGrid2d(int un, double u1, double u2, int vn, double v1, double v2){
+	public static void	glLoadName(int name){
 
     }
-	static void	glMapGrid2f(int un, float u1, float u2, int vn, float v1, float v2){
+	public static void	glLogicOp(int opcode){
 
     }
-	static void	glMaterial(int face, int pname, java.nio.FloatBuffer params){
+	public static void	glMap1d(int target, double u1, double u2, int stride, int order, java.nio.DoubleBuffer points){
 
     }
-	static void	glMaterial(int face, int pname, java.nio.IntBuffer params){
+	public static void	glMap1f(int target, float u1, float u2, int stride, int order, java.nio.FloatBuffer points){
 
     }
-	static void	glMaterialf(int face, int pname, float param){
+	public static void	glMap2d(int target, double u1, double u2, int ustride, int uorder, double v1, double v2, int vstride, int vorder, java.nio.DoubleBuffer points){
 
     }
-	static void	glMateriali(int face, int pname, int param){
+	public static void	glMap2f(int target, float u1, float u2, int ustride, int uorder, float v1, float v2, int vstride, int vorder, java.nio.FloatBuffer points){
 
     }
-	static void	glMatrixMode(int mode){
+	public static void	glMapGrid1d(int un, double u1, double u2){
 
     }
-	static void	glMultMatrix(java.nio.DoubleBuffer m){
+	public static void	glMapGrid1f(int un, float u1, float u2){
 
     }
-	static void	glMultMatrix(java.nio.FloatBuffer m){
+	public static void	glMapGrid2d(int un, double u1, double u2, int vn, double v1, double v2){
 
     }
-	static void	glNewList(int list, int mode){
+	public static void	glMapGrid2f(int un, float u1, float u2, int vn, float v1, float v2){
 
     }
-	static void	glNormal3b(byte nx, byte ny, byte nz) {
+	public static void	glMaterial(int face, int pname, java.nio.FloatBuffer params){
 
     }
-	static void	glNormal3d(double nx, double ny, double nz){
+	public static void	glMaterial(int face, int pname, java.nio.IntBuffer params){
 
     }
-	static void	glNormal3f(float nx, float ny, float nz){
+	public static void	glMaterialf(int face, int pname, float param){
 
     }
-	static void	glNormal3i(int nx, int ny, int nz){
+	public static void	glMateriali(int face, int pname, int param){
 
     }
-	static void	glNormalPointer(int stride, java.nio.ByteBuffer pointer){
+	public static void	glMatrixMode(int mode){
 
     }
-	static void	glNormalPointer(int stride, java.nio.DoubleBuffer pointer){
+	public static void	glMultMatrix(java.nio.DoubleBuffer m){
 
     }
-	static void	glNormalPointer(int stride, java.nio.FloatBuffer pointer){
+	public static void	glMultMatrix(java.nio.FloatBuffer m){
 
     }
-	static void	glNormalPointer(int stride, java.nio.IntBuffer pointer){
+	public static void	glNewList(int list, int mode){
 
     }
-	static void	glNormalPointer(int type, int stride, java.nio.ByteBuffer pointer){
+	public static void	glNormal3b(byte nx, byte ny, byte nz) {
 
     }
-	static void	glNormalPointer(int type, int stride, long pointer_buffer_offset){
+	public static void	glNormal3d(double nx, double ny, double nz){
 
     }
-	static void	glOrtho(double left, double right, double bottom, double top, double zNear, double zFar){
+	public static void	glNormal3f(float nx, float ny, float nz){
 
     }
-	static void	glPassThrough(float token){
+	public static void	glNormal3i(int nx, int ny, int nz){
 
     }
-	static void	glPixelMap(int map, java.nio.FloatBuffer values){
+	public static void	glNormalPointer(int stride, java.nio.ByteBuffer pointer){
 
     }
-	static void	glPixelMapfv(int map, int values_mapsize, long values_buffer_offset){
+	public static void	glNormalPointer(int stride, java.nio.DoubleBuffer pointer){
 
     }
-	static void	glPixelMapu(int map, java.nio.IntBuffer values){
+	public static void	glNormalPointer(int stride, java.nio.FloatBuffer pointer){
 
     }
-	static void	glPixelMapu(int map, java.nio.ShortBuffer values){
+	public static void	glNormalPointer(int stride, java.nio.IntBuffer pointer){
 
     }
-	static void	glPixelMapuiv(int map, int values_mapsize, long values_buffer_offset){
+	public static void	glNormalPointer(int type, int stride, java.nio.ByteBuffer pointer){
 
     }
-	static void	glPixelMapusv(int map, int values_mapsize, long values_buffer_offset){
+	public static void	glNormalPointer(int type, int stride, long pointer_buffer_offset){
 
     }
-	static void	glPixelStoref(int pname, float param){
+	public static void	glOrtho(double left, double right, double bottom, double top, double zNear, double zFar){
 
     }
-	static void	glPixelStorei(int pname, int param){
+	public static void	glPassThrough(float token){
+
+    }
+	public static void	glPixelMap(int map, java.nio.FloatBuffer values){
+
+    }
+	public static void	glPixelMapfv(int map, int values_mapsize, long values_buffer_offset){
+
+    }
+	public static void	glPixelMapu(int map, java.nio.IntBuffer values){
+
+    }
+	public static void	glPixelMapu(int map, java.nio.ShortBuffer values){
+
+    }
+	public static void	glPixelMapuiv(int map, int values_mapsize, long values_buffer_offset){
+
+    }
+	public static void	glPixelMapusv(int map, int values_mapsize, long values_buffer_offset){
+
+    }
+	public static void	glPixelStoref(int pname, float param){
+
+    }
+	public static void	glPixelStorei(int pname, int param){
 	
     }
-	static void	glPixelTransferf(int pname, float param){
+	public static void	glPixelTransferf(int pname, float param){
 
     }
-	static void	glPixelTransferi(int pname, int param){
+	public static void	glPixelTransferi(int pname, int param){
 
     }
-	static void	glPixelZoom(float xfactor, float yfactor){
+	public static void	glPixelZoom(float xfactor, float yfactor){
 
     }
-	static void	glPointSize(float size){
+	public static void	glPointSize(float size){
 
     }
-	static void	glPolygonMode(int face, int mode){
+	public static void	glPolygonMode(int face, int mode){
 
     }
-	static void	glPolygonOffset(float factor, float units){
+	public static void	glPolygonOffset(float factor, float units){
 
     }
-	static void	glPolygonStipple(java.nio.ByteBuffer mask){
+	public static void	glPolygonStipple(java.nio.ByteBuffer mask){
 
     }
-	static void	glPolygonStipple(long mask_buffer_offset){
+	public static void	glPolygonStipple(long mask_buffer_offset){
 
     }
-	static void	glPopAttrib(){
+	public static void	glPopAttrib(){
 
     }
-	static void	glPopClientAttrib(){
+	public static void	glPopClientAttrib(){
 
     }
-	static void	glPopMatrix(){
+	public static void	glPopMatrix(){
 
     }
-	static void	glPopName(){
+	public static void	glPopName(){
 
     }
-	static void	glPrioritizeTextures(java.nio.IntBuffer textures, java.nio.FloatBuffer priorities){
+	public static void	glPrioritizeTextures(java.nio.IntBuffer textures, java.nio.FloatBuffer priorities){
 
     }
-	static void	glPushAttrib(int mask){
+	public static void	glPushAttrib(int mask){
+		
+    }
+	public static void	glPushClientAttrib(int mask){
 
     }
-	static void	glPushClientAttrib(int mask){
+	public static void	glPushMatrix(){
 
     }
-	static void	glPushMatrix(){
+	public static void	glPushName(int name){
 
     }
-	static void	glPushName(int name){
+	public static void	glRasterPos2d(double x, double y){
 
     }
-	static void	glRasterPos2d(double x, double y){
+	public static void	glRasterPos2f(float x, float y){
 
     }
-	static void	glRasterPos2f(float x, float y){
+	public static void	glRasterPos2i(int x, int y){
 
     }
-	static void	glRasterPos2i(int x, int y){
+	public static void	glRasterPos3d(double x, double y, double z){
 
     }
-	static void	glRasterPos3d(double x, double y, double z){
+	public static void	glRasterPos3f(float x, float y, float z){
 
     }
-	static void	glRasterPos3f(float x, float y, float z){
+	public static void	glRasterPos3i(int x, int y, int z){
 
     }
-	static void	glRasterPos3i(int x, int y, int z){
+	public static void	glRasterPos4d(double x, double y, double z, double w){
 
     }
-	static void	glRasterPos4d(double x, double y, double z, double w){
+	public static void	glRasterPos4f(float x, float y, float z, float w){
 
     }
-	static void	glRasterPos4f(float x, float y, float z, float w){
+	public static void	glRasterPos4i(int x, int y, int z, int w){
 
     }
-	static void	glRasterPos4i(int x, int y, int z, int w){
+	public static void	glReadBuffer(int mode){
 
     }
-	static void	glReadBuffer(int mode){
-
-    }
-	static void	glReadPixels(int x, int y, int width, int height, int format, int type, java.nio.ByteBuffer pixels){
+	public static void	glReadPixels(int x, int y, int width, int height, int format, int type, java.nio.ByteBuffer pixels){
 		
 		
 		
@@ -1378,7 +1379,7 @@ public class GL11 {
 	}
 	
 	
-	static void	glReadPixels(int x, int y, int width, int height, int format, int type, java.nio.DoubleBuffer pixels){
+	public static void	glReadPixels(int x, int y, int width, int height, int format, int type, java.nio.DoubleBuffer pixels){
 		int pixelSize = 0;
 		switch (format) {
 		case GL_RGBA:
@@ -1386,273 +1387,297 @@ public class GL11 {
 		}
 //		glReadPixels(x, y, width, height, format, type, )
     }
-	static void glConvertBufferToWebGL(FloatBuffer pixels) {
-		Uint8Array s = Uint8Array.create(pixels.remaining());
-		s.set(pixels.array());
-	}
-	static void	glReadPixels(int x, int y, int width, int height, int format, int type, java.nio.FloatBuffer pixels){
-		ctx.readPixels(x, y, width, height, format, type, pixels.);
-    }
-	static void	glReadPixels(int x, int y, int width, int height, int format, int type, java.nio.IntBuffer pixels){
-
-    }
-	static void	glReadPixels(int x, int y, int width, int height, int format, int type, long pixels_buffer_offset){
-
-    }
-	static void	glReadPixels(int x, int y, int width, int height, int format, int type, java.nio.ShortBuffer pixels){
-
-    }
-	static void	glRectd(double x1, double y1, double x2, double y2){
-
-    }
-	static void	glRectf(float x1, float y1, float x2, float y2){
-
-    }
-	static void	glRecti(int x1, int y1, int x2, int y2){
+	public static void glConvertBufferToWebGL(FloatBuffer pixels) {
 		
+	}
+	public static void	glReadPixels(int x, int y, int width, int height, int format, int type, java.nio.FloatBuffer pixels){
+		Uint8Array sd = GLUtil.glCreateBufferFromJava(pixels);
+		ctx.readPixels(x, y, width, height, format, WebGLRenderingContext.UNSIGNED_BYTE, sd);
+		JSArray<JSNumber> s= glGetArrayFromBuf(sd.getBuffer());
+		for (int a = 0; a < s.getLength(); a++) {
+			pixels.put(s.get(a).floatValue());
+		}
+		pixels.flip();
+    }
+	public static void	glReadPixels(int x, int y, int width, int height, int format, int type, java.nio.IntBuffer pixels){
+		Uint8Array sd = GLUtil.glCreateBufferFromJava(pixels);
+		ctx.readPixels(x, y, width, height, format, WebGLRenderingContext.UNSIGNED_BYTE, sd);
+		JSArray<JSNumber> s= glGetArrayFromBuf(sd.getBuffer());
+		for (int a = 0; a < s.getLength(); a++) {
+			pixels.put(s.get(a).intValue());
+		}
+		pixels.flip();
+    }
+	public static void	glReadPixels(int x, int y, int width, int height, int format, int type, long pixels_buffer_offset){
+		return;
+    }
+	@JSBody(script = "return Array.from(arrBuf);", params = {"arrBuf"})
+	public native static JSArray<JSNumber> glGetArrayFromBuf(ArrayBuffer buf);
+	public static void	glReadPixels(int x, int y, int width, int height, int format, int type, java.nio.ShortBuffer pixels){
+		Uint8Array sd = GLUtil.glCreateBufferFromJava(pixels);
+		ctx.readPixels(x, y, width, height, format, WebGLRenderingContext.UNSIGNED_BYTE, sd);
+		JSArray<JSNumber> s= glGetArrayFromBuf(sd.getBuffer());
+		for (int a = 0; a < s.getLength(); a++) {
+			pixels.put(s.get(a).shortValue());
+		}
+		pixels.flip();
+    }
+	public static void	glRectd(double x1, double y1, double x2, double y2){
+//		currentBatch.vertex2f((float)x1, (float)y1);
+//		currentBatch.vertex2f((float)x2, (float)y1);
+//		currentBatch.vertex2f((float)x2, (float)y2);
+//		currentBatch.vertex2f((float)x1, (float)y1);
+//		currentBatch.vertex2f((float)x2, (float)y2);
+//		currentBatch.vertex2f((float)x1, (float)y2);
+    }
+	public static void	glRectf(float x1, float y1, float x2, float y2){
+//		currentBatch.vertex2f((float)x1, (float)y1);
+    }
+	public static void	glRecti(int x1, int y1, int x2, int y2){
+//		not supported
 	}
 	static int	glRenderMode(int mode){
 		return 0;
     }
-	static void	glRotated(double angle, double x, double y, double z){
+	public static void	glRotated(double angle, double x, double y, double z){
+		
+    }
+	public static void	glRotatef(float angle, float x, float y, float z){
 
     }
-	static void	glRotatef(float angle, float x, float y, float z){
+	public static void	glScaled(double x, double y, double z){
 
     }
-	static void	glScaled(double x, double y, double z){
+	public static void	glScalef(float x, float y, float z){
 
     }
-	static void	glScalef(float x, float y, float z){
+	public static void	glScissor(int x, int y, int width, int height){
 
     }
-	static void	glScissor(int x, int y, int width, int height){
+	public static void	glSelectBuffer(java.nio.IntBuffer buffer){
 
     }
-	static void	glSelectBuffer(java.nio.IntBuffer buffer){
+	public static void	glShadeModel(int mode){
 
     }
-	static void	glShadeModel(int mode){
+	public static void	glStencilFunc(int func, int ref, int mask){
 
     }
-	static void	glStencilFunc(int func, int ref, int mask){
+	public static void	glStencilMask(int mask){
 
     }
-	static void	glStencilMask(int mask){
-
-    }
-	static void	glStencilOp(int fail, int zfail, int zpass){
+	public static void	glStencilOp(int fail, int zfail, int zpass){
 		ctx.stencilOp(ConstantMapper.cmStencilActions.mapRealToWebGL(fail), ConstantMapper.cmStencilActions.mapRealToWebGL(zfail), ConstantMapper.cmStencilActions.mapRealToWebGL(zpass));
     }
-	static void	glTexCoord1d(double s){
+	public static void	glTexCoord1d(double s){
 
     }
-	static void	glTexCoord1f(float s){
+	public static void	glTexCoord1f(float s){
 
     }
-	static void	glTexCoord2d(double s, double t){
+	public static void	glTexCoord2d(double s, double t){
 
     }
-	static void	glTexCoord2f(float s, float t){
+	public static void	glTexCoord2f(float s, float t){
 
     }
-	static void	glTexCoord3d(double s, double t, double r){
+	public static void	glTexCoord3d(double s, double t, double r){
 
     }
-	static void	glTexCoord3f(float s, float t, float r){
+	public static void	glTexCoord3f(float s, float t, float r){
 
     }
-	static void	glTexCoord4d(double s, double t, double r, double q){
+	public static void	glTexCoord4d(double s, double t, double r, double q){
 
     }
-	static void	glTexCoord4f(float s, float t, float r, float q){
+	public static void	glTexCoord4f(float s, float t, float r, float q){
 
     }
-	static void	glTexCoordPointer(int size, int stride, java.nio.DoubleBuffer pointer){
+	public static void	glTexCoordPointer(int size, int stride, java.nio.DoubleBuffer pointer){
 
     }
-	static void	glTexCoordPointer(int size, int stride, java.nio.FloatBuffer pointer){
+	public static void	glTexCoordPointer(int size, int stride, java.nio.FloatBuffer pointer){
 
     }
-	static void	glTexCoordPointer(int size, int stride, java.nio.IntBuffer pointer){
+	public static void	glTexCoordPointer(int size, int stride, java.nio.IntBuffer pointer){
 
     }
-	static void	glTexCoordPointer(int size, int type, int stride, java.nio.ByteBuffer pointer){
+	public static void	glTexCoordPointer(int size, int type, int stride, java.nio.ByteBuffer pointer){
 
     }
-	static void	glTexCoordPointer(int size, int type, int stride, long pointer_buffer_offset){
+	public static void	glTexCoordPointer(int size, int type, int stride, long pointer_buffer_offset){
 
     }
-	static void	glTexCoordPointer(int size, int stride, java.nio.ShortBuffer pointer){
+	public static void	glTexCoordPointer(int size, int stride, java.nio.ShortBuffer pointer){
 
     }
-	static void	glTexEnv(int target, int pname, java.nio.FloatBuffer params){
+	public static void	glTexEnv(int target, int pname, java.nio.FloatBuffer params){
 
     }
-	static void	glTexEnv(int target, int pname, java.nio.IntBuffer params){
+	public static void	glTexEnv(int target, int pname, java.nio.IntBuffer params){
 
     }
-	static void	glTexEnvf(int target, int pname, float param){
+	public static void	glTexEnvf(int target, int pname, float param){
 
     }
-	static void	glTexEnvi(int target, int pname, int param){
+	public static void	glTexEnvi(int target, int pname, int param){
 
     }
-	static void	glTexGen(int coord, int pname, java.nio.DoubleBuffer params){
+	public static void	glTexGen(int coord, int pname, java.nio.DoubleBuffer params){
 		
     }
-	static void	glTexGen(int coord, int pname, java.nio.FloatBuffer params){
+	public static void	glTexGen(int coord, int pname, java.nio.FloatBuffer params){
 
     }
-	static void	glTexGen(int coord, int pname, java.nio.IntBuffer params){
+	public static void	glTexGen(int coord, int pname, java.nio.IntBuffer params){
 
     }
-	static void	glTexGend(int coord, int pname, double param){
+	public static void	glTexGend(int coord, int pname, double param){
 
     }
-	static void	glTexGenf(int coord, int pname, float param){
+	public static void	glTexGenf(int coord, int pname, float param){
 
     }
-	static void	glTexGeni(int coord, int pname, int param){
+	public static void	glTexGeni(int coord, int pname, int param){
 
     }
-	static void	glTexImage1D(int target, int level, int internalformat, int width, int border, int format, int type, java.nio.ByteBuffer pixels){
+	public static void	glTexImage1D(int target, int level, int internalformat, int width, int border, int format, int type, java.nio.ByteBuffer pixels){
 
     }
-	static void	glTexImage1D(int target, int level, int internalformat, int width, int border, int format, int type, java.nio.DoubleBuffer pixels){
+	public static void	glTexImage1D(int target, int level, int internalformat, int width, int border, int format, int type, java.nio.DoubleBuffer pixels){
 
     }
-	static void	glTexImage1D(int target, int level, int internalformat, int width, int border, int format, int type, java.nio.FloatBuffer pixels){
+	public static void	glTexImage1D(int target, int level, int internalformat, int width, int border, int format, int type, java.nio.FloatBuffer pixels){
 
     }
-	static void	glTexImage1D(int target, int level, int internalformat, int width, int border, int format, int type, java.nio.IntBuffer pixels){
+	public static void	glTexImage1D(int target, int level, int internalformat, int width, int border, int format, int type, java.nio.IntBuffer pixels){
 
     }
-	static void	glTexImage1D(int target, int level, int internalformat, int width, int border, int format, int type, long pixels_buffer_offset){
+	public static void	glTexImage1D(int target, int level, int internalformat, int width, int border, int format, int type, long pixels_buffer_offset){
 
     }
-	static void	glTexImage1D(int target, int level, int internalformat, int width, int border, int format, int type, java.nio.ShortBuffer pixels){
+	public static void	glTexImage1D(int target, int level, int internalformat, int width, int border, int format, int type, java.nio.ShortBuffer pixels){
 
     }
-	static void	glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, java.nio.ByteBuffer pixels){
+	public static void	glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, java.nio.ByteBuffer pixels){
 
     }
-	static void	glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, java.nio.DoubleBuffer pixels){
+	public static void	glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, java.nio.DoubleBuffer pixels){
 
     }
-	static void	glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, java.nio.FloatBuffer pixels){
+	public static void	glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, java.nio.FloatBuffer pixels){
 
     }
-	static void	glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, java.nio.IntBuffer pixels){
+	public static void	glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, java.nio.IntBuffer pixels){
 
     }
-	static void	glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, long pixels_buffer_offset){
+	public static void	glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, long pixels_buffer_offset){
 
     }
-	static void	glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, java.nio.ShortBuffer pixels){
+	public static void	glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, java.nio.ShortBuffer pixels){
 
     }
-	static void	glTexParameter(int target, int pname, java.nio.FloatBuffer param){
+	public static void	glTexParameter(int target, int pname, java.nio.FloatBuffer param){
 
     }
-	static void	glTexParameter(int target, int pname, java.nio.IntBuffer param){
+	public static void	glTexParameter(int target, int pname, java.nio.IntBuffer param){
 
     }
-	static void	glTexParameterf(int target, int pname, float param){
+	public static void	glTexParameterf(int target, int pname, float param){
 
     }
-	static void	glTexParameteri(int target, int pname, int param){
+	public static void	glTexParameteri(int target, int pname, int param){
 
     }
-	static void	glTexSubImage1D(int target, int level, int xoffset, int width, int format, int type, java.nio.ByteBuffer pixels){
+	public static void	glTexSubImage1D(int target, int level, int xoffset, int width, int format, int type, java.nio.ByteBuffer pixels){
 
     }
-	static void	glTexSubImage1D(int target, int level, int xoffset, int width, int format, int type, java.nio.DoubleBuffer pixels){
+	public static void	glTexSubImage1D(int target, int level, int xoffset, int width, int format, int type, java.nio.DoubleBuffer pixels){
 
     }
-	static void	glTexSubImage1D(int target, int level, int xoffset, int width, int format, int type, java.nio.FloatBuffer pixels){
+	public static void	glTexSubImage1D(int target, int level, int xoffset, int width, int format, int type, java.nio.FloatBuffer pixels){
 
     }
-	static void	glTexSubImage1D(int target, int level, int xoffset, int width, int format, int type, java.nio.IntBuffer pixels){
+	public static void	glTexSubImage1D(int target, int level, int xoffset, int width, int format, int type, java.nio.IntBuffer pixels){
 
     }
-	static void	glTexSubImage1D(int target, int level, int xoffset, int width, int format, int type, long pixels_buffer_offset){
+	public static void	glTexSubImage1D(int target, int level, int xoffset, int width, int format, int type, long pixels_buffer_offset){
 
     }
-	static void	glTexSubImage1D(int target, int level, int xoffset, int width, int format, int type, java.nio.ShortBuffer pixels){
+	public static void	glTexSubImage1D(int target, int level, int xoffset, int width, int format, int type, java.nio.ShortBuffer pixels){
 
     }
-	static void	glTexSubImage2D(int target, int level, int xoffset, int yoffset, int width, int height, int format, int type, java.nio.ByteBuffer pixels){
+	public static void	glTexSubImage2D(int target, int level, int xoffset, int yoffset, int width, int height, int format, int type, java.nio.ByteBuffer pixels){
 
     }
-	static void	glTexSubImage2D(int target, int level, int xoffset, int yoffset, int width, int height, int format, int type, java.nio.DoubleBuffer pixels){
+	public static void	glTexSubImage2D(int target, int level, int xoffset, int yoffset, int width, int height, int format, int type, java.nio.DoubleBuffer pixels){
 
     }
-	static void	glTexSubImage2D(int target, int level, int xoffset, int yoffset, int width, int height, int format, int type, java.nio.FloatBuffer pixels){
+	public static void	glTexSubImage2D(int target, int level, int xoffset, int yoffset, int width, int height, int format, int type, java.nio.FloatBuffer pixels){
 
     }
-	static void	glTexSubImage2D(int target, int level, int xoffset, int yoffset, int width, int height, int format, int type, java.nio.IntBuffer pixels){
+	public static void	glTexSubImage2D(int target, int level, int xoffset, int yoffset, int width, int height, int format, int type, java.nio.IntBuffer pixels){
 		
     }
-	static void	glTexSubImage2D(int target, int level, int xoffset, int yoffset, int width, int height, int format, int type, long pixels_buffer_offset){
+	public static void	glTexSubImage2D(int target, int level, int xoffset, int yoffset, int width, int height, int format, int type, long pixels_buffer_offset){
 
     }
-	static void	glTexSubImage2D(int target, int level, int xoffset, int yoffset, int width, int height, int format, int type, java.nio.ShortBuffer pixels){
+	public static void	glTexSubImage2D(int target, int level, int xoffset, int yoffset, int width, int height, int format, int type, java.nio.ShortBuffer pixels){
 
     }
-	static void	glTranslated(double x, double y, double z){
+	public static void	glTranslated(double x, double y, double z){
 
     }
-	static void	glTranslatef(float x, float y, float z){
+	public static void	glTranslatef(float x, float y, float z){
 
     }
-	static void	glVertex2d(double x, double y){
+	public static void	glVertex2d(double x, double y){
 
     }
-	static void	glVertex2f(float x, float y){
+	public static void	glVertex2f(float x, float y){
 
     }
-	static void	glVertex2i(int x, int y){
+	public static void	glVertex2i(int x, int y){
 
     }
-	static void	glVertex3d(double x, double y, double z){
+	public static void	glVertex3d(double x, double y, double z){
 
     }
-	static void	glVertex3f(float x, float y, float z){
+	public static void	glVertex3f(float x, float y, float z){
 
     }
-	static void	glVertex3i(int x, int y, int z){
+	public static void	glVertex3i(int x, int y, int z){
 
     }
-	static void	glVertex4d(double x, double y, double z, double w){
+	public static void	glVertex4d(double x, double y, double z, double w){
 
     }
-	static void	glVertex4f(float x, float y, float z, float w){
+	public static void	glVertex4f(float x, float y, float z, float w){
 
     }
-	static void	glVertex4i(int x, int y, int z, int w){
+	public static void	glVertex4i(int x, int y, int z, int w){
 
     }
-	static void	glVertexPointer(int size, int stride, java.nio.DoubleBuffer pointer){
+	public static void	glVertexPointer(int size, int stride, java.nio.DoubleBuffer pointer){
 
     }
-	static void	glVertexPointer(int size, int stride, java.nio.FloatBuffer pointer){
+	public static void	glVertexPointer(int size, int stride, java.nio.FloatBuffer pointer){
 
     }
-	static void	glVertexPointer(int size, int stride, java.nio.IntBuffer pointer){
+	public static void	glVertexPointer(int size, int stride, java.nio.IntBuffer pointer){
 
     }
-	static void	glVertexPointer(int size, int type, int stride, java.nio.ByteBuffer pointer){
+	public static void	glVertexPointer(int size, int type, int stride, java.nio.ByteBuffer pointer){
 
     }
 	
-	static void	glVertexPointer(int size, int type, int stride, long pointer_buffer_offset){
+	public static void	glVertexPointer(int size, int type, int stride, long pointer_buffer_offset){
 
     }
-	static void	glVertexPointer(int size, int stride, java.nio.ShortBuffer pointer){
+	public static void	glVertexPointer(int size, int stride, java.nio.ShortBuffer pointer){
 
     }
-	static void	glViewport(int x, int y, int width, int height){
+	public static void	glViewport(int x, int y, int width, int height){
 
     }
 }
