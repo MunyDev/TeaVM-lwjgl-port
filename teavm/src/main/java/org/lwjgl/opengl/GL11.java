@@ -862,6 +862,7 @@ public class GL11 {
 
     }
 	static int	glGenLists(int range){
+		
 		return 0;
     }
 	static WebGLTexture glGenTextures(){
