@@ -26,7 +26,9 @@ public class GLUtil {
 //		
 //		
 //	}
-	public static int glNewBuffer
+	public static int glGenLists() {
+		
+	}
 	public static Uint8Array glNewBuffer(ByteBuffer data) {
 		Uint8Array arr = Uint8Array.create(data.remaining() * Byte.BYTES);
 		

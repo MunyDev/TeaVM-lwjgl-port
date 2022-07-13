@@ -15,5 +15,5 @@ public class GLObjectBuffers {
 	public static WebGLProgram[] programs = new WebGLProgram[DEFAULT_SIZE];
 	public static WebGLBuffer[] buffers = new WebGLBuffer[DEFAULT_SIZE];
 	
-	
+	public static int[] lists = new int[DEFAULT_SIZE];
 }
