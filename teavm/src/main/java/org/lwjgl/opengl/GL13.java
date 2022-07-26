@@ -4,7 +4,8 @@ package org.lwjgl.opengl;
 
 import org.lwjgl.util.GLUtil;
 import org.munydev.teavm.lwjgl.CurrentContext;
-import org.teavm.jso.webgl.*;
+import org.teavm.jso.typedarrays.Uint8Array;
+import org.teavm.webgl2.WebGL2RenderingContext;
 
 import java.nio.*;
 
@@ -114,7 +115,7 @@ public final class GL13 {
 		GL_DOT3_RGB = 0x86AE,
 		GL_DOT3_RGBA = 0x86AF,
 		GL_CLAMP_TO_BORDER = 0x812D;
-	private static WebGLRenderingContext ctx = (WebGLRenderingContext) CurrentContext.getContext();
+	private static WebGL2RenderingContext ctx = (WebGL2RenderingContext) CurrentContext.getContext();
 	private GL13() {}
 
 	public static void glActiveTexture(int texture) {
@@ -143,7 +144,7 @@ public final class GL13 {
 
 	public static void glCompressedTexImage2D(int target, int level, int internalformat, int width, int height, int border, ByteBuffer data) {
 		
-		ctx.compressedTexImage2D(ConstantMapper.cmTexture.mapRealToWebGL(target), level, ConstantMapper.cmTexture.mapRealToWebGL(internalformat), width, height, border, GLUtil.glCreateBufferFromJava(data));
+		ctx.compressedTexImage2D(target, level, internalformat, width, height, border, Uint8Array.create(GLUtil.glCreateBufferFromJava(data)));
 		
 	}
 	static native void nglCompressedTexImage2D(int target, int level, int internalformat, int width, int height, int border, int data_imageSize, long data, long function_pointer);
@@ -156,10 +157,11 @@ public final class GL13 {
 	/** Overloads glCompressedTexImage2D. */
 	public static void glCompressedTexImage2D(int target, int level, int internalformat, int width, int height, int border, int imageSize) {
 //		ctx.compressedTexImage2D(ConstantMapper.cmTexture.mapRealToWebGL(target), ConstantMapper.cmTexture.mapRealToWebGL(level), ConstantMapper.cmTexture.mapRealToWebGL(internalformat), width, height, border, GLUtil.glCreateBufferFromJava(data));
+	
 	}
 
 	public static void glCompressedTexImage3D(int target, int level, int internalformat, int width, int height, int depth, int border, ByteBuffer data) {
-		ctx.compressedTexImage2D(ConstantMapper.cmTexture.mapRealToWebGL(target), ConstantMapper.cmTexture.mapRealToWebGL(level), ConstantMapper.cmTexture.mapRealToWebGL(internalformat), width, height, border, GLUtil.glCreateBufferFromJava(data));
+//		ctx.compressedTexImage2D(ConstantMapper.cmTexture.mapRealToWebGL(target), ConstantMapper.cmTexture.mapRealToWebGL(level), ConstantMapper.cmTexture.mapRealToWebGL(internalformat), width, height, border, GLUtil.glCreateBufferFromJava(data));
 	}
 	static native void nglCompressedTexImage3D(int target, int level, int internalformat, int width, int height, int depth, int border, int data_imageSize, long data, long function_pointer);
 	public static void glCompressedTexImage3D(int target, int level, int internalformat, int width, int height, int depth, int border, int data_imageSize, long data_buffer_offset) {
@@ -182,11 +184,12 @@ public final class GL13 {
 	static native void nglCompressedTexSubImage1DBO(int target, int level, int xoffset, int width, int format, int data_imageSize, long data_buffer_offset, long function_pointer);
 
 	public static void glCompressedTexSubImage2D(int target, int level, int xoffset, int yoffset, int width, int height, int format, ByteBuffer data) {
-		ctx.compressedTexSubImage2D(ConstantMapper.cmTexture.mapRealToWebGL(target), level, xoffset, yoffset, width, height, ConstantMapper.cmTexture.mapRealToWebGL(level), GLUtil.glCreateBufferFromJava(data));
+		ctx.compressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format, Uint8Array.create(GLUtil.glCreateBufferFromJava(data)));
 	}
 	static native void nglCompressedTexSubImage2D(int target, int level, int xoffset, int yoffset, int width, int height, int format, int data_imageSize, long data, long function_pointer);
 	public static void glCompressedTexSubImage2D(int target, int level, int xoffset, int yoffset, int width, int height, int format, int data_imageSize, long data_buffer_offset) {
 //		ctx.compressedTexSubImage2D(ConstantMapper.cmTexture.mapRealToWebGL(target), level, ConstantMapper.cmTexture.mapRealToWebGL(internalformat), width, height, border, GLUtil.glCreateBufferFromJava(data));
+		
 	}
 	static native void nglCompressedTexSubImage2DBO(int target, int level, int xoffset, int yoffset, int width, int height, int format, int data_imageSize, long data_buffer_offset, long function_pointer);
 

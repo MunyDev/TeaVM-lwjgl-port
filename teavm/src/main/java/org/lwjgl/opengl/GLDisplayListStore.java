@@ -1,7 +1,6 @@
 package org.lwjgl.opengl;
 
 import org.lwjgl.opengl.lists.GLRenderingInstruction;
-import org.teavm.jso.typedarrays.Uint8Array;
 
 /** Sadly the class is a store for each GL Display list and therefore it needs to be non-static */
 public class GLDisplayListStore {
@@ -14,7 +13,7 @@ public class GLDisplayListStore {
 		
 	}
 	
-	public int storeNewInstruction(String riName, Uint8Array data, int type, int numArgs) {
+	public int storeNewInstruction(String riName, Object[] data, int type, int numArgs) {
 		int curIdx = pos;
 		s[curIdx] = new GLRenderingInstruction(riName, data,  type,  numArgs);
 		pos++;
@@ -27,4 +26,5 @@ public class GLDisplayListStore {
 		return curIdx;
 		
 	}
+	
 }

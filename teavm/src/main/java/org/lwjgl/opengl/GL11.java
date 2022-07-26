@@ -4,24 +4,17 @@ import org.munydev.teavm.lwjgl.CurrentContext;
 import org.teavm.jso.core.JSArray;
 import org.teavm.jso.core.JSBoolean;
 import org.teavm.jso.core.JSNumber;
-import org.teavm.jso.typedarrays.ArrayBuffer;
-import org.teavm.jso.typedarrays.DataView;
-import org.teavm.jso.typedarrays.Float32Array;
-import org.teavm.jso.typedarrays.Int8Array;
-import org.teavm.jso.typedarrays.Uint8Array;
-import org.teavm.jso.typedarrays.Uint8ClampedArray;
-import org.teavm.jso.webgl.WebGLFramebuffer;
+import org.teavm.jso.typedarrays.*;
 import org.teavm.jso.webgl.WebGLRenderingContext;
 import org.teavm.jso.webgl.WebGLShader;
 import org.teavm.jso.webgl.WebGLTexture;
 import org.teavm.webgl2.WebGL2RenderingContext;
 
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
-import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.RealOGLConstants;
+import org.joml.Matrix4d;
+import org.joml.Matrix4f;
 import org.lwjgl.util.GLUtil;
 import org.teavm.jso.*;
 /**
@@ -564,8 +557,8 @@ public class GL11 {
 			GL_TEXTURE_COMPONENTS = 0x1003;
 	public static WebGL2RenderingContext ctx = (WebGL2RenderingContext) CurrentContext.getContext();
 	private static Batch currentBatch;
-	private static WebGLTexture[] texBatch = new WebGLTexture[4096];
-	private static WebGLShader[] s = new WebGLShader[4096];
+//	private static WebGLTexture[] texBatch = new WebGLTexture[4096];
+//	private static WebGLShader[] s = new WebGLShader[4096];
 	public static void	glAccum(int op, float value){
 		System.out.println("stub");
     }
@@ -587,13 +580,13 @@ public class GL11 {
 		currentBatch = new Batch(mode);
     }
 	public static void	glBindTexture(int target, WebGLTexture texture){
-		ConstantMapper cm = new ConstantMapper(new String[] {
-				"GL_TEXTURE_1D", "GL_TEXTURE_2D", "GL_TEXTURE_3D", "GL_TEXTURE_1D_ARRAY", "GL_TEXTURE_2D_ARRAY", "GL_TEXTURE_RECTANGLE", "GL_TEXTURE_CUBE_MAP", "GL_TEXTURE_CUBE_MAP_ARRAY", "GL_TEXTURE_BUFFER", "GL_TEXTURE_2D_MULTISAMPLE", "GL_TEXTURE_2D_MULTISAMPLE_ARRAY"
-		});
+//		ConstantMapper cm = new ConstantMapper(new String[] {
+//				"GL_TEXTURE_1D", "GL_TEXTURE_2D", "GL_TEXTURE_3D", "GL_TEXTURE_1D_ARRAY", "GL_TEXTURE_2D_ARRAY", "GL_TEXTURE_RECTANGLE", "GL_TEXTURE_CUBE_MAP", "GL_TEXTURE_CUBE_MAP_ARRAY", "GL_TEXTURE_BUFFER", "GL_TEXTURE_2D_MULTISAMPLE", "GL_TEXTURE_2D_MULTISAMPLE_ARRAY"
+//		});
 		
-		int realTarget= cm.mapRealToWebGL(target);
 		
-		ctx.bindTexture(realTarget, texture);
+		
+		ctx.bindTexture(target, texture);
     }
 	public static void	glBitmap(int width, int height, float xorig, float yorig, float xmove, float ymove, java.nio.ByteBuffer bitmap){
 		System.out.println("currently a stub!");
@@ -602,7 +595,7 @@ public class GL11 {
 		System.out.println("currently a stub!");
     }
 	public static void	glBlendFunc(int sfactor, int dfactor){
-		ctx.blendFunc(ConstantMapper.cmBlendFuncEnums.mapRealToWebGL(sfactor), ConstantMapper.cmBlendFuncEnums.mapRealToWebGL(dfactor));
+		ctx.blendFunc(sfactor, dfactor);
 		
     }
 	public static void	glCallList(int list){
@@ -618,7 +611,7 @@ public class GL11 {
 		System.out.println("currently a stub!");
     }
 	public static void	glClear(int mask){
-		ctx.clear(ConstantMapper.cmBufferBits.mapRealToWebGL(mask));
+		ctx.clear(mask);
     }
 	public static void	glClearAccum(float red, float green, float blue, float alpha){
 		System.out.println("currently a stub!");
@@ -633,7 +626,8 @@ public class GL11 {
 		ctx.clearStencil(s);
     }
 	public static void	glClipPlane(int plane, java.nio.DoubleBuffer equation){
-		System.out.println("currently a stub!");
+//		System.out.println("currently a stub!");
+		
 		
     }
 	public static void	glColor3b(byte red, byte green, byte blue){
@@ -686,6 +680,7 @@ public class GL11 {
 		return;
     }
 	public static void	glColorMaterial(int face, int mode){
+		
 		return;
     }
 	public static void	glColorPointer(int size, boolean unsigned, int stride, java.nio.ByteBuffer pointer){
@@ -711,19 +706,18 @@ public class GL11 {
 		
     }
 	public static void	glCopyTexImage2D(int target, int level, int internalFormat, int x, int y, int width, int height, int border){
-		ConstantMapper cm = ConstantMapper.cmTexture;
-		ctx.copyTexImage2D(cm.mapRealToWebGL(target), cm.mapRealToWebGL(level), cm.mapRealToWebGL(internalFormat), x, y, width, height, border);
+//		ConstantMapper cm = ConstantMapper.cmTexture;
+		ctx.copyTexImage2D(target, level, internalFormat, x, y, width, height, border);
     }
 	public static void	glCopyTexSubImage1D(int target, int level, int xoffset, int x, int y, int width){
 		System.out.println("unsupported operation in context");
     }
 	public static void	glCopyTexSubImage2D(int target, int level, int xoffset, int yoffset, int x, int y, int width, int height){
-		ConstantMapper cm = ConstantMapper.cmTexture;
-		ctx.copyTexSubImage2D(cm.mapRealToWebGL(target), level, xoffset, yoffset, x, y, width, height);
+		ctx.copyTexSubImage2D(target, level, xoffset, yoffset, x, y, width, height);
 		
     }
 	public static void	glCullFace(int mode){
-		ctx.cullFace(ConstantMapper.cmCullFace.mapRealToWebGL(mode));
+		ctx.cullFace(mode);
     }
 	public static void	glDeleteLists(int list, int range){
 		
@@ -739,7 +733,7 @@ public class GL11 {
     }
 	public static void	glDepthFunc(int func){
 		
-		ctx.depthFunc(ConstantMapper.cmFunc.mapRealToWebGL(func));
+		ctx.depthFunc(func);
 		
 		
     }
@@ -757,7 +751,7 @@ public class GL11 {
     }
 	public static void	glDrawArrays(int mode, int first, int count){
 		
-		ctx.drawArrays(ConstantMapper.cmRenderModes.mapRealToWebGL(mode), first, count);
+		ctx.drawArrays(mode, first, count);
     }
 	public static void	glDrawBuffer(int mode){
 		
@@ -799,10 +793,10 @@ public class GL11 {
 
     }
 	public static void	glEnable(int cap){
-		ctx.enable(ConstantMapper.cmEnableDisable.mapRealToWebGL(cap));
+		ctx.enable(cap);
     }
 	public static void	glEnableClientState(int cap){
-		GL11.glEnable(ConstantMapper.cmEnableDisable.mapRealToWebGL(cap));
+		GL11.glEnable(cap);
     }
 	public static void	glEnd(){
 		currentBatch.drawAndFinish();
@@ -872,10 +866,10 @@ public class GL11 {
 
     }
 	static boolean	glGetBoolean(int pname){
-		return ctx.getParameter(ConstantMapper.cmGLParamsInfo.mapRealToWebGL(pname)).<JSBoolean> cast().booleanValue();
+		return ctx.getParameter(pname).<JSBoolean> cast().booleanValue();
     }
 	public static void	glGetBoolean(int pname, java.nio.ByteBuffer params){
-		boolean b = ctx.getParameter(ConstantMapper.cmGLParamsInfo.mapRealToWebGL(pname)).<JSBoolean> cast().booleanValue();
+		boolean b = ctx.getParameter(pname).<JSBoolean> cast().booleanValue();
 		
 		params.putInt(b ? 1 : 0);
 		params.flip();
@@ -884,30 +878,31 @@ public class GL11 {
 
     }
 	static double	glGetDouble(int pname){
-		return (double) ctx.getParameterf(ConstantMapper.cmGLParamsInfo.mapRealToWebGL(pname));
+		return (double) ctx.getParameterf(pname);
     }
 	public static void	glGetDouble(int pname, java.nio.DoubleBuffer params){
-		params.put((double) ctx.getParameterf(ConstantMapper.cmGLParamsInfo.mapRealToWebGL(pname)));
+		params.put((double) ctx.getParameterf(pname));
 		params.flip();
     }
 	static int	glGetError(){
 		return ctx.getError();
     }
 	static float glGetFloat(int pname) {
-		return ctx.getParameterf(ConstantMapper.cmGLParamsInfo.mapRealToWebGL(pname));
+		return ctx.getParameterf(pname);
     }
 	public static void	glGetFloat(int pname, java.nio.FloatBuffer params){
-		params.put(ctx.getParameterf(ConstantMapper.cmGLParamsInfo.mapRealToWebGL(pname)));
+		params.put(ctx.getParameterf(pname));
     }
 	static int	glGetInteger(int pname){
-		return ctx.getParameteri(ConstantMapper.cmGLParamsInfo.mapRealToWebGL(pname));
+		if (pname == GL11.GL_MAX_CLIP_PLANES) return 5;
+		return ctx.getParameteri(pname);
     }
 	public static void	glGetInteger(int pname, java.nio.IntBuffer params){
-		params.put(ctx.getParameteri(ConstantMapper.cmGLParamsInfo.mapRealToWebGL(pname)));
+		params.put(ctx.getParameteri(pname));
 		params.flip();
     }
 	public static void	glGetLight(int light, int pname, java.nio.FloatBuffer params){
-
+		
     }
 	public static void	glGetLight(int light, int pname, java.nio.IntBuffer params){
 
@@ -957,19 +952,15 @@ public class GL11 {
     }
 	static java.lang.String	glGetString(int name){
 		
-		ConstantMapper cm = new ConstantMapper(new String[] {
-			"GL_VENDOR",
-			"GL_VERSION",
-			"GL_RENDERER",
-			"GL_SHADING_LANGUAGE_VERSION",
-			"GL_EXTENSIONS"
-		});
+//		ConstantMapper cm = new ConstantMapper(new String[] {
+//			"GL_VENDOR",
+//			"GL_VERSION",
+//			"GL_RENDERER",
+//			"GL_SHADING_LANGUAGE_VERSION",
+//			"GL_EXTENSIONS"
+//		});
 		
-		if (cm.mapRealToWebGL(name) != -1) {
-			return ctx.getParameterString(name);
-		}else {
-			return "";
-		}
+		return ctx.getParameterString(name);
     }
 	public static void	glGetTexEnv(int coord, int pname, java.nio.FloatBuffer params){
 		return;
@@ -1034,7 +1025,7 @@ public class GL11 {
 		return 0;
     }
 	public static void	glGetTexParameter(int target, int pname, java.nio.FloatBuffer params){
-		JSNumber s = ctx.getTexParameter(ConstantMapper.cmTexture.mapRealToWebGL(target), ConstantMapper.cmTexture.mapRealToWebGL(pname)).<JSNumber> cast();
+		JSNumber s = ctx.getTexParameter(target, pname).<JSNumber> cast();
 		params.put(s.floatValue());
 		params.flip();
     }
@@ -1045,17 +1036,17 @@ public class GL11 {
     }
 	static float glGetTexParameterf(int target, int pname){
 		
-		return ctx.getTexParameter(ConstantMapper.cmTexture.mapRealToWebGL(target), ConstantMapper.cmTexture.mapRealToWebGL(pname)).<JSNumber> cast().floatValue();
+		return ctx.getTexParameter(target, pname).<JSNumber> cast().floatValue();
 		
 		
     }
 	static int glGetTexParameteri(int target, int pname){
-		return ctx.getTexParameter(ConstantMapper.cmTexture.mapRealToWebGL(target), ConstantMapper.cmTexture.mapRealToWebGL(pname)).<JSNumber> cast().intValue();
+		return ctx.getTexParameter(target, pname).<JSNumber> cast().intValue();
 		
 		
     }
 	public static void	glHint(int target, int mode){
-		ctx.hint(ConstantMapper.cmHint.mapRealToWebGL(target), ConstantMapper.cmHint.mapRealToWebGL(mode));
+		ctx.hint(target, mode);
 		
     }
 	public static void	glInitNames(){
@@ -1102,7 +1093,7 @@ public class GL11 {
 
     }
 	static boolean	glIsEnabled(int cap){
-		return ctx.isEnabled(ConstantMapper.cmEnableDisable.mapRealToWebGL(cap));
+		return ctx.isEnabled(cap);
     }
 	static boolean	glIsList(int list){
 		return false;
@@ -1195,7 +1186,7 @@ public class GL11 {
 
     }
 	public static void	glMatrixMode(int mode){
-
+		
     }
 	public static void	glMultMatrix(java.nio.DoubleBuffer m){
 
@@ -1351,10 +1342,13 @@ public class GL11 {
 		
 		
 		
+		ArrayBuffer ab = GLUtil.glNewBuffer(pixels);
+		Uint8Array ua = Uint8Array.create(ab);
 		
-		ctx.readPixels(x, y, width, height, WebGLRenderingContext.RGBA, WebGLRenderingContext.RGBA, GLUtil.glCreateBufferFromJava(pixels));
-		
-		
+//		ctx.readPixels(x, y, width, height, WebGLRenderingContext.RGBA, WebGLRenderingContext.RGBA, GLUtil.glCreateBufferFromJava(pixels));
+		ctx.readPixels(x, y, width, height, format, type, ua);
+		pixels.flip();
+		GLUtil.glWriteArrayBufferToJavau(ua.getBuffer(), pixels);
 		
 		
 		
@@ -1381,32 +1375,26 @@ public class GL11 {
 	
 	
 	public static void	glReadPixels(int x, int y, int width, int height, int format, int type, java.nio.DoubleBuffer pixels){
-		int pixelSize = 0;
-		switch (format) {
-		case GL_RGBA:
-			
-		}
-//		glReadPixels(x, y, width, height, format, type, )
-    }
-	public static void glConvertBufferToWebGL(FloatBuffer pixels) {
 		
-	}
+//		glReadPixels(x, y, width, height, format, type, )
+//		ctx.readPixels(x, y, width, height, format, WebGLRenderingContext.UNSIGNED_, null);
+		System.out.println("Unsupported");
+    }
+//	public static void glConvertBufferToWebGL(FloatBuffer pixels) {
+//		
+//	}
 	public static void	glReadPixels(int x, int y, int width, int height, int format, int type, java.nio.FloatBuffer pixels){
-		Uint8Array sd = GLUtil.glCreateBufferFromJava(pixels);
-		ctx.readPixels(x, y, width, height, format, WebGLRenderingContext.UNSIGNED_BYTE, sd);
-		JSArray<JSNumber> s= glGetArrayFromBuf(sd.getBuffer());
-		for (int a = 0; a < s.getLength(); a++) {
-			pixels.put(s.get(a).floatValue());
-		}
+		Uint8Array ua = Uint8Array.create(GLUtil.glNewBuffer(pixels));
+		ctx.readPixels(x, y, width, height, format, WebGL2RenderingContext.FLOAT, ua);
+		pixels.flip();
+		GLUtil.glWriteArrayBufferToJava(ua.getBuffer(), pixels);
 		pixels.flip();
     }
 	public static void	glReadPixels(int x, int y, int width, int height, int format, int type, java.nio.IntBuffer pixels){
-		Uint8Array sd = GLUtil.glCreateBufferFromJava(pixels);
-		ctx.readPixels(x, y, width, height, format, WebGLRenderingContext.UNSIGNED_BYTE, sd);
-		JSArray<JSNumber> s= glGetArrayFromBuf(sd.getBuffer());
-		for (int a = 0; a < s.getLength(); a++) {
-			pixels.put(s.get(a).intValue());
-		}
+		Int32Array sd = Int32Array.create(GLUtil.glCreateBufferFromJava(pixels));
+		ctx.readPixels(x, y, width, height, format, WebGL2RenderingContext.UNSIGNED_INT, sd);
+		pixels.flip();
+		GLUtil.glWriteArrayBufferToJava(sd.getBuffer(), pixels);
 		pixels.flip();
     }
 	public static void	glReadPixels(int x, int y, int width, int height, int format, int type, long pixels_buffer_offset){
@@ -1415,12 +1403,10 @@ public class GL11 {
 	@JSBody(script = "return Array.from(arrBuf);", params = {"arrBuf"})
 	public native static JSArray<JSNumber> glGetArrayFromBuf(ArrayBuffer buf);
 	public static void	glReadPixels(int x, int y, int width, int height, int format, int type, java.nio.ShortBuffer pixels){
-		Uint8Array sd = GLUtil.glCreateBufferFromJava(pixels);
-		ctx.readPixels(x, y, width, height, format, WebGLRenderingContext.UNSIGNED_BYTE, sd);
-		JSArray<JSNumber> s= glGetArrayFromBuf(sd.getBuffer());
-		for (int a = 0; a < s.getLength(); a++) {
-			pixels.put(s.get(a).shortValue());
-		}
+		Int16Array sd = Int16Array.create(GLUtil.glCreateBufferFromJava(pixels));
+		ctx.readPixels(x, y, width, height, format, WebGLRenderingContext.SHORT, sd);
+		pixels.flip();
+		GLUtil.glWriteArrayBufferToJava(sd.getBuffer(), pixels);
 		pixels.flip();
     }
 	public static void	glRectd(double x1, double y1, double x2, double y2){
@@ -1450,28 +1436,28 @@ public class GL11 {
 
     }
 	public static void	glScalef(float x, float y, float z){
-
+		
     }
 	public static void	glScissor(int x, int y, int width, int height){
-
+		ctx.scissor(x, y, width, height);
     }
-	public static void	glSelectBuffer(java.nio.IntBuffer buffer){
-
-    }
+//	public static void	glSelectBuffer(java.nio.IntBuffer buffer){
+//
+//    }
 	public static void	glShadeModel(int mode){
-
+		
     }
 	public static void	glStencilFunc(int func, int ref, int mask){
-
+		ctx.stencilFunc(func, ref, mask);
     }
 	public static void	glStencilMask(int mask){
-
+		ctx.stencilMask(mask);
     }
 	public static void	glStencilOp(int fail, int zfail, int zpass){
-		ctx.stencilOp(ConstantMapper.cmStencilActions.mapRealToWebGL(fail), ConstantMapper.cmStencilActions.mapRealToWebGL(zfail), ConstantMapper.cmStencilActions.mapRealToWebGL(zpass));
+		ctx.stencilOp(fail, zfail, zpass);
     }
 	public static void	glTexCoord1d(double s){
-
+		
     }
 	public static void	glTexCoord1f(float s){
 
@@ -1543,55 +1529,55 @@ public class GL11 {
 
     }
 	public static void	glTexImage1D(int target, int level, int internalformat, int width, int border, int format, int type, java.nio.ByteBuffer pixels){
-
+		System.out.println("1D textures are unsupported");
     }
 	public static void	glTexImage1D(int target, int level, int internalformat, int width, int border, int format, int type, java.nio.DoubleBuffer pixels){
-
+		System.out.println("1D textures are unsupported");
     }
 	public static void	glTexImage1D(int target, int level, int internalformat, int width, int border, int format, int type, java.nio.FloatBuffer pixels){
-
+		System.out.println("1D textures are unsupported");
     }
 	public static void	glTexImage1D(int target, int level, int internalformat, int width, int border, int format, int type, java.nio.IntBuffer pixels){
-
+		System.out.println("1D textures are unsupported");
     }
 	public static void	glTexImage1D(int target, int level, int internalformat, int width, int border, int format, int type, long pixels_buffer_offset){
-
+		System.out.println("1D textures are unsupported");
     }
 	public static void	glTexImage1D(int target, int level, int internalformat, int width, int border, int format, int type, java.nio.ShortBuffer pixels){
-
+		System.out.println("1D textures are unsupported");
     }
 	public static void	glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, java.nio.ByteBuffer pixels){
-
+		ctx.texImage2D(target, level, internalformat, width, height, border, format, type, Uint8Array.create(GLUtil.glCreateBufferFromJava(pixels)), type);
     }
 	public static void	glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, java.nio.DoubleBuffer pixels){
-
+		ctx.texImage2D(target, level, internalformat, width, height, border, format, type, Float64Array.create(GLUtil.glCreateBufferFromJava(pixels)), type);
     }
 	public static void	glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, java.nio.FloatBuffer pixels){
-
+		ctx.texImage2D(target, level, internalformat, width, height, border, format, type, Float32Array.create(GLUtil.glCreateBufferFromJava(pixels)), type);
     }
 	public static void	glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, java.nio.IntBuffer pixels){
-
+		ctx.texImage2D(target, level, internalformat, width, height, border, format, type, Int32Array.create(GLUtil.glCreateBufferFromJava(pixels)), type);
     }
 	public static void	glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, long pixels_buffer_offset){
-
+		
     }
 	public static void	glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, java.nio.ShortBuffer pixels){
-
+		ctx.texImage2D(target, level, internalformat, width, height, border, format, type, Int16Array.create(GLUtil.glCreateBufferFromJava(pixels)), type);
     }
 	public static void	glTexParameter(int target, int pname, java.nio.FloatBuffer param){
-
+		ctx.texParameterf(target, pname, param.get());
     }
 	public static void	glTexParameter(int target, int pname, java.nio.IntBuffer param){
-
+		ctx.texParameteri(target, pname, param.get());
     }
 	public static void	glTexParameterf(int target, int pname, float param){
-
+		ctx.texParameterf(target, pname, param);
     }
 	public static void	glTexParameteri(int target, int pname, int param){
-
+		ctx.texParameteri(target, pname, param);
     }
 	public static void	glTexSubImage1D(int target, int level, int xoffset, int width, int format, int type, java.nio.ByteBuffer pixels){
-
+		
     }
 	public static void	glTexSubImage1D(int target, int level, int xoffset, int width, int format, int type, java.nio.DoubleBuffer pixels){
 
@@ -1609,58 +1595,58 @@ public class GL11 {
 
     }
 	public static void	glTexSubImage2D(int target, int level, int xoffset, int yoffset, int width, int height, int format, int type, java.nio.ByteBuffer pixels){
-
+		ctx.texSubImage2D(target, level, xoffset, yoffset, width, height, format, type, Uint8Array.create(GLUtil.glCreateBufferFromJava(pixels)));
     }
 	public static void	glTexSubImage2D(int target, int level, int xoffset, int yoffset, int width, int height, int format, int type, java.nio.DoubleBuffer pixels){
-
+		ctx.texSubImage2D(target, level, xoffset, yoffset, width, height, format, type, Float64Array.create(GLUtil.glCreateBufferFromJava(pixels)));
     }
 	public static void	glTexSubImage2D(int target, int level, int xoffset, int yoffset, int width, int height, int format, int type, java.nio.FloatBuffer pixels){
-
+		ctx.texSubImage2D(target, level, xoffset, yoffset, width, height, format, type, Float32Array.create(GLUtil.glCreateBufferFromJava(pixels)));
     }
 	public static void	glTexSubImage2D(int target, int level, int xoffset, int yoffset, int width, int height, int format, int type, java.nio.IntBuffer pixels){
-		
+		ctx.texSubImage2D(target, level, xoffset, yoffset, width, height, format, type, Int32Array.create(GLUtil.glCreateBufferFromJava(pixels)));
     }
 	public static void	glTexSubImage2D(int target, int level, int xoffset, int yoffset, int width, int height, int format, int type, long pixels_buffer_offset){
-
+		
     }
 	public static void	glTexSubImage2D(int target, int level, int xoffset, int yoffset, int width, int height, int format, int type, java.nio.ShortBuffer pixels){
-
+		ctx.texSubImage2D(target, level, xoffset, yoffset, width, height, format, type, Int16Array.create(GLUtil.glCreateBufferFromJava(pixels)));
     }
 	public static void	glTranslated(double x, double y, double z){
-
+		
     }
 	public static void	glTranslatef(float x, float y, float z){
 
     }
 	public static void	glVertex2d(double x, double y){
-
+		currentBatch.vertex2f((float) x, (float) y);
     }
 	public static void	glVertex2f(float x, float y){
-
+		currentBatch.vertex2f((float) x, (float) y);
     }
 	public static void	glVertex2i(int x, int y){
-
+		currentBatch.vertex2f((float) x, (float) y);
     }
 	public static void	glVertex3d(double x, double y, double z){
-
+		currentBatch.vertex3f((float) x, (float) y, (float) z);
     }
 	public static void	glVertex3f(float x, float y, float z){
-
+		currentBatch.vertex3f((float) x, (float) y, (float) z);
     }
 	public static void	glVertex3i(int x, int y, int z){
-
+		currentBatch.vertex3f((float) x, (float) y, (float) z);
     }
 	public static void	glVertex4d(double x, double y, double z, double w){
-
+		currentBatch.vertex4f((float) x, (float) y, (float) z, (float) w);
     }
 	public static void	glVertex4f(float x, float y, float z, float w){
-
+		currentBatch.vertex4f((float) x, (float) y, (float) z, (float) w);
     }
 	public static void	glVertex4i(int x, int y, int z, int w){
-
+		currentBatch.vertex4f((float) x, (float) y, (float) z, (float) w);
     }
 	public static void	glVertexPointer(int size, int stride, java.nio.DoubleBuffer pointer){
-
+		
     }
 	public static void	glVertexPointer(int size, int stride, java.nio.FloatBuffer pointer){
 
@@ -1679,6 +1665,6 @@ public class GL11 {
 
     }
 	public static void	glViewport(int x, int y, int width, int height){
-
+		ctx.viewport(x, y, width, height);
     }
 }

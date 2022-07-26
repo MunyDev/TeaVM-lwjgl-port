@@ -1,15 +1,8 @@
 package org.lwjgl.util;
 
-import java.nio.ByteBuffer;
-import java.nio.DoubleBuffer;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import java.nio.ShortBuffer;
+import java.nio.*;
 
-import org.teavm.jso.typedarrays.DataView;
-import org.teavm.jso.typedarrays.Uint8Array;
-import org.teavm.jso.typedarrays.Uint8ClampedArray;
-import org.teavm.jso.webgl.WebGLRenderingContext;
+import org.teavm.jso.typedarrays.*;
 
 public class GLUtil {
 //	static void	glReadPixels(int x, int y, int width, int height, int format, int type, java.nio.ByteBuffer pixels){
@@ -17,7 +10,7 @@ public class GLUtil {
 //		
 //		
 //		
-//		ctx.readPixels(x, y, width, height, WebGLRenderingContext.RGBA, WebGLRenderingContext.RGBA, ua);
+////		ctx.readPixels(x, y, width, height, WebGLRenderingContext.RGBA, WebGLRenderingContext.RGBA, ua);
 //		
 //		for (int i = 0; i < ua.getLength(); i++ ) {
 //			pixels.put((byte) ua.get(i));
@@ -26,63 +19,132 @@ public class GLUtil {
 //		
 //		
 //	}
-	public static int glGenLists() {
-		
-	}
-	public static Uint8Array glNewBuffer(ByteBuffer data) {
-		Uint8Array arr = Uint8Array.create(data.remaining() * Byte.BYTES);
-		
-		return arr;
-	}
-	public static Uint8Array glCreateBufferFromJava(ByteBuffer data) {
-		Uint8Array arr = Uint8Array.create(data.remaining() * Byte.BYTES);
-		DataView dv = DataView.create(arr);
-		
-		for (int i = 0; i < arr.getLength(); i++) {
-			dv.setUint8(i, data.get(i));
-		}
-		return arr;
-	}
-	public static Uint8Array glCreateBufferFromJava(FloatBuffer data) {
-		Uint8Array arr = Uint8Array.create(data.remaining() * Float.BYTES);
-		DataView dv = DataView.create(arr);
-		
-		for (int i = 0; i < arr.getLength(); i++) {
-			dv.setFloat32(i*4, data.get(i));
-			
-		}
-		return arr;
-	}
-	public static Uint8Array glCreateBufferFromJava(DoubleBuffer data) {
-		Uint8Array arr = Uint8Array.create(data.remaining() * Double.BYTES);
-		DataView dv = DataView.create(arr);
-		
-		for (int i = 0; i < arr.getLength(); i++) {
-			dv.setFloat64(i*8, data.get(i));
-			
-		}
-		
-		return arr;
-	}
 	
-	public static Uint8Array glCreateBufferFromJava(ShortBuffer data) {
-		Uint8Array arr = Uint8Array.create(data.remaining() * Short.BYTES);
-		DataView dv = DataView.create(arr);
+	public static ArrayBuffer glNewBuffer(ByteBuffer data) {
+		return ArrayBuffer.create(data.remaining() * Byte.BYTES);
+	}
+	public static ArrayBuffer glNewBuffer(FloatBuffer data) {
+		return ArrayBuffer.create(data.remaining() * Float.BYTES);
+	}
+	public static ArrayBuffer glNewBuffer(DoubleBuffer data) {
+		return ArrayBuffer.create(data.remaining() * Double.BYTES);
+	}
+	public static ArrayBuffer glNewBuffer(ShortBuffer data) {
+		return ArrayBuffer.create(data.remaining() * Short.BYTES);
+	}
+	public static ArrayBuffer glNewBuffer(IntBuffer data) {
+		return ArrayBuffer.create(data.remaining() * Integer.BYTES);
+	}
+//	public static ArrayBuffer glNewBuffer(LongBuffer data) {
+//		return ArrayBuffer.create(data.remaining() * Float.BYTES);
+//	}
+	//No Type casting/safety...
+	
+	
+	public static void glWriteArrayBufferToJavab(ArrayBuffer ab, ByteBuffer d) {
+		Int8Array ua = Int8Array.create(ab);
+		int len = ua.getLength();
 		
-		for (int i = 0; i < arr.getLength(); i++) {
+		for (int i = 0; i < len; i++) {
+			byte v = ua.get(i);
+			d.put(v);
+		}
+		
+	}  
+	public static void glWriteArrayBufferToJavau(ArrayBuffer ab, ByteBuffer d) {
+		Uint8Array ua = Uint8Array.create(ab);
+		int len = ua.getLength();
+		
+		for (int i = 0; i < len; i++) {
+			short v = ua.get(i);
+			d.put((byte)v);
+		}
+		
+	}
+	public static void glWriteArrayBufferToJava(ArrayBuffer ab, ShortBuffer d) {
+		Int16Array ua = Int16Array.create(ab);
+		int len = ua.getLength();
+		
+		for (int i = 0; i < len; i++) {
+			short v = ua.get(i);
+			d.put(v);
+		}
+		
+	}                              
+	public static void glWriteArrayBufferToJava(ArrayBuffer ab, IntBuffer d) {
+		Int32Array in = Int32Array.create(ab);
+		int len = in.getLength();
+		
+		for (int i = 0; i < len; i++) {
+			
+			int v = in.get(i);
+			d.put(v);
+			
+		}
+	}                                           
+	public static void glWriteArrayBufferToJava(ArrayBuffer ab, DoubleBuffer d) {
+		Float64Array fin = Float64Array.create(ab);
+		int len = fin.getLength();
+		
+		for (int i = 0; i< len; i++) {
+			double val = fin.get(i);
+			d.put(val);
+		}
+	}
+	public static void glWriteArrayBufferToJava(ArrayBuffer ab, FloatBuffer d) {
+		Float32Array fin = Float32Array.create(ab);
+		int len = fin.getLength();
+		
+		for (int i = 0; i< len; i++) {
+			float val = fin.get(i);
+			d.put(val);
+		}
+	}
+	public static ArrayBuffer glCreateBufferFromJava(ByteBuffer data) {
+		ArrayBuffer arr = ArrayBuffer.create(data.remaining() * Byte.BYTES);
+		Uint8Array dv = Uint8Array.create(arr);
+		byte[] exp = new byte[data.remaining()];
+		data.get(exp);
+		dv.set(exp);
+		return arr;
+	}
+	public static ArrayBuffer glCreateBufferFromJava(FloatBuffer data) {
+		ArrayBuffer arr = ArrayBuffer.create(data.remaining() * Float.BYTES);
+		Float32Array arr1 = Float32Array.create(arr);
+		float[] exp = new float[data.remaining()];
+		data.get(exp);
+		arr1.set(exp);
+		return arr;
+	}
+	public static ArrayBuffer glCreateBufferFromJava(DoubleBuffer data) {
+		ArrayBuffer arr = ArrayBuffer.create(data.remaining() * Double.BYTES);
+		DataView dv = DataView.create(arr);
+		int len = data.remaining();
+		for (int i = 0; i < len; i++) {
 			dv.setFloat64(i*8, data.get(i));
 			
 		}
 		return arr;
 	}
-	public static Uint8Array glCreateBufferFromJava(IntBuffer data) {
-		Uint8Array arr = Uint8Array.create(data.remaining() * Integer.BYTES);
+	public static ArrayBuffer glCreateBufferFromJava(IntBuffer data) {
+		ArrayBuffer arr = ArrayBuffer.create(data.remaining() * Integer.BYTES);
 		DataView dv = DataView.create(arr);
-		
-		for (int i = 0; i < arr.getLength(); i++) {
-			dv.setInt32(i*8, data.get(i));
+		int len = data.remaining();
+		for (int i = 0; i < len; i++) {
+			dv.setInt32(i*4, data.get(i));
 			
 		}
+		return arr;
+	}
+	public static ArrayBuffer glCreateBufferFromJava(ShortBuffer data) {
+		ArrayBuffer arr = ArrayBuffer.create(data.remaining() * Short.BYTES);
+		DataView dv = DataView.create(arr);
+		int len = data.remaining();
+		for (int i = 0; i < len; i++) {
+			dv.setFloat64(i*8, data.get(i));
+			
+		}
+		
 		return arr;
 	}
 }

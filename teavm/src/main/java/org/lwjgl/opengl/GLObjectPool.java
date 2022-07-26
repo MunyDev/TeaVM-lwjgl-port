@@ -5,5 +5,7 @@ public class GLObjectPool {
 	public float[] vertBuffer = new float[4096];
 	public float[] normalBuffer = new float[4096];
 	public float[] texCoordBuffer = new float[4096];
-	
+	public GLObjectPool() {
+		
+	}
 }

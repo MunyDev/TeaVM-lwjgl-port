@@ -8,10 +8,11 @@ import org.teavm.jso.dom.html.HTMLDocument;
 import org.teavm.jso.*;
 import org.teavm.jso.browser.*;
 import org.teavm.webgl2.WebGL2RenderingContext;
-
-import static org.teavm.jso.webgl.WebGLRenderingContext.*;
-
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.Batch;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
 
 import static org.teavm.jso.browser.Window.*;
 public class Client {
@@ -36,22 +37,43 @@ public class Client {
 				// TODO Auto-generated method stub
 				ctx.getCanvas().setWidth(Window.current().getInnerWidth());
 				ctx.getCanvas().setHeight(Window.current().getInnerHeight());
-				ctx.viewport(0, 0, document.getBody().getClientWidth(), document.getBody().getClientHeight());
+				
+				GL11.glViewport(0, 0, Window.current().getInnerWidth(), Window.current().getInnerHeight());
+				evt.preventDefault();
+				evt.stopPropagation();
 			}
         	
         });
+        
         CurrentContext.setCurrentContext(ctx);
         Mouse.create();
+        Mouse.setGrabbed(true);
+        Keyboard.create();
         requestAnimationFrame(new AnimationFrameCallback() {
 
 			@Override
 			public void onAnimationFrame(double timestamp) {
 				// TODO Auto-generated method stub
-				ctx.clearColor(0, 0, 1, 1);
-				ctx.clear(COLOR_BUFFER_BIT);
 				
+				GL11.glClearColor(0, 0, 0, 1);
+				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 				
+				GL11.glBegin(GL11.GL_TRIANGLES);
+				
+				GL11.glVertex3f(-0.5f, 0.5f, 0);
+				GL11.glVertex3f(0.5f, 0.5f, 0);
+				GL11.glVertex3f(0.5f, -0.5f, 0);
+				GL11.glVertex3f(-0.5f, 0.5f, 0);
+				GL11.glVertex3f(0.5f, -0.5f, 0);
+				GL11.glVertex3f(-0.5f, -0.5f, 0);
+				
+				GL11.glEnd();
+				log(String.valueOf(Mouse.isButtonDown(0)));
+				log(String.valueOf(Keyboard.isKeyDown(Keyboard.KEY_0)));
+//				System.out.print('\n');
+				Mouse.poll();
 				requestAnimationFrame(this);
+				
 			}
         	
         });
@@ -60,6 +82,9 @@ public class Client {
         
         
     }
+    @JSBody(script = "window.console.log(param);", params = {"param"})
+    public native static void log(String param);
+    
     @JSBody(script = "window.showOpenDirectoryPicker()")
     public native static void showOpenDirectoryPicker();
     
