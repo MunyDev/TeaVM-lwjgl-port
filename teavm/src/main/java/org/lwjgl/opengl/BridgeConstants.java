@@ -4,7 +4,7 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.teavm.webgl2.WebGL2RenderingContext;
+//import org.teavm.webgl2.WebGL2RenderingContext;
 
 
 /**

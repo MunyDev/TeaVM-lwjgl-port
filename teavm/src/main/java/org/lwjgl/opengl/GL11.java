@@ -6,15 +6,12 @@ import org.teavm.jso.core.JSBoolean;
 import org.teavm.jso.core.JSNumber;
 import org.teavm.jso.typedarrays.*;
 import org.teavm.jso.webgl.WebGLRenderingContext;
-import org.teavm.jso.webgl.WebGLShader;
 import org.teavm.jso.webgl.WebGLTexture;
 import org.teavm.webgl2.WebGL2RenderingContext;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
-import org.joml.Matrix4d;
-import org.joml.Matrix4f;
 import org.lwjgl.util.GLUtil;
 import org.teavm.jso.*;
 /**

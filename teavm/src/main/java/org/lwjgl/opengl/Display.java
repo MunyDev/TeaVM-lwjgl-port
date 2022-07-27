@@ -1,9 +1,17 @@
 package org.lwjgl.opengl;
 
+import org.teavm.jso.JSBody;
 import org.teavm.jso.browser.Window;
+import org.teavm.jso.dom.events.Event;
+import org.teavm.jso.dom.events.EventListener;
+import org.teavm.jso.dom.events.KeyboardEvent;
+import org.teavm.jso.dom.html.HTMLCanvasElement;
+import org.teavm.jso.dom.html.HTMLDocument;
+import org.teavm.jso.dom.html.HTMLElement;
+import org.teavm.webgl2.WebGL2RenderingContext;
 
 
-	/*
+/*
 	 * Copyright (c) 2002-2008 LWJGL Project
 	 * All rights reserved.
 	 *
@@ -34,7 +42,7 @@ import org.teavm.jso.browser.Window;
 	 * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 	 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	 */
-	package org.lwjgl.opengl;
+	
 
 	/**
 	 * This is the abstract class for a Display in LWJGL. LWJGL displays have some
@@ -48,38 +56,28 @@ import org.teavm.jso.browser.Window;
 	 * @author foo
 	 */
 
-	import org.lwjgl.BufferUtils;
-
 	import org.lwjgl.input.Keyboard;
 	import org.lwjgl.input.Mouse;
+import org.munydev.teavm.lwjgl.CurrentContext;
 
-	import java.awt.*;
-	import java.awt.event.ComponentAdapter;
-	import java.awt.event.ComponentEvent;
-	import java.awt.event.ComponentListener;
-	import java.nio.ByteBuffer;
-	import java.nio.FloatBuffer;
-	import java.security.AccessController;
-	import java.security.PrivilegedAction;
-	import java.util.Arrays;
-	import java.util.HashSet;
+import java.nio.ByteBuffer;
 
 	public final class Display {
-
+		private static boolean wasResized = false;
 		private static final Thread shutdown_hook = new Thread() {
 			public void run() {
 				reset();
 			}
 		};
-
+		private static Window jsWin;
 		/** The display implementor */
-		private static final DisplayImplementation display_impl;
+//		private static final DisplayImplementation display_impl;
 
 		/** The initial display mode */
-		private static final DisplayMode initial_mode;
+//		private static final DisplayMode initial_mode;
 
 		/** The parent, if any */
-		private static Canvas parent;
+//		private static Canvas parent;
 
 		/** The current display mode, if created */
 		private static DisplayMode current_mode;
@@ -96,6 +94,7 @@ import org.teavm.jso.browser.Window;
 		 */
 		private static int y = -1;
 
+		private static boolean fullscreenReq = false;
 		/** the width of the Display window */
 		private static int width = 0;
 
@@ -112,7 +111,7 @@ import org.teavm.jso.browser.Window;
 		private static int swap_interval;
 
 		/** The Drawable instance that tracks the current Display context */
-		private static DrawableLWJGL drawable;
+//		private static DrawableLWJGL drawable;
 
 		private static boolean window_created;
 
@@ -124,14 +123,16 @@ import org.teavm.jso.browser.Window;
 
 		/** Initial Background Color of Display */
 		private static float r, g, b;
-
-		private static final ComponentListener component_listener = new ComponentAdapter() {
-			public void componentResized(ComponentEvent e) {
-				synchronized ( GlobalLock.lock ) {
-					parent_resized = true;
-				}
-			}
-		};
+		private static boolean closeRequested;
+		private static int fkey;
+	
+//		private static final ComponentListener component_listener = new ComponentAdapter() {
+//			public void componentResized(ComponentEvent e) {
+//				synchronized ( GlobalLock.lock ) {
+//					parent_resized = true;
+//				}
+//			}
+//		};
 
 		
 
@@ -144,7 +145,7 @@ import org.teavm.jso.browser.Window;
 //		
 //		}
 
-		private static DisplayImplementation createDisplayImplementation() {
+		private static void createDisplayImplementation() {
 
 		}
 
@@ -167,7 +168,7 @@ import org.teavm.jso.browser.Window;
 		 *
 		 * @return an array of all display modes the system reckons it can handle.
 		 */
-		public static DisplayMode[] getAvailableDisplayModes() throws LWJGLException {
+		public static DisplayMode[] getAvailableDisplayModes()  {
 			return null;
 		}
 
@@ -177,7 +178,7 @@ import org.teavm.jso.browser.Window;
 		 * @return The desktop display mode
 		 */
 		public static DisplayMode getDesktopDisplayMode() {
-			return initial_mode;
+			return new DisplayMode(640, 480);
 		}
 
 		/**
@@ -198,30 +199,30 @@ import org.teavm.jso.browser.Window;
 		 *
 		 * @param mode The new display mode to set
 		 *
-		 * @throws LWJGLException if the display mode could not be set
+		 * @ if the display mode could not be set
 		 */
-		public static void setDisplayMode(DisplayMode mode) throws LWJGLException {
-
+		public static void setDisplayMode(DisplayMode mode)  {
+			current_mode = mode;
 		}
 
 		private static DisplayMode getEffectiveMode() {
-			
+			return new DisplayMode(640, 480);
 		}
 
 		private static int getWindowX() {
-
+			return jsWin.getScreenX();
 		}
 
 		private static int getWindowY() {
-
+			return jsWin.getScreenY();
 		}
 
 		/**
 		 * Create the native window peer from the given mode and fullscreen flag.
 		 * A native context must exist, and it will be attached to the window.
 		 */
-		private static void createWindow() throws LWJGLException {
-
+		private static void createWindow()  {
+			
 		}
 
 		private static void releaseDrawable() {
@@ -232,7 +233,7 @@ import org.teavm.jso.browser.Window;
 
 		}
 
-		private static void switchDisplayMode() throws LWJGLException {
+		private static void switchDisplayMode()  {
 
 		}
 
@@ -244,7 +245,7 @@ import org.teavm.jso.browser.Window;
 		 * @param brightness The brightness value between -1.0 and 1.0, inclusive
 		 * @param contrast   The contrast, larger than 0.0.
 		 */
-		public static void setDisplayConfiguration(float gamma, float brightness, float contrast) throws LWJGLException {
+		public static void setDisplayConfiguration(float gamma, float brightness, float contrast)  {
 
 		}
 
@@ -260,12 +261,13 @@ import org.teavm.jso.browser.Window;
 
 		/** @return the title of the window */
 		public static String getTitle() {
-
+			
+			return jsWin.getDocument().getTitle();
 		}
 
 		/** Return the last parent set with setParent(). */
-		public static Canvas getParent() {
-
+		public static Object getParent() {
+			return CurrentContext.getContext();
 		}
 
 		/**
@@ -278,9 +280,9 @@ import org.teavm.jso.browser.Window;
 		 * While the Display is in fullscreen mode, the current parent will be ignored. Additionally, when a non null parent is specified,
 		 * the Dispaly will inherit the size of the parent, disregarding the currently set display mode.<p>
 		 */
-		public static void setParent(Canvas parent) throws LWJGLException {
-
-		}
+//		public static void setParent(Canvas parent)  {
+//
+//		}
 
 		/**
 		 * Set the fullscreen mode of the context. If no context has been created through create(),
@@ -291,13 +293,19 @@ import org.teavm.jso.browser.Window;
 		 *
 		 * @param fullscreen Specify the fullscreen mode of the context.
 		 *
-		 * @throws LWJGLException If fullscreen is true, and the current DisplayMode instance is not
+		 * @ If fullscreen is true, and the current DisplayMode instance is not
 		 *                        from getAvailableDisplayModes() or if the mode switch fails.
 		 */
-		public static void setFullscreen(boolean fullscreen) throws LWJGLException {
-			
+		public static void setFullscreen(boolean fullscreen)  {
+			if (fullscreen) {
+				fullscreenReq = true;
+			}else {
+				exitFullscreen(jsWin);
+			}
 		}
-
+		public static void setFullscreenKey(int key) {
+			Display.fkey = key;
+		}
 		/**
 		 * Set the mode of the context. If no context has been created through create(),
 		 * the mode will apply when create() is called. If mode.isFullscreenCapable() is true, the context will become
@@ -307,19 +315,19 @@ import org.teavm.jso.browser.Window;
 		 *
 		 * @param mode The new display mode to set. Must be non-null.
 		 *
-		 * @throws LWJGLException If the mode switch fails.
+		 * @ If the mode switch fails.
 		 */
-		public static void setDisplayModeAndFullscreen(DisplayMode mode) throws LWJGLException {
+		public static void setDisplayModeAndFullscreen(DisplayMode mode)  {
 
 		}
 
-		private static void setDisplayModeAndFullscreenInternal(boolean fullscreen, DisplayMode mode) throws LWJGLException {
+		private static void setDisplayModeAndFullscreenInternal(boolean fullscreen, DisplayMode mode)  {
 
 		}
 
 		/** @return whether the Display is in fullscreen mode */
 		public static boolean isFullscreen() {
-
+			return isFullscreen(((WebGL2RenderingContext)CurrentContext.getContext()).getCanvas());
 		}
 
 		/**
@@ -328,22 +336,23 @@ import org.teavm.jso.browser.Window;
 		 * @param newTitle The new window title
 		 */
 		public static void setTitle(String newTitle) {
-
+			jsWin.setName(newTitle);
 		}
 
 		/** @return true if the user or operating system has asked the window to close */
 		public static boolean isCloseRequested() {
-
+			return closeRequested;
 		}
-
+		@JSBody(script = "return window.document.visibilityState == \"visible\";")
+		public static native boolean nisVisible();
 		/** @return true if the window is visible, false if not */
 		public static boolean isVisible() {
-	
+			return nisVisible();
 		}
 
 		/** @return true if window is active, that is, the foreground display of the operating system. */
 		public static boolean isActive() {
-			
+			return nisVisible();
 		}
 
 		/**
@@ -357,7 +366,7 @@ import org.teavm.jso.browser.Window;
 		 *         and needs to repaint itself
 		 */
 		public static boolean isDirty() {
-			
+			return false;
 		}
 
 		/**
@@ -366,7 +375,7 @@ import org.teavm.jso.browser.Window;
 		 * this method if update() is called periodically.
 		 */
 		public static void processMessages() {
-
+			
 		}
 
 		/**
@@ -375,7 +384,7 @@ import org.teavm.jso.browser.Window;
 		 *
 		 * @throws OpenGLException if an OpenGL error has occured since the last call to glGetError()
 		 */
-		public static void swapBuffers() throws LWJGLException {
+		public static void swapBuffers()  {
 
 		}
 
@@ -385,7 +394,7 @@ import org.teavm.jso.browser.Window;
 		 * polls the input devices.
 		 */
 		public static void update() {
-
+			update(true);
 		}
 
 		/**
@@ -396,7 +405,9 @@ import org.teavm.jso.browser.Window;
 		 * @param processMessages Poll input devices if true
 		 */
 		public static void update(boolean processMessages) {
-
+			Mouse.poll();
+			Keyboard.poll();
+			wasResized = false;
 		}
 
 		static void pollDevices() {
@@ -407,23 +418,23 @@ import org.teavm.jso.browser.Window;
 		/**
 		 * Release the Display context.
 		 *
-		 * @throws LWJGLException If the context could not be released
+		 * @ If the context could not be released
 		 */
-		public static void releaseContext() throws LWJGLException {
+		public static void releaseContext()  {
 			
 		}
 
 		/** Returns true if the Display's context is current in the current thread. */
-		public static boolean isCurrent() throws LWJGLException {
-			
+		public static boolean isCurrent()  {
+			return true;
 		}
 
 		/**
 		 * Make the Display the current rendering context for GL calls.
 		 *
-		 * @throws LWJGLException If the context could not be made current
+		 * @ If the context could not be made current
 		 */
-		public static void makeCurrent() throws LWJGLException {
+		public static void makeCurrent()  {
 			
 		}
 
@@ -444,12 +455,108 @@ import org.teavm.jso.browser.Window;
 		 * <p/>
 		 * <p>The window created will be set up in orthographic 2D projection, with 1:1 pixel ratio with GL coordinates.
 		 *
-		 * @throws LWJGLException
+		 * @
 		 */
-		public static void create() throws LWJGLException {
-
+		public static void create()  {
+			create((Object)null);
 		}
+		
+		
+		public static void create(Object... unused) {
+			DisplayMode dm = getDisplayMode();
+			if (dm == null) {
+				dm = new DisplayMode(800, 600);
+				dm.setPopup(true);
+			}
+			jsWin = Window.current();
+			if (dm.isPopup()) {
+				jsWin = Window.current().open("", "_blank", "width=" +dm.getWidth()+",height="+dm.getHeight());
+				System.out.println("width=" +dm.getWidth()+",height="+dm.getHeight()+",popup="+dm.isPopup());
+				System.out.println(jsWin.getInnerWidth());
+				System.out.println(jsWin.getInnerHeight());
+			}
+			HTMLDocument document = jsWin.getDocument();
+			HTMLCanvasElement elem = (HTMLCanvasElement) jsWin.getDocument().createElement("canvas");
+			document.getBody().getStyle().setProperty("margin", "0");
+	        document.getBody().getStyle().setProperty("padding", "0");
+	        
+	        elem.setWidth(jsWin.getInnerWidth());
+	        elem.setHeight(jsWin.getInnerHeight());
+	        WebGL2RenderingContext ctx = (WebGL2RenderingContext) elem.getContext("webgl2");
+	        document.getBody().getStyle().setProperty("overflow", "hidden");
+	        document.setTitle(title);
+	        jsWin.addEventListener("beforeunload", new EventListener<Event>() {
 
+				@Override
+				public void handleEvent(Event evt) {
+					// TODO Auto-generated method stub
+					closeRequested = true;
+				}
+	        	
+	        });
+	        jsWin.addEventListener("keydown", new EventListener<KeyboardEvent>() {
+
+				@Override
+				public void handleEvent(KeyboardEvent evt) {
+					// TODO Auto-generated method stub
+//					if (evt.getKey() == "Escape") return;
+					if (fullscreenReq && Keyboard.map(fkey).contains(evt.getCode())) {
+					requestFullscreen(elem);
+					}
+//					fullscreenReq = false;
+					evt.preventDefault();
+					evt.stopPropagation();
+				}
+	        	
+	        });
+	        Window.current().addEventListener("beforeunload", new EventListener<Event>() {
+
+				@Override
+				public void handleEvent(Event evt) {
+					// TODO Auto-generated method stub
+					closeRequested = true;
+				}
+	        	
+	        });
+	        
+	        jsWin.addEventListener("resize", new EventListener<Event>() {
+
+				@Override
+				public void handleEvent(Event evt) {
+					// TODO Auto-generated method stub
+					elem.setWidth(jsWin.getInnerWidth());
+					elem.setHeight(jsWin.getInnerHeight());
+					
+					((WebGL2RenderingContext) elem.getContext("webgl2")).viewport(0, 0, jsWin.getInnerWidth(), jsWin.getInnerHeight());
+					wasResized = true;
+					evt.preventDefault();
+					evt.stopPropagation();
+				}
+	        	
+	        });
+
+	        CurrentContext.setCurrentContext(ctx);
+	        Keyboard.create();
+	        Mouse.create();
+	        
+	        document.getBody().appendChild(ctx.getCanvas());
+	        
+	        
+		}
+		public static Window getWindow() {
+			return jsWin;
+		}
+		
+		
+		@JSBody(script = "elem.requestFullscreen()", params = {"elem"} )
+		private static native void requestFullscreen(HTMLElement elem);
+		
+		@JSBody(script = "window.document.exitFullscreen()", params= {"window"})
+		private static native void exitFullscreen(Window w);
+		
+		@JSBody(script = "return window.document.fullscreenElement == elem;", params = {"elem"} )
+		private static native boolean isFullscreen(HTMLElement elem);
+		
 		/**
 		 * Create the OpenGL context with the given minimum parameters. If isFullscreen() is true or if windowed
 		 * context are not supported on the platform, the display mode will be switched to the mode returned by
@@ -461,139 +568,139 @@ import org.teavm.jso.browser.Window;
 		 *
 		 * @param pixel_format Describes the minimum specifications the context must fulfill.
 		 *
-		 * @throws LWJGLException
+		 * @
 		 */
-		public static void create(PixelFormat pixel_format) throws LWJGLException {
-	
-		}
+//		public static void create(PixelFormat pixel_format)  {
+//	
+//		}
 
-		/**
-		 * Create the OpenGL context with the given minimum parameters. If isFullscreen() is true or if windowed
-		 * context are not supported on the platform, the display mode will be switched to the mode returned by
-		 * getDisplayMode(), and a fullscreen context will be created. If isFullscreen() is false, a windowed context
-		 * will be created with the dimensions given in the mode returned by getDisplayMode(). If a context can't be
-		 * created with the given parameters, a LWJGLException will be thrown.
-		 * <p/>
-		 * <p>The window created will be set up in orthographic 2D projection, with 1:1 pixel ratio with GL coordinates.
-		 *
-		 * @param pixel_format    Describes the minimum specifications the context must fulfill.
-		 * @param shared_drawable The Drawable to share context with. (optional, may be null)
-		 *
-		 * @throws LWJGLException
-		 */
-		public static void create(PixelFormat pixel_format, Drawable shared_drawable) throws LWJGLException {
-
-		}
-
-		/**
-		 * Create the OpenGL context with the given minimum parameters. If isFullscreen() is true or if windowed
-		 * context are not supported on the platform, the display mode will be switched to the mode returned by
-		 * getDisplayMode(), and a fullscreen context will be created. If isFullscreen() is false, a windowed context
-		 * will be created with the dimensions given in the mode returned by getDisplayMode(). If a context can't be
-		 * created with the given parameters, a LWJGLException will be thrown.
-		 * <p/>
-		 * <p>The window created will be set up in orthographic 2D projection, with 1:1 pixel ratio with GL coordinates.
-		 *
-		 * @param pixel_format Describes the minimum specifications the context must fulfill.
-		 * @param attribs      The ContextAttribs to use when creating the context. (optional, may be null)
-		 *
-		 * @throws LWJGLException
-		 */
-		public static void create(PixelFormat pixel_format, ContextAttribs attribs) throws LWJGLException {
-
-		}
-
-		/**
-		 * Create the OpenGL context with the given minimum parameters. If isFullscreen() is true or if windowed
-		 * context are not supported on the platform, the display mode will be switched to the mode returned by
-		 * getDisplayMode(), and a fullscreen context will be created. If isFullscreen() is false, a windowed context
-		 * will be created with the dimensions given in the mode returned by getDisplayMode(). If a context can't be
-		 * created with the given parameters, a LWJGLException will be thrown.
-		 * <p/>
-		 * <p>The window created will be set up in orthographic 2D projection, with 1:1 pixel ratio with GL coordinates.
-		 *
-		 * @param pixel_format    Describes the minimum specifications the context must fulfill.
-		 * @param shared_drawable The Drawable to share context with. (optional, may be null)
-		 * @param attribs         The ContextAttribs to use when creating the context. (optional, may be null)
-		 *
-		 * @throws LWJGLException
-		 */
-		public static void create(PixelFormat pixel_format, Drawable shared_drawable, ContextAttribs attribs) throws LWJGLException {
-
-		}
-
-		/**
-		 * Create the OpenGL ES context with the given minimum parameters. If isFullscreen() is true or if windowed
-		 * context are not supported on the platform, the display mode will be switched to the mode returned by
-		 * getDisplayMode(), and a fullscreen context will be created. If isFullscreen() is false, a windowed context
-		 * will be created with the dimensions given in the mode returned by getDisplayMode(). If a context can't be
-		 * created with the given parameters, a LWJGLException will be thrown.
-		 * <p/>
-		 * <p>The window created will be set up in orthographic 2D projection, with 1:1 pixel ratio with GL coordinates.
-		 *
-		 * @param pixel_format Describes the minimum specifications the context must fulfill. Must be an instance of org.lwjgl.opengles.PixelFormat.
-		 *
-		 * @throws LWJGLException
-		 */
-
-		public static void create(PixelFormatLWJGL pixel_format) throws LWJGLException {
-
-		}
-
-		/**
-		 * Create the OpenGL ES context with the given minimum parameters. If isFullscreen() is true or if windowed
-		 * context are not supported on the platform, the display mode will be switched to the mode returned by
-		 * getDisplayMode(), and a fullscreen context will be created. If isFullscreen() is false, a windowed context
-		 * will be created with the dimensions given in the mode returned by getDisplayMode(). If a context can't be
-		 * created with the given parameters, a LWJGLException will be thrown.
-		 * <p/>
-		 * <p>The window created will be set up in orthographic 2D projection, with 1:1 pixel ratio with GL coordinates.
-		 *
-		 * @param pixel_format    Describes the minimum specifications the context must fulfill. Must be an instance of org.lwjgl.opengles.PixelFormat.
-		 * @param shared_drawable The Drawable to share context with. (optional, may be null)
-		 *
-		 * @throws LWJGLException
-		 */
-		public static void create(PixelFormatLWJGL pixel_format, Drawable shared_drawable) throws LWJGLException {
-
-		}
-
-		/**
-		 * Create the OpenGL ES context with the given minimum parameters. If isFullscreen() is true or if windowed
-		 * context are not supported on the platform, the display mode will be switched to the mode returned by
-		 * getDisplayMode(), and a fullscreen context will be created. If isFullscreen() is false, a windowed context
-		 * will be created with the dimensions given in the mode returned by getDisplayMode(). If a context can't be
-		 * created with the given parameters, a LWJGLException will be thrown.
-		 * <p/>
-		 * <p>The window created will be set up in orthographic 2D projection, with 1:1 pixel ratio with GL coordinates.
-		 *
-		 * @param pixel_format Describes the minimum specifications the context must fulfill. Must be an instance of org.lwjgl.opengles.PixelFormat.
-		 * @param attribs      The ContextAttribs to use when creating the context. (optional, may be null)
-		 *
-		 * @throws LWJGLException
-		 */
-		public static void create(PixelFormatLWJGL pixel_format, org.lwjgl.opengles.ContextAttribs attribs) throws LWJGLException {
-			
-		}
-
-		/**
-		 * Create the OpenGL ES context with the given minimum parameters. If isFullscreen() is true or if windowed
-		 * context are not supported on the platform, the display mode will be switched to the mode returned by
-		 * getDisplayMode(), and a fullscreen context will be created. If isFullscreen() is false, a windowed context
-		 * will be created with the dimensions given in the mode returned by getDisplayMode(). If a context can't be
-		 * created with the given parameters, a LWJGLException will be thrown.
-		 * <p/>
-		 * <p>The window created will be set up in orthographic 2D projection, with 1:1 pixel ratio with GL coordinates.
-		 *
-		 * @param pixel_format    Describes the minimum specifications the context must fulfill. Must be an instance of org.lwjgl.opengles.PixelFormat.
-		 * @param shared_drawable The Drawable to share context with. (optional, may be null)
-		 * @param attribs         The ContextAttribs to use when creating the context. (optional, may be null)
-		 *
-		 * @throws LWJGLException
-		 */
-		public static void create(PixelFormatLWJGL pixel_format, Drawable shared_drawable, org.lwjgl.opengles.ContextAttribs attribs) throws LWJGLException {
-			
-		}
+//		/**
+//		 * Create the OpenGL context with the given minimum parameters. If isFullscreen() is true or if windowed
+//		 * context are not supported on the platform, the display mode will be switched to the mode returned by
+//		 * getDisplayMode(), and a fullscreen context will be created. If isFullscreen() is false, a windowed context
+//		 * will be created with the dimensions given in the mode returned by getDisplayMode(). If a context can't be
+//		 * created with the given parameters, a LWJGLException will be thrown.
+//		 * <p/>
+//		 * <p>The window created will be set up in orthographic 2D projection, with 1:1 pixel ratio with GL coordinates.
+//		 *
+//		 * @param pixel_format    Describes the minimum specifications the context must fulfill.
+//		 * @param shared_drawable The Drawable to share context with. (optional, may be null)
+//		 *
+//		 * @
+//		 */
+//		public static void create(PixelFormat pixel_format, Drawable shared_drawable)  {
+//
+//		}
+//
+//		/**
+//		 * Create the OpenGL context with the given minimum parameters. If isFullscreen() is true or if windowed
+//		 * context are not supported on the platform, the display mode will be switched to the mode returned by
+//		 * getDisplayMode(), and a fullscreen context will be created. If isFullscreen() is false, a windowed context
+//		 * will be created with the dimensions given in the mode returned by getDisplayMode(). If a context can't be
+//		 * created with the given parameters, a LWJGLException will be thrown.
+//		 * <p/>
+//		 * <p>The window created will be set up in orthographic 2D projection, with 1:1 pixel ratio with GL coordinates.
+//		 *
+//		 * @param pixel_format Describes the minimum specifications the context must fulfill.
+//		 * @param attribs      The ContextAttribs to use when creating the context. (optional, may be null)
+//		 *
+//		 * @
+//		 */
+//		public static void create(PixelFormat pixel_format, ContextAttribs attribs)  {
+//
+//		}
+//
+//		/**
+//		 * Create the OpenGL context with the given minimum parameters. If isFullscreen() is true or if windowed
+//		 * context are not supported on the platform, the display mode will be switched to the mode returned by
+//		 * getDisplayMode(), and a fullscreen context will be created. If isFullscreen() is false, a windowed context
+//		 * will be created with the dimensions given in the mode returned by getDisplayMode(). If a context can't be
+//		 * created with the given parameters, a LWJGLException will be thrown.
+//		 * <p/>
+//		 * <p>The window created will be set up in orthographic 2D projection, with 1:1 pixel ratio with GL coordinates.
+//		 *
+//		 * @param pixel_format    Describes the minimum specifications the context must fulfill.
+//		 * @param shared_drawable The Drawable to share context with. (optional, may be null)
+//		 * @param attribs         The ContextAttribs to use when creating the context. (optional, may be null)
+//		 *
+//		 * @
+//		 */
+//		public static void create(PixelFormat pixel_format, Drawable shared_drawable, ContextAttribs attribs)  {
+//
+//		}
+//
+//		/**
+//		 * Create the OpenGL ES context with the given minimum parameters. If isFullscreen() is true or if windowed
+//		 * context are not supported on the platform, the display mode will be switched to the mode returned by
+//		 * getDisplayMode(), and a fullscreen context will be created. If isFullscreen() is false, a windowed context
+//		 * will be created with the dimensions given in the mode returned by getDisplayMode(). If a context can't be
+//		 * created with the given parameters, a LWJGLException will be thrown.
+//		 * <p/>
+//		 * <p>The window created will be set up in orthographic 2D projection, with 1:1 pixel ratio with GL coordinates.
+//		 *
+//		 * @param pixel_format Describes the minimum specifications the context must fulfill. Must be an instance of org.lwjgl.opengles.PixelFormat.
+//		 *
+//		 * @
+//		 */
+//
+//		public static void create(PixelFormatLWJGL pixel_format)  {
+//
+//		}
+//
+//		/**
+//		 * Create the OpenGL ES context with the given minimum parameters. If isFullscreen() is true or if windowed
+//		 * context are not supported on the platform, the display mode will be switched to the mode returned by
+//		 * getDisplayMode(), and a fullscreen context will be created. If isFullscreen() is false, a windowed context
+//		 * will be created with the dimensions given in the mode returned by getDisplayMode(). If a context can't be
+//		 * created with the given parameters, a LWJGLException will be thrown.
+//		 * <p/>
+//		 * <p>The window created will be set up in orthographic 2D projection, with 1:1 pixel ratio with GL coordinates.
+//		 *
+//		 * @param pixel_format    Describes the minimum specifications the context must fulfill. Must be an instance of org.lwjgl.opengles.PixelFormat.
+//		 * @param shared_drawable The Drawable to share context with. (optional, may be null)
+//		 *
+//		 * @
+//		 */
+//		public static void create(PixelFormatLWJGL pixel_format, Drawable shared_drawable)  {
+//
+//		}
+//
+//		/**
+//		 * Create the OpenGL ES context with the given minimum parameters. If isFullscreen() is true or if windowed
+//		 * context are not supported on the platform, the display mode will be switched to the mode returned by
+//		 * getDisplayMode(), and a fullscreen context will be created. If isFullscreen() is false, a windowed context
+//		 * will be created with the dimensions given in the mode returned by getDisplayMode(). If a context can't be
+//		 * created with the given parameters, a LWJGLException will be thrown.
+//		 * <p/>
+//		 * <p>The window created will be set up in orthographic 2D projection, with 1:1 pixel ratio with GL coordinates.
+//		 *
+//		 * @param pixel_format Describes the minimum specifications the context must fulfill. Must be an instance of org.lwjgl.opengles.PixelFormat.
+//		 * @param attribs      The ContextAttribs to use when creating the context. (optional, may be null)
+//		 *
+//		 * @
+//		 */
+//		public static void create(PixelFormatLWJGL pixel_format, org.lwjgl.opengles.ContextAttribs attribs)  {
+//			
+//		}
+//
+//		/**
+//		 * Create the OpenGL ES context with the given minimum parameters. If isFullscreen() is true or if windowed
+//		 * context are not supported on the platform, the display mode will be switched to the mode returned by
+//		 * getDisplayMode(), and a fullscreen context will be created. If isFullscreen() is false, a windowed context
+//		 * will be created with the dimensions given in the mode returned by getDisplayMode(). If a context can't be
+//		 * created with the given parameters, a LWJGLException will be thrown.
+//		 * <p/>
+//		 * <p>The window created will be set up in orthographic 2D projection, with 1:1 pixel ratio with GL coordinates.
+//		 *
+//		 * @param pixel_format    Describes the minimum specifications the context must fulfill. Must be an instance of org.lwjgl.opengles.PixelFormat.
+//		 * @param shared_drawable The Drawable to share context with. (optional, may be null)
+//		 * @param attribs         The ContextAttribs to use when creating the context. (optional, may be null)
+//		 *
+//		 * @
+//		 */
+//		public static void create(PixelFormatLWJGL pixel_format, Drawable shared_drawable, org.lwjgl.opengles.ContextAttribs attribs)  {
+//			
+//		}
 
 		/**
 		 * Set the initial color of the Display. This method is called before the Display is created and will set the
@@ -604,29 +711,29 @@ import org.teavm.jso.browser.Window;
 		 * @param blue  - color value between 0 - 1
 		 */
 		public static void setInitialBackground(float red, float green, float blue) {
-
+			
 		}
 
-		private static void makeCurrentAndSetSwapInterval() throws LWJGLException {
-
+		private static void makeCurrentAndSetSwapInterval()  {
+			
 		}
 
 		private static void initContext() {
-
+			
 		}
 
-		static DisplayImplementation getImplementation() {
-		
+		static void getImplementation() {
+			
 		}
 
 		/** Gets a boolean property as a privileged action. */
 		static boolean getPrivilegedBoolean(final String property_name) {
-			return null;
+			return false;
 		}
 		
 		/** Gets a string property as a privileged action. */
 		static String getPrivilegedString(final String property_name) {
-
+			return "";
 		}
 
 		private static void initControls() {
@@ -638,7 +745,9 @@ import org.teavm.jso.browser.Window;
 		 * regardless of whether the Display was the current rendering context.
 		 */
 		public static void destroy() {
-
+			jsWin.close();
+			Window.current().close();
+			
 		}
 
 		/*
@@ -652,7 +761,7 @@ import org.teavm.jso.browser.Window;
 
 		/** @return true if the window's native peer has been created */
 		public static boolean isCreated() {
-
+			return jsWin != null;
 		}
 
 		/**
@@ -665,7 +774,7 @@ import org.teavm.jso.browser.Window;
 		 * @param value The swap interval in frames, 0 to disable
 		 */
 		public static void setSwapInterval(int value) {
-
+			
 		}
 
 		/**
@@ -675,7 +784,7 @@ import org.teavm.jso.browser.Window;
 		 * @param sync true to synchronize; false to ignore synchronization
 		 */
 		public static void setVSyncEnabled(boolean sync) {
-
+			
 		}
 
 		/**
@@ -689,11 +798,11 @@ import org.teavm.jso.browser.Window;
 		 * @param new_y The new window location on the y axis
 		 */
 		public static void setLocation(int new_x, int new_y) {
-
+			jsWin.moveTo(new_x, new_y);
 		}
 
 		private static void reshape() {
-
+			
 		}
 
 		/**
@@ -703,7 +812,7 @@ import org.teavm.jso.browser.Window;
 		 * @return a String
 		 */
 		public static String getAdapter() {
-
+			return "Web";
 		}
 
 		/**
@@ -713,7 +822,7 @@ import org.teavm.jso.browser.Window;
 		 * @return a String
 		 */
 		public static String getVersion() {
-
+			return "";
 		}
 
 		/**
@@ -734,7 +843,7 @@ import org.teavm.jso.browser.Window;
 		 * @return number of icons used, or 0 if display hasn't been created
 		 */
 		public static int setIcon(ByteBuffer[] icons) {
-
+			return 0;
 		}
 
 		/**
@@ -751,7 +860,7 @@ import org.teavm.jso.browser.Window;
 		 * @return true if the Display window is resizable.
 		 */
 		public static boolean isResizable() {
-			
+			return true;
 		}
 
 		/**
@@ -761,7 +870,7 @@ import org.teavm.jso.browser.Window;
 		 * This will return false if running in fullscreen or with Display.setParent(Canvas parent)
 		 */
 		public static boolean wasResized() {
-			
+			return wasResized;
 		}
 
 		/**
@@ -772,7 +881,7 @@ import org.teavm.jso.browser.Window;
 		 * the parent will be returned.
 		 */
 		public static int getX() {
-
+			return jsWin.getScreenX();
 		}
 
 		/**
@@ -783,7 +892,7 @@ import org.teavm.jso.browser.Window;
 		 * the parent will be returned.
 		 */
 		public static int getY() {
-
+			return jsWin.getScreenY();
 		}
 
 		/**
@@ -796,7 +905,7 @@ import org.teavm.jso.browser.Window;
 		 * This value will be updated after a call to Display.update().
 		 */
 		public static int getWidth() {
-
+			return jsWin.getInnerWidth();
 		}
 
 		/**
@@ -809,7 +918,7 @@ import org.teavm.jso.browser.Window;
 		 * This value will be updated after a call to Display.update().
 		 */
 		public static int getHeight() {
-
+			return jsWin.getInnerHeight();
 		}
 		
 		/**
@@ -833,7 +942,7 @@ import org.teavm.jso.browser.Window;
 		 * not have any effect on values that are multiplied by it.
 		 */
 		public static float getPixelScaleFactor() {
-
+			return 1;
 		}
 	}
 

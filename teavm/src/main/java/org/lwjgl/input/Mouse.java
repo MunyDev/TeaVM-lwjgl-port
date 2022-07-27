@@ -1,7 +1,6 @@
 package org.lwjgl.input;
 
 import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 
@@ -31,6 +30,7 @@ import org.teavm.jso.dom.events.*;
  * @version $Revision$
  * $Id$
  */
+@SuppressWarnings("unused")
 public class Mouse {
 	/** Internal use - event size in bytes */
 	public static final int	EVENT_SIZE									= 1 + 1 + 4 + 4 + 4 + 8;
@@ -151,6 +151,7 @@ public class Mouse {
 		}
 	}
 
+	
 	private static void resetMouse() {
 		dx = dy = dwheel = 0;
 		readBuffer.position(readBuffer.limit());
@@ -199,7 +200,7 @@ public class Mouse {
 			}
 			
 		});
-		hce.addEventListener("pointerlockchange", new EventListener() {
+		hce.addEventListener("pointerlockchange", new EventListener<Event>() {
 
 			@Override
 			public void handleEvent(Event evt) {

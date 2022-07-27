@@ -34,18 +34,16 @@ package org.lwjgl.input;
 	 */
 
 
-	import java.lang.reflect.Field;
-	import java.lang.reflect.Modifier;
-	import java.nio.ByteBuffer;
 	import java.util.HashMap;
-	import java.util.Map;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.BiConsumer;
 
-	import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.Display;
 import org.munydev.teavm.lwjgl.CurrentContext;
-import org.teavm.jso.browser.Window;
 import org.teavm.jso.dom.events.EventListener;
 import org.teavm.jso.dom.events.KeyboardEvent;
-import org.teavm.jso.dom.html.HTMLCanvasElement;
 import org.teavm.webgl2.WebGL2RenderingContext;
 
 	/**
@@ -225,12 +223,12 @@ import org.teavm.webgl2.WebGL2RenderingContext;
 		public static final int KEYBOARD_SIZE = 256;
 
 		/** Buffer size in events */
-		private static final int BUFFER_SIZE = 50;
+//		private static final int BUFFER_SIZE = 50;
 
 		/** Key names */
-		private static final String[] keyName = new String[KEYBOARD_SIZE];
+//		private static final String[] keyName = new String[KEYBOARD_SIZE];
 		private static final Map<String, Integer> keyMap = new HashMap<String, Integer>(256);
-		private static int counter;
+//		private static int counter;
 
 //		static {
 //			// Use reflection to find out key names
@@ -258,13 +256,13 @@ import org.teavm.webgl2.WebGL2RenderingContext;
 //		}
 
 		/** The number of keys supported */
-		private static final int keyCount = counter;
+//		private static final int keyCount = counter;
 //
 		/** Has the keyboard been created? */
 		private static boolean created;
 
 		/** Are repeat events enabled? */
-		private static boolean repeat_enabled;
+//		private static boolean repeat_enabled;
 		private static boolean[] keyArr;
 		/** The keys status from the last poll */
 //		private static final ByteBuffer keyDownBuffer = BufferUtils.createByteBuffer(KEYBOARD_SIZE);
@@ -407,19 +405,34 @@ import org.teavm.webgl2.WebGL2RenderingContext;
 		/**
 		 * Static initialization
 		 */
-		private static void initialize() {
+//		private static void initialize() {
+//			
+//		}
+		public static Set<String> map(int key) {
+			Set<String> str = new HashSet<String>();
+			keyMap.forEach(new BiConsumer<String, Integer>() {
+
+				@Override
+				public void accept(String t, Integer u) {
+					// TODO Auto-generated method stub
+					if (u == key) {
+						str.add(t);
+					}
+				}
+				
+			});
+			return str;
 			
 		}
-
 		/**
 		 * "Create" the keyboard with the given implementation. This is used
 		 * reflectively from AWTInputAdapter.
 		 *
 		 * @throws LWJGLException if the keyboard could not be created for any reason
 		 */
-		private static void create(Object unused) {
-			create();
-		}
+//		private static void create(Object unused) {
+//			create();
+//		}
 
 		/**
 		 * "Create" the keyboard. The display must first have been created. The
@@ -430,8 +443,8 @@ import org.teavm.webgl2.WebGL2RenderingContext;
 		public static void create() {
 			if (created) return;
 			keyArr = new boolean[512];
-			HTMLCanvasElement hce = ((WebGL2RenderingContext)CurrentContext.getContext()).getCanvas();
-			Window.current().addEventListener("keydown", new EventListener<KeyboardEvent>() {
+//			HTMLCanvasElement hce = ((WebGL2RenderingContext)CurrentContext.getContext()).getCanvas();
+			Display.getWindow().addEventListener("keydown", new EventListener<KeyboardEvent>() {
 
 				@Override
 				public void handleEvent(KeyboardEvent evt) {
@@ -446,13 +459,14 @@ import org.teavm.webgl2.WebGL2RenderingContext;
 					}else {
 						System.out.println(String.format("%s is not available", evt.getCode()));
 					}
+					if (Mouse.isSupposedToBeGrabbed) ((WebGL2RenderingContext) CurrentContext.getContext()).getCanvas().requestPointerLock();
 					evt.preventDefault();
 					evt.stopPropagation();
 					
 				}
 				
 			});
-			Window.current().addEventListener("keyup", new EventListener<KeyboardEvent>() {
+			Display.getWindow().addEventListener("keyup", new EventListener<KeyboardEvent>() {
 
 				@Override
 				public void handleEvent(KeyboardEvent evt) {
@@ -471,9 +485,9 @@ import org.teavm.webgl2.WebGL2RenderingContext;
 			});
 		}
 
-		private static void reset() {
-			
-		}
+//		private static void reset() {
+//			
+//		}
 
 		/**
 		 * @return true if the keyboard has been created
@@ -514,9 +528,9 @@ import org.teavm.webgl2.WebGL2RenderingContext;
 			
 		}
 
-		private static void read() {
-			
-		}
+//		private static void read() {
+//			
+//		}
 
 		/**
 		 * Checks to see if a key is down.
@@ -601,9 +615,9 @@ import org.teavm.webgl2.WebGL2RenderingContext;
 			return false;
 		}
 
-		private static boolean readNext(Object event) {
-			return false;
-		}
+//		private static boolean readNext(Object event) {
+//			return false;
+//		}
 
 		/**
 		 * @return Number of keys on this keyboard
