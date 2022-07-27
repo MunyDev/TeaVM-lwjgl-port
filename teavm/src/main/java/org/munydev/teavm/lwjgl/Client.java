@@ -1,7 +1,10 @@
 package org.munydev.teavm.lwjgl;
 
 import org.teavm.jso.dom.html.HTMLDocument;
+import org.teavm.jso.dom.html.HTMLElement;
+import org.teavm.jso.dom.html.HTMLLinkElement;
 import org.teavm.jso.*;
+import org.teavm.jso.ajax.XMLHttpRequest;
 import org.teavm.jso.browser.*;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -9,6 +12,8 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import static org.teavm.jso.browser.Window.*;
+
+import org.apache.commons.codec.binary.Base64;
 public class Client {
     public static void main(String[] args) {
 //        HTMLDocument document = HTMLDocument.current();
@@ -39,9 +44,17 @@ public class Client {
 //        	
 //        });
     	HTMLDocument document = HTMLDocument.current();
+    	
     	document.getBody().setInnerHTML("If you don't see the game window, allow popups(disable popup blocker) and reload");
     	Display.setDisplayMode(new DisplayMode(640, 480, true));
-        Display.create();
+    	Display.create();
+    	HTMLLinkElement link = (HTMLLinkElement) Display.getWindow().getDocument().createElement("link");
+    	link.setRel("shortcut icon");
+    	link.setHref("https://stackoverflow.com/favicon.ico");
+    	XMLHttpRequest xhr =  XMLHttpRequest.create();
+    	
+    	Display.getWindow().getDocument().getHead().appendChild(link);
+    	
 //        CurrentContext.setCurrentContext(ctx);
 //        Mouse.create();
 //        Mouse.setGrabbed(true);

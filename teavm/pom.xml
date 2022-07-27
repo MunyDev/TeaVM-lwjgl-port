@@ -80,6 +80,7 @@
         <groupId>org.teavm</groupId>
         <artifactId>teavm-maven-plugin</artifactId>
         <version>${teavm.version}</version>
+        
         <executions>
           <execution>
             <id>web-client</id>
@@ -90,15 +91,15 @@
             <configuration>
               <!-- Directory where TeaVM should put generated files. This configuration conforms to the settings
                    of the WAR plugin -->
-              <targetDirectory>D:\nginx\html\mc-v2\</targetDirectory>
+              <targetDirectory>${project.basedir}\html</targetDirectory>
 
               <!-- Main class, containing static void main(String[]) -->
               <mainClass>org.munydev.teavm.lwjgl.Client</mainClass>
-
+			 
               <!-- Whether TeaVM should produce minified JavaScript. Can reduce JavaScript file size more than
                    two times -->
               <minifying>false</minifying>
-
+			  
               <!-- Whether TeaVM should produce debug information for its built-in debugger -->
               <debugInformationGenerated>true</debugInformationGenerated>
 
