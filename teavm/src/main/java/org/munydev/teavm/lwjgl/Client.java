@@ -59,19 +59,25 @@ public class Client {
 				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 				
 				GL11.glBegin(GL11.GL_TRIANGLES);
-				
+				GL11.glColor3f(1, 0, 0);
 				GL11.glVertex3f(-0.5f, 0.5f, 0);
+				GL11.glColor3f(0, 1, 0);
 				GL11.glVertex3f(0.5f, 0.5f, 0);
+				GL11.glColor3f(0, 0, 1);
 				GL11.glVertex3f(0.5f, -0.5f, 0);
+				GL11.glColor3f(1, 0, 0);
 				GL11.glVertex3f(-0.5f, 0.5f, 0);
+				GL11.glColor3f(0, 0, 1);
 				GL11.glVertex3f(0.5f, -0.5f, 0);
+				GL11.glColor3f(1, 1, 1);
 				GL11.glVertex3f(-0.5f, -0.5f, 0);
 				
 				GL11.glEnd();
-				log(String.valueOf(Mouse.isButtonDown(0)));
-				log(String.valueOf(Keyboard.isKeyDown(Keyboard.KEY_0)));
+//				log(String.valueOf(Mouse.isButtonDown(0)));
+//				log(String.valueOf(Keyboard.isKeyDown(Keyboard.KEY_0)));
 //				System.out.print('\n');
 				Mouse.poll();
+				
 				requestAnimationFrame(this);
 				
 			}
