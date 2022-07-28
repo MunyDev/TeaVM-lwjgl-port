@@ -91,6 +91,13 @@ public class GLUtil {
 			d.put(val);
 		}
 	}
+	public static byte[] glWriteArrayToJByteArray(Uint8Array ua) {
+		byte[] x = new byte[ua.getLength()];
+		for (int i = 0; i < ua.getLength(); i++) {
+			x[i] = (byte) ua.get(i);
+		}
+		return x;
+	}
 	public static void glWriteArrayBufferToJava(ArrayBuffer ab, FloatBuffer d) {
 		Float32Array fin = Float32Array.create(ab);
 		int len = fin.getLength();

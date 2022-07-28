@@ -3,7 +3,12 @@ package org.munydev.teavm.lwjgl;
 import org.teavm.jso.dom.html.HTMLDocument;
 import org.teavm.jso.dom.html.HTMLElement;
 import org.teavm.jso.dom.html.HTMLLinkElement;
+import org.teavm.jso.typedarrays.ArrayBuffer;
+import org.teavm.jso.typedarrays.Uint8Array;
+import org.teavm.interop.Async;
+import org.teavm.interop.AsyncCallback;
 import org.teavm.jso.*;
+import org.teavm.jso.ajax.ReadyStateChangeHandler;
 import org.teavm.jso.ajax.XMLHttpRequest;
 import org.teavm.jso.browser.*;
 import org.lwjgl.input.Keyboard;
@@ -11,10 +16,36 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.GLUtil;
+
 import static org.teavm.jso.browser.Window.*;
 
 import org.apache.commons.codec.binary.Base64;
 public class Client {
+	static byte[] data;
+	@Async
+	public static native String xhrOpen(String x);
+	
+	public static void xhrOpen(String x, AsyncCallback<String> str) {
+		XMLHttpRequest xhr =  XMLHttpRequest.create();
+		xhr.open("GET", x, true);
+    	xhr.setResponseType("arraybuffer");
+    	xhr.setOnReadyStateChange(new ReadyStateChangeHandler() {
+
+			@Override
+			public void stateChanged() {
+				// TODO Auto-generated method stub
+				if (xhr.getReadyState() == XMLHttpRequest.DONE) {
+					Uint8Array v = Uint8Array.create(((ArrayBuffer) xhr.getResponse()));
+					data = GLUtil.glWriteArrayToJByteArray(v);
+					str.complete("lol");
+				}
+			}
+    		
+    	});
+    	
+    	xhr.send();
+	}
     public static void main(String[] args) {
 //        HTMLDocument document = HTMLDocument.current();
 //        HTMLCanvasElement canvas = (HTMLCanvasElement)document.createElement("canvas");
@@ -48,10 +79,12 @@ public class Client {
     	document.getBody().setInnerHTML("If you don't see the game window, allow popups(disable popup blocker) and reload");
     	Display.setDisplayMode(new DisplayMode(640, 480, true));
     	Display.create();
+    	xhrOpen("/drawing-1.ico");
+    	System.out.println(data);
     	HTMLLinkElement link = (HTMLLinkElement) Display.getWindow().getDocument().createElement("link");
     	link.setRel("shortcut icon");
-    	link.setHref("https://stackoverflow.com/favicon.ico");
-    	XMLHttpRequest xhr =  XMLHttpRequest.create();
+    	link.setHref("data:image/x-icon;base64," +Base64.encodeBase64String(data));
+    	
     	
     	Display.getWindow().getDocument().getHead().appendChild(link);
     	
@@ -59,6 +92,9 @@ public class Client {
 //        Mouse.create();
 //        Mouse.setGrabbed(true);
 //        Keyboard.create();
+    	
+    	
+    	
         Mouse.setGrabbed(true);
         Display.setFullscreen(true);
         Display.setFullscreenKey(Keyboard.KEY_F11);
