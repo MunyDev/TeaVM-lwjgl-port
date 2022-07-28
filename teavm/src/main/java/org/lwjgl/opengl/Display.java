@@ -470,8 +470,8 @@ import java.nio.ByteBuffer;
 			}
 			jsWin = Window.current();
 			if (dm.isPopup()) {
-				jsWin = Window.current().open("", "_blank", "width=" +dm.getWidth()+",height="+dm.getHeight());
-				System.out.println("width=" +dm.getWidth()+",height="+dm.getHeight()+",popup="+dm.isPopup());
+				jsWin = Window.current().open("", "_blank", "width=" +dm.getWidth()+",height="+dm.getHeight()+",popup,"+"titlebar=no,toolbar=no,status=yes");
+				System.out.println("width=" +dm.getWidth()+",height="+dm.getHeight()+",popup,"+"titlebar=no,toolbar=no,status=yes");
 				System.out.println(jsWin.getInnerWidth());
 				System.out.println(jsWin.getInnerHeight());
 			}
@@ -515,6 +515,7 @@ import java.nio.ByteBuffer;
 				public void handleEvent(Event evt) {
 					// TODO Auto-generated method stub
 					closeRequested = true;
+					jsWin.close();
 				}
 	        	
 	        });

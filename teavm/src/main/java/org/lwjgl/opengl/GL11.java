@@ -1,6 +1,7 @@
 package org.lwjgl.opengl;
 
 import org.munydev.teavm.lwjgl.CurrentContext;
+import static org.lwjgl.opengl.GLObjectBuffers.*;
 import org.teavm.jso.core.JSArray;
 import org.teavm.jso.core.JSBoolean;
 import org.teavm.jso.core.JSNumber;
@@ -576,14 +577,14 @@ public class GL11 {
 	public static void	glBegin(int mode){
 		currentBatch = new Batch(mode);
     }
-	public static void	glBindTexture(int target, WebGLTexture texture){
+	public static void	glBindTexture(int target, int texture){
 //		ConstantMapper cm = new ConstantMapper(new String[] {
 //				"GL_TEXTURE_1D", "GL_TEXTURE_2D", "GL_TEXTURE_3D", "GL_TEXTURE_1D_ARRAY", "GL_TEXTURE_2D_ARRAY", "GL_TEXTURE_RECTANGLE", "GL_TEXTURE_CUBE_MAP", "GL_TEXTURE_CUBE_MAP_ARRAY", "GL_TEXTURE_BUFFER", "GL_TEXTURE_2D_MULTISAMPLE", "GL_TEXTURE_2D_MULTISAMPLE_ARRAY"
 //		});
 		
 		
 		
-		ctx.bindTexture(target, texture);
+		ctx.bindTexture(target, (WebGLTexture) get(texture).getObject());
     }
 	public static void	glBitmap(int width, int height, float xorig, float yorig, float xmove, float ymove, java.nio.ByteBuffer bitmap){
 		System.out.println("currently a stub!");
@@ -860,7 +861,12 @@ public class GL11 {
 		return ctx.createTexture();
     }
 	public static void	glGenTextures(java.nio.IntBuffer textures){
-
+		int len = textures.remaining();
+		for (int i = 0; i < len; i++) {
+			textures.put(newObject(GL_OBJECT_TEXTURES, ctx.createTexture()));
+		}
+		
+		
     }
 	static boolean	glGetBoolean(int pname){
 		return ctx.getParameter(pname).<JSBoolean> cast().booleanValue();

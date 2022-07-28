@@ -11,14 +11,25 @@ import org.teavm.jso.*;
 import org.teavm.jso.ajax.ReadyStateChangeHandler;
 import org.teavm.jso.ajax.XMLHttpRequest;
 import org.teavm.jso.browser.*;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
+
+import static org.lwjgl.opengl.GL11.*;
 import org.lwjgl.util.GLUtil;
 
 import static org.teavm.jso.browser.Window.*;
+
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
+
+import javax.imageio.ImageIO;
 
 import org.apache.commons.codec.binary.Base64;
 public class Client {
@@ -79,14 +90,58 @@ public class Client {
     	document.getBody().setInnerHTML("If you don't see the game window, allow popups(disable popup blocker) and reload");
     	Display.setDisplayMode(new DisplayMode(640, 480, true));
     	Display.create();
-    	xhrOpen("/drawing-1.ico");
+    	xhrOpen("./default-icon.ico");
+//    	IntBuffer ai = BufferUtils.createIntBuffer(1);
+//    	ai.flip();
+//    	glGenTextures(ai);
+//    	ai.flip();
+//    	int k = ai.get();
+//    	glBindTexture(GL_TEXTURE_2D, k);
+//    	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+//    	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+//    	
+//    	
+//    	try {
+//			BufferedImage bi = ImageIO.read(new ByteArrayInputStream(data));
+//			int[] rgb = new int[bi.getWidth() * bi.getHeight()];
+//			bi.getRGB(0, 0, bi.getWidth(), bi.getHeight(), rgb, 0, bi.getWidth());
+//			ByteBuffer b = BufferUtils.createByteBuffer(bi.getWidth() * bi.getHeight() * 4);
+//			for (int i = 0; i < bi.getWidth(); i++) {
+//				for (int j = 0; j < bi.getHeight(); j++) {
+//					int argb = rgb[i + j * bi.getWidth()];
+//					
+//					b.put((byte) ((argb >> 16) & 0xff));
+//					b.put((byte) ((argb >> 8) & 0xff));
+//					b.put((byte) ((argb >> 0) & 0xff));
+//					b.put((byte) ((argb >> 24) & 0xff));
+//				}
+//			}
+//			b.flip();
+//			GL11.glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bi.getWidth(), bi.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, b);
+//			
+//			
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
     	System.out.println(data);
     	HTMLLinkElement link = (HTMLLinkElement) Display.getWindow().getDocument().createElement("link");
-    	link.setRel("shortcut icon");
+    	link.setRel("icon");
+    	link.setType("image/x-icon");
     	link.setHref("data:image/x-icon;base64," +Base64.encodeBase64String(data));
+    	document.getHead().appendChild(link);
+    	System.out.println(Base64.encodeBase64String(data));
+    	Window.setTimeout(new TimerHandler() {
+
+			@Override
+			public void onTimer() {
+				// TODO Auto-generated method stub
+				Display.getWindow().getDocument().getHead().appendChild(link);
+				log("finished", Display.getWindow());
+			}
+    		
+    	}, 5000);
     	
-    	
-    	Display.getWindow().getDocument().getHead().appendChild(link);
     	
 //        CurrentContext.setCurrentContext(ctx);
 //        Mouse.create();
@@ -98,6 +153,7 @@ public class Client {
         Mouse.setGrabbed(true);
         Display.setFullscreen(true);
         Display.setFullscreenKey(Keyboard.KEY_F11);
+        
         requestAnimationFrame(new AnimationFrameCallback() {
 
 			@Override
@@ -105,30 +161,30 @@ public class Client {
 				// TODO Auto-generated method stub
 				if (Display.isCloseRequested()) {
 					
-					Window.current().close();
+//					Window.current().close();
 				}
 				
-				GL11.glClearColor(0, 0, 0, 1);
-				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+				glClearColor(0, 0, 0, 1);
+				glClear(GL_COLOR_BUFFER_BIT);
 				
-				GL11.glBegin(GL11.GL_TRIANGLES);
-				GL11.glColor3f(1, 0, 0);
-				GL11.glVertex3f(-0.5f, 0.5f, 0);
-				GL11.glColor3f(0, 1, 0);
-				GL11.glVertex3f(0.5f, 0.5f, 0);
-				GL11.glColor3f(0, 0, 1);
-				GL11.glVertex3f(0.5f, -0.5f, 0);
-				GL11.glColor3f(1, 0, 0);
-				GL11.glVertex3f(-0.5f, 0.5f, 0);
-				GL11.glColor3f(0, 0, 1);
-				GL11.glVertex3f(0.5f, -0.5f, 0);
-				GL11.glColor3f(1, 1, 1);
-				GL11.glVertex3f(-0.5f, -0.5f, 0);
+				glBegin(GL_TRIANGLES);
+				GL11.glTexCoord2f(0, 0);
+				glVertex3f(-0.5f, 0.5f, 0);
+				GL11.glTexCoord2f(1, 0);
+				glVertex3f(0.5f, 0.5f, 0);
+				GL11.glTexCoord2f(1, 1);
+				glVertex3f(0.5f, -0.5f, 0);
+				GL11.glTexCoord2f(0, 0);
+				glVertex3f(-0.5f, 0.5f, 0);
+				GL11.glTexCoord2f(1, 1);
+				glVertex3f(0.5f, -0.5f, 0);
+				GL11.glTexCoord2f(0, 1);
+				glVertex3f(-0.5f, -0.5f, 0);
 				
-				GL11.glEnd();
+				glEnd();
 				
-				log(String.valueOf(Mouse.isButtonDown(0)), Display.getWindow());
-				log(String.valueOf(Keyboard.isKeyDown(Keyboard.KEY_0)), Display.getWindow());
+//				log(String.valueOf(Mouse.isButtonDown(0)), Display.getWindow());
+//				log(String.valueOf(Keyboard.isKeyDown(Keyboard.KEY_0)), Display.getWindow());
 //				System.out.print('\n');
 				Display.update();
 				

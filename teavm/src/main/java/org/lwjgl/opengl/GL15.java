@@ -8,7 +8,9 @@ import org.teavm.jso.core.JSNumber;
 import org.teavm.jso.typedarrays.ArrayBuffer;
 import org.teavm.jso.typedarrays.Float32Array;
 import org.teavm.jso.typedarrays.Float64Array;
+import org.teavm.jso.typedarrays.Int8Array;
 import org.teavm.jso.typedarrays.Uint8Array;
+import org.teavm.jso.webgl.WebGLBuffer;
 import org.teavm.jso.webgl.WebGLRenderingContext;
 import org.teavm.webgl2.WebGL2RenderingContext;
 import org.teavm.webgl2.WebGLQuery;
@@ -85,14 +87,14 @@ public final class GL15 {
 	private GL15() {}
 
 	public static void glBindBuffer(int target, int buffer) {
-		ctx.bindBuffer(ConstantMapper.cmBuffers.mapRealToWebGL(target), buffers[buffer]);
+		ctx.bindBuffer(ConstantMapper.cmBuffers.mapRealToWebGL(target), (WebGLBuffer) get(buffer).getObject());
 	}
 	static native void nglBindBuffer(int target, int buffer, long function_pointer);
 
 	public static void glDeleteBuffers(IntBuffer buffers) {
 		while (buffers.remaining() > 0) {
-			int buf = buffers.get();
-			ctx.deleteBuffer(GLObjectBuffers.buffers[buf]);
+			
+			glDeleteBuffers(buffers.get());
 			
 		}
 	}
@@ -100,7 +102,7 @@ public final class GL15 {
 
 	/** Overloads glDeleteBuffers. */
 	public static void glDeleteBuffers(int buffer) {
-		ctx.deleteBuffer(buffers[buffer]);
+		ctx.deleteBuffer((WebGLBuffer) get(buffer).getObject());
 	}
 
 	public static void glGenBuffers(IntBuffer buffers) {
@@ -113,65 +115,66 @@ public final class GL15 {
 
 	/** Overloads glGenBuffers. */
 	public static int glGenBuffers() {
-		int result = bufferCount;
-		bufferCount++;
-		buffers[result] = ctx.createBuffer();
-		return result;
+		
+		return newObject(GL_OBJECT_BUFFERS, ctx.createBuffer());
 	}
 
 	public static boolean glIsBuffer(int buffer) {
-		return true;
+		return get(buffer).getType() == GL_OBJECT_BUFFERS;
 	}
 	static native boolean nglIsBuffer(int buffer, long function_pointer);
 
 	public static void glBufferData(int target, long data_size, int usage) {
-		ctx.bufferData(ConstantMapper.cmBuffers.mapRealToWebGL(target), (int) data_size, usage);
+		ctx.bufferData(target, (int) data_size, usage);
 	}
 	public static void glBufferData(int target, ByteBuffer data, int usage) {
 		
 		
-		ctx.bufferData(ConstantMapper.cmBuffers.mapRealToWebGL(target), GLUtil.glCreateBufferFromJava(data), usage);
+		ctx.bufferData(target, GLUtil.glCreateBufferFromJava(data), usage);
 		
 	}
 	public static void glBufferData(int target, DoubleBuffer data, int usage) {
-		
+		ctx.bufferData(target, GLUtil.glCreateBufferFromJava(data), usage);
 	}
 	public static void glBufferData(int target, FloatBuffer data, int usage) {
-		ctx.bufferData(ConstantMapper.cmBuffers.mapRealToWebGL(target), GLUtil.glCreateBufferFromJava(data), usage);
+		ctx.bufferData(target, GLUtil.glCreateBufferFromJava(data), usage);
 
 	}
 	public static void glBufferData(int target, IntBuffer data, int usage) {
-		ctx.bufferData(ConstantMapper.cmBuffers.mapRealToWebGL(target), GLUtil.glCreateBufferFromJava(data), usage);
+		ctx.bufferData(target, GLUtil.glCreateBufferFromJava(data), usage);
 
 	}
 	public static void glBufferData(int target, ShortBuffer data, int usage) {
-		ctx.bufferData(ConstantMapper.cmBuffers.mapRealToWebGL(target), GLUtil.glCreateBufferFromJava(data), usage);
+		ctx.bufferData(target, GLUtil.glCreateBufferFromJava(data), usage);
 	}
 
 	public static void glBufferSubData(int target, long offset, ByteBuffer data) {
-		ctx.bufferSubData(ConstantMapper.cmBuffers.mapRealToWebGL(target), (int) offset, GLUtil.glCreateBufferFromJava(data));
+		ctx.bufferSubData(target, (int) offset, GLUtil.glCreateBufferFromJava(data));
 
 	}
 	public static void glBufferSubData(int target, long offset, DoubleBuffer data) {
-		ctx.bufferSubData(ConstantMapper.cmBuffers.mapRealToWebGL(target), (int) offset, GLUtil.glCreateBufferFromJava(data));
+		ctx.bufferSubData(target, (int) offset, GLUtil.glCreateBufferFromJava(data));
 
 	}
 	public static void glBufferSubData(int target, long offset, FloatBuffer data) {
-		ctx.bufferSubData(ConstantMapper.cmBuffers.mapRealToWebGL(target), (int) offset, GLUtil.glCreateBufferFromJava(data));
+		ctx.bufferSubData(target, (int) offset, GLUtil.glCreateBufferFromJava(data));
 
 	}
 	public static void glBufferSubData(int target, long offset, IntBuffer data) {
-		ctx.bufferSubData(ConstantMapper.cmBuffers.mapRealToWebGL(target), (int) offset, GLUtil.glCreateBufferFromJava(data));
+		ctx.bufferSubData(target, (int) offset, GLUtil.glCreateBufferFromJava(data));
 
 	}
 	public static void glBufferSubData(int target, long offset, ShortBuffer data) {
-		ctx.bufferSubData(ConstantMapper.cmBuffers.mapRealToWebGL(target), (int) offset, GLUtil.glCreateBufferFromJava(data));
+		ctx.bufferSubData(target, (int) offset, GLUtil.glCreateBufferFromJava(data));
 
 	}
 	static native void nglBufferSubData(int target, long offset, long data_size, long data, long function_pointer);
 
 	public static void glGetBufferSubData(int target, long offset, ByteBuffer data) {
-		ctx.getBufferSubData(ConstantMapper.cmBuffers.mapRealToWebGL(target), target, null, target, target);
+		Int8Array ua = Int8Array.create(GLUtil.glNewBuffer(data));
+		ctx.getBufferSubData(target, 0, ua , 0, ua.getByteLength());
+		data.flip();
+		GLUtil.glWriteArrayBufferToJavab(ua.getBuffer(), data);
 	}
 	public static void glGetBufferSubData(int target, long offset, DoubleBuffer data) {
 		Float64Array arr = Float64Array.create(GLUtil.glNewBuffer(data));
@@ -334,14 +337,9 @@ public final class GL15 {
 	static native ByteBuffer nglGetBufferPointerv(int target, int pname, long result_size, long function_pointer);
 
 	public static void glGenQueries(IntBuffer ids) {
-		WebGLQuery wglq = ctx.createQuery();
-		
-		int idx = GLObjectBuffers.queryCount;
-		GLObjectBuffers.queries[idx] = wglq;
-		GLObjectBuffers.queryCount++;
-		ids.put(idx);
+		ids.put(newObject(GL_OBJECT_QUERIES, ctx.createQuery()));
 
-
+		ids.flip();
 
 
 	}
@@ -350,22 +348,16 @@ public final class GL15 {
 	/** Overloads glGenQueries. */
 	public static int glGenQueries() {
 
-		WebGLQuery wglq = ctx.createQuery();
-		int idx = queryCount;
-		if (queries[queryCount] != null) queryCount = GLObjectBuffers.queries.length - 1;
-		queryCount++;
-		queries[idx] = wglq;
 		
-		return idx;
+		
+		return newObject(GL_OBJECT_QUERIES, ctx.createQuery());
 		
 
 
 	}
 
 	public static void glDeleteQueries(IntBuffer ids) {
-		int i = ids.get();
-		ctx.deleteQuery(GLObjectBuffers.queries[i]);
-		queryCount = i;
+		ctx.deleteQuery((WebGLQuery) get(ids.get()).getObject());
 
 
 
@@ -375,8 +367,8 @@ public final class GL15 {
 	/** Overloads glDeleteQueries. */
 	public static void glDeleteQueries(int id) {
 
-		ctx.deleteQuery(GLObjectBuffers.queries[id]);
-		queryCount = id;
+		ctx.deleteQuery((WebGLQuery) get(id).getObject());
+		
 		
 
 
@@ -393,7 +385,7 @@ public final class GL15 {
 
 	public static void glBeginQuery(int target, int id) {
 
-
+		ctx.beginQuery(target, (WebGLQuery) get(id).getObject());
 
 
 	}
@@ -401,7 +393,7 @@ public final class GL15 {
 
 	public static void glEndQuery(int target) {
 
-
+		ctx.endQuery(target);
 
 
 	}
@@ -410,7 +402,7 @@ public final class GL15 {
 	public static void glGetQuery(int target, int pname, IntBuffer params) {
 
 
-
+		params.put(find(ctx.getQuery(target, pname)));
 
 
 	}
@@ -428,9 +420,9 @@ public final class GL15 {
 
 	/** Overloads glGetQueryiv. */
 	public static int glGetQueryi(int target, int pname) {
+		
 
-
-		return 0;
+		return find(ctx.getQuery(target, pname));
 
 
 
@@ -438,7 +430,7 @@ public final class GL15 {
 
 	public static void glGetQueryObject(int id, int pname, IntBuffer params) {
 
-		params.put(0);
+		params.put(((JSNumber) ctx.getQueryParameter((WebGLQuery) get(id).getObject(), pname)).intValue());
 
 
 
@@ -447,8 +439,10 @@ public final class GL15 {
 
 	/** Overloads glGetQueryObjectiv. */
 	public static int glGetQueryObjecti(int id, int pname) {
-
-		return 0;
+		
+		
+		
+		return ((JSNumber) ctx.getQueryParameter((WebGLQuery) get(id).getObject(), pname)).intValue();
 
 
 
@@ -456,7 +450,7 @@ public final class GL15 {
 	}
 
 	public static void glGetQueryObjectu(int id, int pname, IntBuffer params) {
-		params.put(0);
+		params.put(((JSNumber) ctx.getQueryParameter((WebGLQuery) get(id).getObject(), pname)).intValue());
 
 
 
@@ -468,7 +462,7 @@ public final class GL15 {
 	public static int glGetQueryObjectui(int id, int pname) {
 
 
-		return 0;
+		return ((JSNumber) ctx.getQueryParameter((WebGLQuery) get(id).getObject(), pname)).intValue();
 
 
 

@@ -449,7 +449,7 @@ import org.teavm.webgl2.WebGL2RenderingContext;
 				@Override
 				public void handleEvent(KeyboardEvent evt) {
 					// TODO Auto-generated method stub
-					
+					if (Mouse.isSupposedToBeGrabbed && evt.getCode() != "Escape") ((WebGL2RenderingContext) CurrentContext.getContext()).getCanvas().requestPointerLock();
 					if (evt.isRepeat()) return;
 					
 					if (keyMap.containsKey(evt.getCode())) {
@@ -459,7 +459,7 @@ import org.teavm.webgl2.WebGL2RenderingContext;
 					}else {
 						System.out.println(String.format("%s is not available", evt.getCode()));
 					}
-					if (Mouse.isSupposedToBeGrabbed) ((WebGL2RenderingContext) CurrentContext.getContext()).getCanvas().requestPointerLock();
+					
 					evt.preventDefault();
 					evt.stopPropagation();
 					
