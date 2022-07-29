@@ -1,16 +1,6 @@
 package org.lwjgl.opengl;
 
-import java.nio.ByteBuffer;
-import java.util.Arrays;
-
-import org.lwjgl.BufferUtils;
 import org.teavm.jso.JSObject;
-import org.teavm.jso.webgl.WebGLBuffer;
-import org.teavm.jso.webgl.WebGLProgram;
-import org.teavm.jso.webgl.WebGLShader;
-import org.teavm.jso.webgl.WebGLTexture;
-import org.teavm.jso.webgl.WebGLUniformLocation;
-import org.teavm.webgl2.WebGLQuery;
 
 public class GLObjectBuffers {
 	private static int objectCount = 0;

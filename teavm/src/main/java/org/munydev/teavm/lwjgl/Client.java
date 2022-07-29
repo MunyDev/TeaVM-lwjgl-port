@@ -124,7 +124,7 @@ public class Client {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
-    	System.out.println(data);
+//    	System.out.println(data);
     	HTMLLinkElement link = (HTMLLinkElement) Display.getWindow().getDocument().createElement("link");
     	link.setRel("icon");
     	link.setType("image/x-icon");

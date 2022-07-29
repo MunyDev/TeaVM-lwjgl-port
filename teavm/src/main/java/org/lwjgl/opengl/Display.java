@@ -844,7 +844,8 @@ import java.nio.ByteBuffer;
 		 * @return number of icons used, or 0 if display hasn't been created
 		 */
 		public static int setIcon(ByteBuffer[] icons) {
-			return 0;
+			
+			return 1;
 		}
 
 		/**
