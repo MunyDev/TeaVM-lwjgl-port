@@ -37,6 +37,7 @@ package org.lwjgl.input;
 	import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.function.BiConsumer;
 
@@ -228,6 +229,36 @@ import org.teavm.webgl2.WebGL2RenderingContext;
 		/** Key names */
 //		private static final String[] keyName = new String[KEYBOARD_SIZE];
 		private static final Map<String, Integer> keyMap = new HashMap<String, Integer>(256);
+		protected static class Event {
+			public boolean state;
+			public int keyCode;
+			public char keyCharCode;
+			public boolean repeat;
+			public boolean isRepeat() {
+				return repeat;
+			}
+			public Event(boolean state, int keyCode, char keyCharCode, boolean repeat) {
+//				super();
+				this.state = state;
+				this.keyCode = keyCode;
+				this.keyCharCode = keyCharCode;
+				this.repeat = repeat;
+			}
+			public boolean isState() {
+				return state;
+			}
+			public int getKeyCode() {
+				return keyCode;
+			}
+			public char getKeyCharCode() {
+				return keyCharCode;
+			}
+			
+		}
+		private static Keyboard.Event curEvent;
+		private static PriorityQueue<Keyboard.Event> queue = new PriorityQueue<Keyboard.Event>();
+		
+		
 //		private static int counter;
 
 //		static {
@@ -260,7 +291,7 @@ import org.teavm.webgl2.WebGL2RenderingContext;
 //
 		/** Has the keyboard been created? */
 		private static boolean created;
-
+//		private static PriorityQueue<KeyboardEvent> pq = new PriorityQueue<KeyboardEvent>();
 		/** Are repeat events enabled? */
 //		private static boolean repeat_enabled;
 		private static boolean[] keyArr;
@@ -459,7 +490,7 @@ import org.teavm.webgl2.WebGL2RenderingContext;
 					}else {
 						System.out.println(String.format("%s is not available", evt.getCode()));
 					}
-					
+					queue.add(new Keyboard.Event(true, keyMap.get(evt.getCode()), (char) evt.getCharCode(), evt.isRepeat()));
 					evt.preventDefault();
 					evt.stopPropagation();
 					
@@ -475,6 +506,7 @@ import org.teavm.webgl2.WebGL2RenderingContext;
 //						System.out.printf("%s, %d", evt.getCode(), keyMap.get(evt.getCode()));
 //						System.out.println(keyMap.get(evt.getCode()));
 						keyArr[keyMap.get(evt.getCode())] = false;
+						queue.add(new Keyboard.Event(false, keyMap.get(evt.getCode()), (char) evt.getCharCode(), false));
 					}else {
 //						System.out.printf("%s is not available", evt.getCode());
 					}
@@ -590,7 +622,12 @@ import org.teavm.webgl2.WebGL2RenderingContext;
 		 * @return true if a keyboard event was read, false otherwise
 		 */
 		public static boolean next() {
-			return true;
+			if (queue.isEmpty()) {
+				return false;
+			}else {
+				curEvent = queue.poll();
+				return true;
+			}
 		}
 
 		/**
@@ -630,7 +667,7 @@ import org.teavm.webgl2.WebGL2RenderingContext;
 		 * @return The character from the current event
 		 */
 		public static char getEventCharacter() {
-			return 0;
+			return (char) curEvent.getKeyCharCode();
 		}
 
 		/**
@@ -641,7 +678,7 @@ import org.teavm.webgl2.WebGL2RenderingContext;
 		 * @return The key from the current event
 		 */
 		public static int getEventKey() {
-			return 0;
+			return curEvent.getKeyCode();
 		}
 
 		/**
@@ -651,7 +688,7 @@ import org.teavm.webgl2.WebGL2RenderingContext;
 		 * @return True if key was down, or false if released
 		 */
 		public static boolean getEventKeyState() {
-			return false;
+			return curEvent.isState();
 		}
 
 		/**
@@ -671,7 +708,7 @@ import org.teavm.webgl2.WebGL2RenderingContext;
 		 * the current event is not a repeat even or if repeat events are disabled.
 		 */
 		public static boolean isRepeatEvent() {
-			return false;
+			return curEvent.repeat;
 		}
 
 		
