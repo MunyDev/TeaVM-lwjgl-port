@@ -12,10 +12,12 @@ This will attemmpt to port 1.8.8
 
 
 ## Display lists
-We are currently working on a way to stabilize display lists
+We are currently working on a way to stabilize display lists.
 
-## gl(*)Pointer functions(except for glVertexAttribPointer)
-These functions being added.
+## gl(\*)Pointer functions(except for glVertexAttribPointer)
+These functions are currently being added. Thanks for your patience.
+## glDrawElements with indices as a ByteBuffer
+These functions are currently being added. Thanks for your patience.
 
 ## Authors
 Authors: MunyDev, vTajae, WeekendGamez12
