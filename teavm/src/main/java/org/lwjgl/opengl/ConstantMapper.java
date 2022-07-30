@@ -1,10 +1,5 @@
 package org.lwjgl.opengl;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.function.Consumer;
-
 /**
  * BEFORE USING THIS <br />
  * SCOPES AND PREFIXES ARE BASED ON REAL OPENGL CONSTANTS, <b>NOT WEBGL CONSTANTS</b>
@@ -693,82 +688,77 @@ public class ConstantMapper {
 		USE_PREFIX, USE_SCOPE
 	}
 	public ConstantMapperOptions opt;
-//	private Object data;
-	private Map<Integer, String> subsetOpengl;
-//	private Map<String, String> subsetBridge;
-	private Map<Integer, String> subsetWGL;
-	
-	
-	
-	/**
+/**
 	 * Clearly obvious. This constructor sets up the ConstantMapper to work with a SCOPE. It is much better if you use the predefined constant mappers.
 	 *  
 	 * @param scopes
 	 */
-	@SuppressWarnings("unlikely-arg-type")
+//	@SuppressWarnings("unlikely-arg-type")
 	public ConstantMapper(String scopes[]) {
-		this.opt = ConstantMapperOptions.USE_SCOPE;
-//		this.data = scopes;
-		
-		Map<String, Integer> opengl = BridgeConstants.m;
-		subsetOpengl = new HashMap<Integer, String>();
-		for (String s : scopes) {
-			//We throw an exception if it is not unique
-			if (subsetOpengl.containsKey(s))
-				throw new IllegalStateException("Make sure your scopes have its values be unique");
-			if (!BridgeConstants.ogltowgl.containsKey(s)) continue;
-			subsetOpengl.put(opengl.get(s), s);
-			String x =  BridgeConstants.ogltowgl.get(s);
-			subsetWGL.put(BridgeConstants.wgl.get(x), x);
-		}
+//		this.opt = ConstantMapperOptions.USE_SCOPE;
+////		this.data = scopes;
+//		
+//		Map<String, Integer> opengl = BridgeConstants.m;
+//		subsetOpengl = new HashMap<Integer, String>();
+//		for (String s : scopes) {
+//			//We throw an exception if it is not unique
+//			if (subsetOpengl.containsKey(s))
+//				throw new IllegalStateException("Make sure your scopes have its values be unique");
+//			if (!BridgeConstants.ogltowgl.containsKey(s)) continue;
+//			subsetOpengl.put(opengl.get(s), s);
+//			String x =  BridgeConstants.ogltowgl.get(s);
+//			subsetWGL.put(BridgeConstants.wgl.get(x), x);
+//		}
 		
 		
 	}
 	public ConstantMapper(String prefix) {
-		this.opt = ConstantMapperOptions.USE_PREFIX;
-//		this.data = prefix;
-		Map<String, Integer> opengl = BridgeConstants.m;
-		subsetOpengl = new HashMap<Integer, String>();
-		
-		opengl.entrySet().forEach(new Consumer<Map.Entry<String, Integer>>() {
-
-			@Override
-			public void accept(Entry<String, Integer> t) {
-				// TODO Auto-generated method stub
-				String s = t.getKey();
-				int i = t.getValue();
-				
-				//Check if it fits the criteria
-				if (s.startsWith(prefix)) {
-					subsetOpengl.put(i, s);
-				}
-			}
-			
-		});
+//		this.opt = ConstantMapperOptions.USE_PREFIX;
+////		this.data = prefix;
+//		Map<String, Integer> opengl = BridgeConstants.m;
+//		subsetOpengl = new HashMap<Integer, String>();
+//		
+//		opengl.entrySet().forEach(new Consumer<Map.Entry<String, Integer>>() {
+//
+//			@Override
+//			public void accept(Entry<String, Integer> t) {
+//				// TODO Auto-generated method stub
+//				String s = t.getKey();
+//				int i = t.getValue();
+//				
+//				//Check if it fits the criteria
+//				if (s.startsWith(prefix)) {
+//					subsetOpengl.put(i, s);
+//				}
+//			}
+//			
+//		});
 	}
 	public String[] getScopeList() {
-		return (String[]) subsetOpengl.values().toArray();
+//		return (String[]) subsetOpengl.values().toArray();
+		return new String[] {"Unavailable" };
 	}
 	public int mapRealToWebGL(int i) {
-		if (!subsetOpengl.containsKey(i)) return -1;
-		String name = subsetOpengl.get(i); 
-		
-		Map<String, String> ogltowgl = BridgeConstants.ogltowgl;
-		if ( BridgeConstants.wgl.get(ogltowgl.get(name)) != null) {
-			return BridgeConstants.wgl.get(ogltowgl.get(name));
-		}
-		else {
-			return -1;
-		}
+//		if (!subsetOpengl.containsKey(i)) return -1;
+//		String name = subsetOpengl.get(i); 
+//		
+//		Map<String, String> ogltowgl = BridgeConstants.ogltowgl;
+//		if ( BridgeConstants.wgl.get(ogltowgl.get(name)) != null) {
+//			return BridgeConstants.wgl.get(ogltowgl.get(name));
+//		}
+//		else {
+//			return -1;
+//		}
+		return i;
 	}
 	public int mapWebGLToReal(int i) {
-		String s= subsetWGL.get(i);
-		Map<String, String> ogltowgl = BridgeConstants.ogltowgl;
-		
-		for (Map.Entry<String, String> ent : ogltowgl.entrySet()) {
-			if (s == ent.getValue()) return BridgeConstants.m.get(ent.getKey());
-		}
-		return -1;
+//		String s= subsetWGL.get(i);
+//		Map<String, String> ogltowgl = BridgeConstants.ogltowgl;
+//		
+//		for (Map.Entry<String, String> ent : ogltowgl.entrySet()) {
+//			if (s == ent.getValue()) return BridgeConstants.m.get(ent.getKey());
+//		}
+		return i;
 	}
 	
 }
