@@ -2,8 +2,25 @@
 
 package org.lwjgl.opengl;
 
-import org.lwjgl.*;
 import java.nio.*;
+
+import org.lwjgl.util.GLUtil;
+import org.munydev.teavm.lwjgl.CurrentContext;
+import org.teavm.jso.core.JSNumber;
+import org.teavm.jso.typedarrays.*;
+import org.teavm.jso.webgl.WebGLActiveInfo;
+import org.teavm.jso.webgl.WebGLBuffer;
+import org.teavm.jso.webgl.WebGLFramebuffer;
+import org.teavm.jso.webgl.WebGLProgram;
+import org.teavm.jso.webgl.WebGLRenderbuffer;
+import org.teavm.jso.webgl.WebGLTexture;
+import org.teavm.jso.webgl.WebGLUniformLocation;
+import org.teavm.webgl2.*;
+
+
+import static org.lwjgl.opengl.GLObjectBuffers.*;
+//import org.lwjgl.*;
+//import java.nio.*;
 
 public final class GL30 {
 
@@ -575,406 +592,267 @@ public final class GL30 {
 	public static final int GL_FRAMEBUFFER_SRGB_CAPABLE = 0x8DBA;
 
 	private GL30() {}
-
+	private static WebGL2RenderingContext ctx = (WebGL2RenderingContext) CurrentContext.getContext();
 	public static String glGetStringi(int name, int index) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetStringi;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		String __result = nglGetStringi(name, index, function_pointer);
-		return __result;
+		return ctx.getParameterString(name);
 	}
 	static native String nglGetStringi(int name, int index, long function_pointer);
 
 	public static void glClearBuffer(int buffer, int drawbuffer, FloatBuffer value) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glClearBufferfv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkBuffer(value, 4);
-		nglClearBufferfv(buffer, drawbuffer, MemoryUtil.getAddress(value), function_pointer);
+		ctx.clearBufferfv(buffer, drawbuffer, Float32Array.create(GLUtil.glCreateBufferFromJava(value)), 0);
 	}
 	static native void nglClearBufferfv(int buffer, int drawbuffer, long value, long function_pointer);
 
 	public static void glClearBuffer(int buffer, int drawbuffer, IntBuffer value) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glClearBufferiv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkBuffer(value, 4);
-		nglClearBufferiv(buffer, drawbuffer, MemoryUtil.getAddress(value), function_pointer);
+		ctx.clearBufferiv(buffer, drawbuffer, Int32Array.create(GLUtil.glCreateBufferFromJava(value)), 0);
 	}
 	static native void nglClearBufferiv(int buffer, int drawbuffer, long value, long function_pointer);
 
 	public static void glClearBufferu(int buffer, int drawbuffer, IntBuffer value) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glClearBufferuiv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkBuffer(value, 4);
-		nglClearBufferuiv(buffer, drawbuffer, MemoryUtil.getAddress(value), function_pointer);
+		ctx.clearBufferuiv(buffer, drawbuffer, GLUtil.glCreateBufferFromJava(value), drawbuffer);
 	}
 	static native void nglClearBufferuiv(int buffer, int drawbuffer, long value, long function_pointer);
 
 	public static void glClearBufferfi(int buffer, int drawbuffer, float depth, int stencil) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glClearBufferfi;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglClearBufferfi(buffer, drawbuffer, depth, stencil, function_pointer);
+		ctx.clearBufferfi(buffer, drawbuffer, depth, stencil);
 	}
 	static native void nglClearBufferfi(int buffer, int drawbuffer, float depth, int stencil, long function_pointer);
 
 	public static void glVertexAttribI1i(int index, int x) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glVertexAttribI1i;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglVertexAttribI1i(index, x, function_pointer);
+		ctx.vertexAttribI4i(index, x, 0, 0, 1);
 	}
 	static native void nglVertexAttribI1i(int index, int x, long function_pointer);
 
 	public static void glVertexAttribI2i(int index, int x, int y) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glVertexAttribI2i;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglVertexAttribI2i(index, x, y, function_pointer);
+		ctx.vertexAttribI4i(index, x, y, 0, 1);
 	}
 	static native void nglVertexAttribI2i(int index, int x, int y, long function_pointer);
 
 	public static void glVertexAttribI3i(int index, int x, int y, int z) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glVertexAttribI3i;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglVertexAttribI3i(index, x, y, z, function_pointer);
+		ctx.vertexAttribI4i(index, x, y, z, 1);
 	}
 	static native void nglVertexAttribI3i(int index, int x, int y, int z, long function_pointer);
 
 	public static void glVertexAttribI4i(int index, int x, int y, int z, int w) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glVertexAttribI4i;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglVertexAttribI4i(index, x, y, z, w, function_pointer);
+		ctx.vertexAttribI4i(index, x, y, z, w);
 	}
 	static native void nglVertexAttribI4i(int index, int x, int y, int z, int w, long function_pointer);
 
 	public static void glVertexAttribI1ui(int index, int x) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glVertexAttribI1ui;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglVertexAttribI1ui(index, x, function_pointer);
+		ctx.vertexAttribI4ui(index, x, 0, 0, 0);
 	}
 	static native void nglVertexAttribI1ui(int index, int x, long function_pointer);
 
 	public static void glVertexAttribI2ui(int index, int x, int y) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glVertexAttribI2ui;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglVertexAttribI2ui(index, x, y, function_pointer);
+		ctx.vertexAttribI4ui(index, x, y, 0, 1);
 	}
 	static native void nglVertexAttribI2ui(int index, int x, int y, long function_pointer);
 
 	public static void glVertexAttribI3ui(int index, int x, int y, int z) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glVertexAttribI3ui;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglVertexAttribI3ui(index, x, y, z, function_pointer);
+		ctx.vertexAttribI4ui(index, x, y, z, 0);
 	}
 	static native void nglVertexAttribI3ui(int index, int x, int y, int z, long function_pointer);
 
 	public static void glVertexAttribI4ui(int index, int x, int y, int z, int w) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glVertexAttribI4ui;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglVertexAttribI4ui(index, x, y, z, w, function_pointer);
+		ctx.vertexAttribI4ui(index, x, y, z, w);
 	}
 	static native void nglVertexAttribI4ui(int index, int x, int y, int z, int w, long function_pointer);
 
 	public static void glVertexAttribI1(int index, IntBuffer v) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glVertexAttribI1iv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkBuffer(v, 1);
-		nglVertexAttribI1iv(index, MemoryUtil.getAddress(v), function_pointer);
+		int[] arr = new int[] {v.get(), 0, 0, 1};
+		Int32Array res = Int32Array.create(arr.length);
+		res.set(arr);
+		ctx.vertexAttribI4iv(index, res);
 	}
 	static native void nglVertexAttribI1iv(int index, long v, long function_pointer);
 
 	public static void glVertexAttribI2(int index, IntBuffer v) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glVertexAttribI2iv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkBuffer(v, 2);
-		nglVertexAttribI2iv(index, MemoryUtil.getAddress(v), function_pointer);
+		int[] arr = new int[] {v.get(), v.get(), 0, 1};
+		Int32Array res = Int32Array.create(arr.length);
+		res.set(arr);
+		ctx.vertexAttribI4iv(index, res);
 	}
 	static native void nglVertexAttribI2iv(int index, long v, long function_pointer);
 
 	public static void glVertexAttribI3(int index, IntBuffer v) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glVertexAttribI3iv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkBuffer(v, 3);
-		nglVertexAttribI3iv(index, MemoryUtil.getAddress(v), function_pointer);
+		int[] arr = new int[] {v.get(), v.get(), v.get(), 1};
+		Int32Array res = Int32Array.create(arr.length);
+		res.set(arr);
+		ctx.vertexAttribI4iv(index, res);
 	}
 	static native void nglVertexAttribI3iv(int index, long v, long function_pointer);
 
 	public static void glVertexAttribI4(int index, IntBuffer v) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glVertexAttribI4iv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkBuffer(v, 4);
-		nglVertexAttribI4iv(index, MemoryUtil.getAddress(v), function_pointer);
+		int[] arr = new int[] {v.get(), v.get(), v.get(), v.get()};
+		Int32Array res = Int32Array.create(arr.length);
+		res.set(arr);
+		ctx.vertexAttribI4iv(index, res);
 	}
 	static native void nglVertexAttribI4iv(int index, long v, long function_pointer);
 
 	public static void glVertexAttribI1u(int index, IntBuffer v) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glVertexAttribI1uiv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkBuffer(v, 1);
-		nglVertexAttribI1uiv(index, MemoryUtil.getAddress(v), function_pointer);
+		int[] arr = new int[] {v.get(), 0, 0, 1};
+		Int32Array res = Int32Array.create(arr.length);
+		res.set(arr);
+		ctx.vertexAttribI4uiv(index, res.getBuffer());
 	}
 	static native void nglVertexAttribI1uiv(int index, long v, long function_pointer);
 
 	public static void glVertexAttribI2u(int index, IntBuffer v) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glVertexAttribI2uiv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkBuffer(v, 2);
-		nglVertexAttribI2uiv(index, MemoryUtil.getAddress(v), function_pointer);
+		int[] arr = new int[] {v.get(), v.get(), 0, 1};
+		Int32Array res = Int32Array.create(arr.length);
+		res.set(arr);
+		ctx.vertexAttribI4uiv(index, res.getBuffer());
 	}
 	static native void nglVertexAttribI2uiv(int index, long v, long function_pointer);
 
 	public static void glVertexAttribI3u(int index, IntBuffer v) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glVertexAttribI3uiv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkBuffer(v, 3);
-		nglVertexAttribI3uiv(index, MemoryUtil.getAddress(v), function_pointer);
+		int[] arr = new int[] {v.get(), v.get(), v.get(), 1};
+		Int32Array res = Int32Array.create(arr.length);
+		res.set(arr);
+		ctx.vertexAttribI4uiv(index, res.getBuffer());
 	}
 	static native void nglVertexAttribI3uiv(int index, long v, long function_pointer);
 
 	public static void glVertexAttribI4u(int index, IntBuffer v) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glVertexAttribI4uiv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkBuffer(v, 4);
-		nglVertexAttribI4uiv(index, MemoryUtil.getAddress(v), function_pointer);
+		int[] arr = new int[] {v.get(), v.get(), v.get(), v.get()};
+		Int32Array res = Int32Array.create(arr.length);
+		res.set(arr);
+		ctx.vertexAttribI4uiv(index, res.getBuffer());
 	}
 	static native void nglVertexAttribI4uiv(int index, long v, long function_pointer);
 
 	public static void glVertexAttribI4(int index, ByteBuffer v) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glVertexAttribI4bv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkBuffer(v, 4);
-		nglVertexAttribI4bv(index, MemoryUtil.getAddress(v), function_pointer);
+		int[] arr = new int[] {v.get(), v.get(), v.get(), v.get()};
+		Int32Array res = Int32Array.create(arr.length);
+		res.set(arr);
+		ctx.vertexAttribI4iv(index, res);
 	}
 	static native void nglVertexAttribI4bv(int index, long v, long function_pointer);
 
 	public static void glVertexAttribI4(int index, ShortBuffer v) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glVertexAttribI4sv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkBuffer(v, 4);
-		nglVertexAttribI4sv(index, MemoryUtil.getAddress(v), function_pointer);
+		int[] arr = new int[] {v.get(), v.get(), v.get(), v.get()};
+		Int32Array res = Int32Array.create(arr.length);
+		res.set(arr);
+		ctx.vertexAttribI4iv(index, res);
 	}
 	static native void nglVertexAttribI4sv(int index, long v, long function_pointer);
 
 	public static void glVertexAttribI4u(int index, ByteBuffer v) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glVertexAttribI4ubv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkBuffer(v, 4);
-		nglVertexAttribI4ubv(index, MemoryUtil.getAddress(v), function_pointer);
+		int[] arr = new int[] {v.get(), v.get(), v.get(), v.get()};
+		Int32Array res = Int32Array.create(arr.length);
+		res.set(arr);
+		ctx.vertexAttribI4iv(index, res);
 	}
 	static native void nglVertexAttribI4ubv(int index, long v, long function_pointer);
 
 	public static void glVertexAttribI4u(int index, ShortBuffer v) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glVertexAttribI4usv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkBuffer(v, 4);
-		nglVertexAttribI4usv(index, MemoryUtil.getAddress(v), function_pointer);
+		int[] arr = new int[] {v.get(), v.get(), v.get(), v.get()};
+		Int32Array res = Int32Array.create(arr.length);
+		res.set(arr);
+		ctx.vertexAttribI4iv(index, res);
 	}
 	static native void nglVertexAttribI4usv(int index, long v, long function_pointer);
 
 	public static void glVertexAttribIPointer(int index, int size, int type, int stride, ByteBuffer buffer) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glVertexAttribIPointer;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		GLChecks.ensureArrayVBOdisabled(caps);
-		BufferChecks.checkDirect(buffer);
-		if ( LWJGLUtil.CHECKS ) StateTracker.getReferences(caps).glVertexAttribPointer_buffer[index] = buffer;
-		nglVertexAttribIPointer(index, size, type, stride, MemoryUtil.getAddress(buffer), function_pointer);
+		ctx.vertexAttribIPointer(index, size, type, stride, buffer.get());
 	}
 	public static void glVertexAttribIPointer(int index, int size, int type, int stride, IntBuffer buffer) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glVertexAttribIPointer;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		GLChecks.ensureArrayVBOdisabled(caps);
-		BufferChecks.checkDirect(buffer);
-		if ( LWJGLUtil.CHECKS ) StateTracker.getReferences(caps).glVertexAttribPointer_buffer[index] = buffer;
-		nglVertexAttribIPointer(index, size, type, stride, MemoryUtil.getAddress(buffer), function_pointer);
+		ctx.vertexAttribIPointer(index, size, type, stride, buffer.get());
 	}
 	public static void glVertexAttribIPointer(int index, int size, int type, int stride, ShortBuffer buffer) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glVertexAttribIPointer;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		GLChecks.ensureArrayVBOdisabled(caps);
-		BufferChecks.checkDirect(buffer);
-		if ( LWJGLUtil.CHECKS ) StateTracker.getReferences(caps).glVertexAttribPointer_buffer[index] = buffer;
-		nglVertexAttribIPointer(index, size, type, stride, MemoryUtil.getAddress(buffer), function_pointer);
+		ctx.vertexAttribIPointer(index, size, type, stride, buffer.get());
 	}
 	static native void nglVertexAttribIPointer(int index, int size, int type, int stride, long buffer, long function_pointer);
 	public static void glVertexAttribIPointer(int index, int size, int type, int stride, long buffer_buffer_offset) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glVertexAttribIPointer;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		GLChecks.ensureArrayVBOenabled(caps);
-		nglVertexAttribIPointerBO(index, size, type, stride, buffer_buffer_offset, function_pointer);
+//		ctx.vertexAttribIPointer(index, size, type, stride, buffer.get());
 	}
 	static native void nglVertexAttribIPointerBO(int index, int size, int type, int stride, long buffer_buffer_offset, long function_pointer);
 
 	public static void glGetVertexAttribI(int index, int pname, IntBuffer params) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetVertexAttribIiv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkBuffer(params, 4);
-		nglGetVertexAttribIiv(index, pname, MemoryUtil.getAddress(params), function_pointer);
+		JSNumber v = (JSNumber) ctx.getVertexAttrib(index, pname);
+		params.put(v.intValue());
 	}
 	static native void nglGetVertexAttribIiv(int index, int pname, long params, long function_pointer);
 
 	public static void glGetVertexAttribIu(int index, int pname, IntBuffer params) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetVertexAttribIuiv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkBuffer(params, 4);
-		nglGetVertexAttribIuiv(index, pname, MemoryUtil.getAddress(params), function_pointer);
+		params.get(((JSNumber) ctx.getVertexAttrib(index, pname)).intValue());
 	}
 	static native void nglGetVertexAttribIuiv(int index, int pname, long params, long function_pointer);
 
 	public static void glUniform1ui(int location, int v0) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glUniform1ui;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglUniform1ui(location, v0, function_pointer);
+		ctx.uniform1ui((WebGLUniformLocation) get(location).getObject(), v0);
 	}
 	static native void nglUniform1ui(int location, int v0, long function_pointer);
 
 	public static void glUniform2ui(int location, int v0, int v1) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glUniform2ui;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglUniform2ui(location, v0, v1, function_pointer);
+		ctx.uniform2ui((WebGLUniformLocation) get(location).getObject(), v0, v1);
 	}
 	static native void nglUniform2ui(int location, int v0, int v1, long function_pointer);
 
 	public static void glUniform3ui(int location, int v0, int v1, int v2) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glUniform3ui;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglUniform3ui(location, v0, v1, v2, function_pointer);
+		ctx.uniform3ui((WebGLUniformLocation) get(location).getObject(), v0, v1, v2);
 	}
 	static native void nglUniform3ui(int location, int v0, int v1, int v2, long function_pointer);
 
 	public static void glUniform4ui(int location, int v0, int v1, int v2, int v3) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glUniform4ui;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglUniform4ui(location, v0, v1, v2, v3, function_pointer);
+		ctx.uniform4ui((WebGLUniformLocation) get(location).getObject(), v0, v1, v2, v3);
 	}
 	static native void nglUniform4ui(int location, int v0, int v1, int v2, int v3, long function_pointer);
 
 	public static void glUniform1u(int location, IntBuffer value) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glUniform1uiv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkDirect(value);
-		nglUniform1uiv(location, value.remaining(), MemoryUtil.getAddress(value), function_pointer);
+		ctx.uniform1uiv((WebGLUniformLocation) get(location).getObject(), GLUtil.glCreateBufferFromJava(value));
 	}
 	static native void nglUniform1uiv(int location, int value_count, long value, long function_pointer);
 
 	public static void glUniform2u(int location, IntBuffer value) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glUniform2uiv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkDirect(value);
-		nglUniform2uiv(location, value.remaining() >> 1, MemoryUtil.getAddress(value), function_pointer);
+		ctx.uniform2uiv((WebGLUniformLocation) get(location).getObject(), GLUtil.glCreateBufferFromJava(value));
 	}
 	static native void nglUniform2uiv(int location, int value_count, long value, long function_pointer);
 
 	public static void glUniform3u(int location, IntBuffer value) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glUniform3uiv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkDirect(value);
-		nglUniform3uiv(location, value.remaining() / 3, MemoryUtil.getAddress(value), function_pointer);
+		ctx.uniform3uiv((WebGLUniformLocation) get(location).getObject(), GLUtil.glCreateBufferFromJava(value));
 	}
 	static native void nglUniform3uiv(int location, int value_count, long value, long function_pointer);
 
 	public static void glUniform4u(int location, IntBuffer value) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glUniform4uiv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkDirect(value);
-		nglUniform4uiv(location, value.remaining() >> 2, MemoryUtil.getAddress(value), function_pointer);
+		ctx.uniform4uiv((WebGLUniformLocation) get(location).getObject(), GLUtil.glCreateBufferFromJava(value));
 	}
 	static native void nglUniform4uiv(int location, int value_count, long value, long function_pointer);
 
 	public static void glGetUniformu(int program, int location, IntBuffer params) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetUniformuiv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkDirect(params);
-		nglGetUniformuiv(program, location, MemoryUtil.getAddress(params), function_pointer);
+		ctx.getUniform((WebGLProgram) get(program).getObject(), (WebGLUniformLocation) get(location).getObject());
 	}
 	static native void nglGetUniformuiv(int program, int location, long params, long function_pointer);
 
 	public static void glBindFragDataLocation(int program, int colorNumber, ByteBuffer name) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glBindFragDataLocation;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkDirect(name);
-		BufferChecks.checkNullTerminated(name);
-		nglBindFragDataLocation(program, colorNumber, MemoryUtil.getAddress(name), function_pointer);
+		
 	}
 	static native void nglBindFragDataLocation(int program, int colorNumber, long name, long function_pointer);
 
 	/** Overloads glBindFragDataLocation. */
 	public static void glBindFragDataLocation(int program, int colorNumber, CharSequence name) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glBindFragDataLocation;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglBindFragDataLocation(program, colorNumber, APIUtil.getBufferNT(caps, name), function_pointer);
+		
 	}
 
 	public static int glGetFragDataLocation(int program, ByteBuffer name) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetFragDataLocation;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkDirect(name);
-		BufferChecks.checkNullTerminated(name);
-		int __result = nglGetFragDataLocation(program, MemoryUtil.getAddress(name), function_pointer);
-		return __result;
+		return ctx.getFragDataLocation((WebGLProgram) get(program).getObject(), name.asCharBuffer().toString());
 	}
 	static native int nglGetFragDataLocation(int program, long name, long function_pointer);
 
 	/** Overloads glGetFragDataLocation. */
 	public static int glGetFragDataLocation(int program, CharSequence name) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetFragDataLocation;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		int __result = nglGetFragDataLocation(program, APIUtil.getBufferNT(caps, name), function_pointer);
-		return __result;
+	
+		return ctx.getFragDataLocation((WebGLProgram) get(program).getObject(), name.toString());
 	}
 
 	public static void glBeginConditionalRender(int id, int mode) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glBeginConditionalRender;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglBeginConditionalRender(id, mode, function_pointer);
+		
 	}
 	static native void nglBeginConditionalRender(int id, int mode, long function_pointer);
 
 	public static void glEndConditionalRender() {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glEndConditionalRender;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglEndConditionalRender(function_pointer);
+		
 	}
 	static native void nglEndConditionalRender(long function_pointer);
 
@@ -993,99 +871,60 @@ public final class GL30 {
 	 *  @return A ByteBuffer representing the mapped buffer memory.
 	 */
 	public static ByteBuffer glMapBufferRange(int target, long offset, long length, int access, ByteBuffer old_buffer) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glMapBufferRange;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		if (old_buffer != null)
-			BufferChecks.checkDirect(old_buffer);
-		ByteBuffer __result = nglMapBufferRange(target, offset, length, access, old_buffer, function_pointer);
-		return LWJGLUtil.CHECKS && __result == null ? null : __result.order(ByteOrder.nativeOrder());
+		return null;
 	}
 	static native ByteBuffer nglMapBufferRange(int target, long offset, long length, int access, ByteBuffer old_buffer, long function_pointer);
 
 	public static void glFlushMappedBufferRange(int target, long offset, long length) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glFlushMappedBufferRange;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglFlushMappedBufferRange(target, offset, length, function_pointer);
+		
 	}
 	static native void nglFlushMappedBufferRange(int target, long offset, long length, long function_pointer);
 
 	public static void glClampColor(int target, int clamp) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glClampColor;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglClampColor(target, clamp, function_pointer);
+		
 	}
 	static native void nglClampColor(int target, int clamp, long function_pointer);
 
 	public static boolean glIsRenderbuffer(int renderbuffer) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glIsRenderbuffer;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		boolean __result = nglIsRenderbuffer(renderbuffer, function_pointer);
-		return __result;
+		return get(renderbuffer).getType() == GL_OBJECT_RENDERBUFFER;
 	}
 	static native boolean nglIsRenderbuffer(int renderbuffer, long function_pointer);
 
 	public static void glBindRenderbuffer(int target, int renderbuffer) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glBindRenderbuffer;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglBindRenderbuffer(target, renderbuffer, function_pointer);
+		ctx.bindRenderbuffer(target, (WebGLRenderbuffer) get(renderbuffer).getObject());
 	}
 	static native void nglBindRenderbuffer(int target, int renderbuffer, long function_pointer);
 
 	public static void glDeleteRenderbuffers(IntBuffer renderbuffers) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glDeleteRenderbuffers;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkDirect(renderbuffers);
-		nglDeleteRenderbuffers(renderbuffers.remaining(), MemoryUtil.getAddress(renderbuffers), function_pointer);
+		ctx.deleteRenderbuffer((WebGLRenderbuffer) get(renderbuffers.get()).getObject());
 	}
 	static native void nglDeleteRenderbuffers(int renderbuffers_n, long renderbuffers, long function_pointer);
 
 	/** Overloads glDeleteRenderbuffers. */
 	public static void glDeleteRenderbuffers(int renderbuffer) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glDeleteRenderbuffers;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglDeleteRenderbuffers(1, APIUtil.getInt(caps, renderbuffer), function_pointer);
+		ctx.deleteRenderbuffer((WebGLRenderbuffer) get(renderbuffer).getObject());
 	}
 
 	public static void glGenRenderbuffers(IntBuffer renderbuffers) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGenRenderbuffers;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkDirect(renderbuffers);
-		nglGenRenderbuffers(renderbuffers.remaining(), MemoryUtil.getAddress(renderbuffers), function_pointer);
+		int remaining = renderbuffers.remaining();
+		for (int i =0; i < remaining; i ++) {
+			renderbuffers.put(newObject(GL_OBJECT_RENDERBUFFER, ctx.createRenderbuffer()));
+		}
 	}
 	static native void nglGenRenderbuffers(int renderbuffers_n, long renderbuffers, long function_pointer);
 
 	/** Overloads glGenRenderbuffers. */
 	public static int glGenRenderbuffers() {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGenRenderbuffers;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		IntBuffer renderbuffers = APIUtil.getBufferInt(caps);
-		nglGenRenderbuffers(1, MemoryUtil.getAddress(renderbuffers), function_pointer);
-		return renderbuffers.get(0);
+		return newObject(GL_OBJECT_RENDERBUFFER, ctx.createRenderbuffer());
 	}
 
 	public static void glRenderbufferStorage(int target, int internalformat, int width, int height) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glRenderbufferStorage;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglRenderbufferStorage(target, internalformat, width, height, function_pointer);
+		ctx.renderbufferStorage(target, internalformat, width, height);
 	}
 	static native void nglRenderbufferStorage(int target, int internalformat, int width, int height, long function_pointer);
 
 	public static void glGetRenderbufferParameter(int target, int pname, IntBuffer params) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetRenderbufferParameteriv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkBuffer(params, 4);
-		nglGetRenderbufferParameteriv(target, pname, MemoryUtil.getAddress(params), function_pointer);
+		params.put(((JSNumber) ctx.getRenderbufferParameter(target, pname)).intValue());
 	}
 	static native void nglGetRenderbufferParameteriv(int target, int pname, long params, long function_pointer);
 
@@ -1101,114 +940,70 @@ public final class GL30 {
 
 	/** Overloads glGetRenderbufferParameteriv. */
 	public static int glGetRenderbufferParameteri(int target, int pname) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetRenderbufferParameteriv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		IntBuffer params = APIUtil.getBufferInt(caps);
-		nglGetRenderbufferParameteriv(target, pname, MemoryUtil.getAddress(params), function_pointer);
-		return params.get(0);
+		return ((JSNumber) ctx.getRenderbufferParameter(target, pname)).intValue();
 	}
 
 	public static boolean glIsFramebuffer(int framebuffer) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glIsFramebuffer;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		boolean __result = nglIsFramebuffer(framebuffer, function_pointer);
-		return __result;
+		return get(framebuffer).getType() == GL_OBJECT_FRAMEBUFFER;
 	}
 	static native boolean nglIsFramebuffer(int framebuffer, long function_pointer);
 
 	public static void glBindFramebuffer(int target, int framebuffer) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glBindFramebuffer;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglBindFramebuffer(target, framebuffer, function_pointer);
+		ctx.bindFramebuffer(target, (WebGLFramebuffer) get(framebuffer).getObject());
 	}
 	static native void nglBindFramebuffer(int target, int framebuffer, long function_pointer);
 
 	public static void glDeleteFramebuffers(IntBuffer framebuffers) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glDeleteFramebuffers;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkDirect(framebuffers);
-		nglDeleteFramebuffers(framebuffers.remaining(), MemoryUtil.getAddress(framebuffers), function_pointer);
+		for (int i = 0; i < framebuffers.remaining(); i++) {
+			ctx.deleteFramebuffer((WebGLFramebuffer) get(framebuffers.get()).getObject());
+		}
 	}
 	static native void nglDeleteFramebuffers(int framebuffers_n, long framebuffers, long function_pointer);
 
 	/** Overloads glDeleteFramebuffers. */
 	public static void glDeleteFramebuffers(int framebuffer) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glDeleteFramebuffers;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglDeleteFramebuffers(1, APIUtil.getInt(caps, framebuffer), function_pointer);
+		ctx.deleteFramebuffer((WebGLFramebuffer) get(framebuffer).getObject());
 	}
 
 	public static void glGenFramebuffers(IntBuffer framebuffers) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGenFramebuffers;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkDirect(framebuffers);
-		nglGenFramebuffers(framebuffers.remaining(), MemoryUtil.getAddress(framebuffers), function_pointer);
+		for (int i = 0; i < framebuffers.remaining(); i++ ) {
+			framebuffers.put(newObject(GL_OBJECT_FRAMEBUFFER, ctx.createFramebuffer()));
+		}
 	}
 	static native void nglGenFramebuffers(int framebuffers_n, long framebuffers, long function_pointer);
 
 	/** Overloads glGenFramebuffers. */
 	public static int glGenFramebuffers() {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGenFramebuffers;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		IntBuffer framebuffers = APIUtil.getBufferInt(caps);
-		nglGenFramebuffers(1, MemoryUtil.getAddress(framebuffers), function_pointer);
-		return framebuffers.get(0);
+		return newObject(GL_OBJECT_FRAMEBUFFER, ctx.createFramebuffer());
 	}
 
 	public static int glCheckFramebufferStatus(int target) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glCheckFramebufferStatus;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		int __result = nglCheckFramebufferStatus(target, function_pointer);
-		return __result;
+		return ctx.checkFramebufferStatus(target);
 	}
 	static native int nglCheckFramebufferStatus(int target, long function_pointer);
 
 	public static void glFramebufferTexture1D(int target, int attachment, int textarget, int texture, int level) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glFramebufferTexture1D;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglFramebufferTexture1D(target, attachment, textarget, texture, level, function_pointer);
+		
 	}
 	static native void nglFramebufferTexture1D(int target, int attachment, int textarget, int texture, int level, long function_pointer);
 
 	public static void glFramebufferTexture2D(int target, int attachment, int textarget, int texture, int level) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glFramebufferTexture2D;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglFramebufferTexture2D(target, attachment, textarget, texture, level, function_pointer);
+		ctx.framebufferTexture2D(target, attachment, textarget, (WebGLTexture) get(texture).getObject(), level);
 	}
 	static native void nglFramebufferTexture2D(int target, int attachment, int textarget, int texture, int level, long function_pointer);
 
 	public static void glFramebufferTexture3D(int target, int attachment, int textarget, int texture, int level, int zoffset) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glFramebufferTexture3D;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglFramebufferTexture3D(target, attachment, textarget, texture, level, zoffset, function_pointer);
+		
 	}
 	static native void nglFramebufferTexture3D(int target, int attachment, int textarget, int texture, int level, int zoffset, long function_pointer);
 
 	public static void glFramebufferRenderbuffer(int target, int attachment, int renderbuffertarget, int renderbuffer) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glFramebufferRenderbuffer;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglFramebufferRenderbuffer(target, attachment, renderbuffertarget, renderbuffer, function_pointer);
+		ctx.framebufferRenderbuffer(target, attachment, renderbuffertarget, (WebGLRenderbuffer) get(renderbuffer).getObject());
 	}
 	static native void nglFramebufferRenderbuffer(int target, int attachment, int renderbuffertarget, int renderbuffer, long function_pointer);
 
 	public static void glGetFramebufferAttachmentParameter(int target, int attachment, int pname, IntBuffer params) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetFramebufferAttachmentParameteriv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkBuffer(params, 4);
-		nglGetFramebufferAttachmentParameteriv(target, attachment, pname, MemoryUtil.getAddress(params), function_pointer);
+		params.put(((JSNumber) ctx.getFramebufferAttachmentParameter(target, attachment, pname)).intValue());
 	}
 	static native void nglGetFramebufferAttachmentParameteriv(int target, int attachment, int pname, long params, long function_pointer);
 
@@ -1224,19 +1019,11 @@ public final class GL30 {
 
 	/** Overloads glGetFramebufferAttachmentParameteriv. */
 	public static int glGetFramebufferAttachmentParameteri(int target, int attachment, int pname) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetFramebufferAttachmentParameteriv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		IntBuffer params = APIUtil.getBufferInt(caps);
-		nglGetFramebufferAttachmentParameteriv(target, attachment, pname, MemoryUtil.getAddress(params), function_pointer);
-		return params.get(0);
+		return ((JSNumber) ctx.getFramebufferAttachmentParameter(target, attachment, pname)).intValue();
 	}
 
 	public static void glGenerateMipmap(int target) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGenerateMipmap;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglGenerateMipmap(target, function_pointer);
+		ctx.generateMipmap(target);
 	}
 	static native void nglGenerateMipmap(int target, long function_pointer);
 
@@ -1245,10 +1032,7 @@ public final class GL30 {
 	 *  samples of a renderbuffer object's image.
 	 */
 	public static void glRenderbufferStorageMultisample(int target, int samples, int internalformat, int width, int height) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glRenderbufferStorageMultisample;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglRenderbufferStorageMultisample(target, samples, internalformat, width, height, function_pointer);
+		ctx.renderbufferStorageMultisample(target, samples, internalformat, width, height);
 	}
 	static native void nglRenderbufferStorageMultisample(int target, int samples, int internalformat, int width, int height, long function_pointer);
 
@@ -1270,295 +1054,173 @@ public final class GL30 {
 	 *  stretched.
 	 */
 	public static void glBlitFramebuffer(int srcX0, int srcY0, int srcX1, int srcY1, int dstX0, int dstY0, int dstX1, int dstY1, int mask, int filter) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glBlitFramebuffer;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglBlitFramebuffer(srcX0, srcY0, srcX1, srcY1, dstX0, dstY0, dstX1, dstY1, mask, filter, function_pointer);
+		ctx.blitFramebuffer(srcX0, srcY0, srcX1, srcY1, dstX0, dstY0, dstX1, dstY1, mask, filter);
 	}
 	static native void nglBlitFramebuffer(int srcX0, int srcY0, int srcX1, int srcY1, int dstX0, int dstY0, int dstX1, int dstY1, int mask, int filter, long function_pointer);
 
 	public static void glTexParameterI(int target, int pname, IntBuffer params) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glTexParameterIiv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkBuffer(params, 4);
-		nglTexParameterIiv(target, pname, MemoryUtil.getAddress(params), function_pointer);
+		ctx.texParameteri(target, pname, params.get());
 	}
 	static native void nglTexParameterIiv(int target, int pname, long params, long function_pointer);
 
 	/** Overloads glTexParameterIiv. */
 	public static void glTexParameterIi(int target, int pname, int param) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glTexParameterIiv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglTexParameterIiv(target, pname, APIUtil.getInt(caps, param), function_pointer);
+		ctx.texParameteri(target, pname, param);
 	}
 
 	public static void glTexParameterIu(int target, int pname, IntBuffer params) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glTexParameterIuiv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkBuffer(params, 4);
-		nglTexParameterIuiv(target, pname, MemoryUtil.getAddress(params), function_pointer);
+		ctx.texParameteri(target, pname, params.get());
 	}
 	static native void nglTexParameterIuiv(int target, int pname, long params, long function_pointer);
 
 	/** Overloads glTexParameterIuiv. */
 	public static void glTexParameterIui(int target, int pname, int param) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glTexParameterIuiv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglTexParameterIuiv(target, pname, APIUtil.getInt(caps, param), function_pointer);
+		ctx.texParameteri(target, pname, param);
 	}
 
 	public static void glGetTexParameterI(int target, int pname, IntBuffer params) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetTexParameterIiv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkBuffer(params, 4);
-		nglGetTexParameterIiv(target, pname, MemoryUtil.getAddress(params), function_pointer);
+		params.put( ((JSNumber) ctx.getTexParameter(target, pname)).intValue());
 	}
 	static native void nglGetTexParameterIiv(int target, int pname, long params, long function_pointer);
 
 	/** Overloads glGetTexParameterIiv. */
 	public static int glGetTexParameterIi(int target, int pname) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetTexParameterIiv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		IntBuffer params = APIUtil.getBufferInt(caps);
-		nglGetTexParameterIiv(target, pname, MemoryUtil.getAddress(params), function_pointer);
-		return params.get(0);
+		return ((JSNumber) ctx.getTexParameter(target, pname)).intValue();
 	}
 
 	public static void glGetTexParameterIu(int target, int pname, IntBuffer params) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetTexParameterIuiv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkBuffer(params, 4);
-		nglGetTexParameterIuiv(target, pname, MemoryUtil.getAddress(params), function_pointer);
+		params.put(((JSNumber) ctx.getTexParameter(target, pname)).intValue());
 	}
 	static native void nglGetTexParameterIuiv(int target, int pname, long params, long function_pointer);
 
 	/** Overloads glGetTexParameterIuiv. */
 	public static int glGetTexParameterIui(int target, int pname) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetTexParameterIuiv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		IntBuffer params = APIUtil.getBufferInt(caps);
-		nglGetTexParameterIuiv(target, pname, MemoryUtil.getAddress(params), function_pointer);
-		return params.get(0);
+		return ((JSNumber) ctx.getTexParameter(target, pname)).intValue();
 	}
 
 	public static void glFramebufferTextureLayer(int target, int attachment, int texture, int level, int layer) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glFramebufferTextureLayer;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglFramebufferTextureLayer(target, attachment, texture, level, layer, function_pointer);
+		ctx.framebufferTextureLayer(target, attachment, (WebGLTexture) get(texture).getObject(), level, layer);
 	}
 	static native void nglFramebufferTextureLayer(int target, int attachment, int texture, int level, int layer, long function_pointer);
 
 	public static void glColorMaski(int buf, boolean r, boolean g, boolean b, boolean a) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glColorMaski;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglColorMaski(buf, r, g, b, a, function_pointer);
+		ctx.colorMask(r, g, b, a);
 	}
 	static native void nglColorMaski(int buf, boolean r, boolean g, boolean b, boolean a, long function_pointer);
 
 	public static void glGetBoolean(int value, int index, ByteBuffer data) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetBooleani_v;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkBuffer(data, 4);
-		nglGetBooleani_v(value, index, MemoryUtil.getAddress(data), function_pointer);
+		data.put(ctx.getParameteri(value) == 1 ? (byte) 1: (byte) 0);
 	}
 	static native void nglGetBooleani_v(int value, int index, long data, long function_pointer);
 
 	/** Overloads glGetBooleani_v. */
 	public static boolean glGetBoolean(int value, int index) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetBooleani_v;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		ByteBuffer data = APIUtil.getBufferByte(caps, 1);
-		nglGetBooleani_v(value, index, MemoryUtil.getAddress(data), function_pointer);
-		return data.get(0) == 1;
+		return ctx.getParameteri(value) == 1;
 	}
 
 	public static void glGetInteger(int value, int index, IntBuffer data) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetIntegeri_v;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkBuffer(data, 4);
-		nglGetIntegeri_v(value, index, MemoryUtil.getAddress(data), function_pointer);
+		data.put(ctx.getParameteri(value));
 	}
 	static native void nglGetIntegeri_v(int value, int index, long data, long function_pointer);
 
 	/** Overloads glGetIntegeri_v. */
 	public static int glGetInteger(int value, int index) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetIntegeri_v;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		IntBuffer data = APIUtil.getBufferInt(caps);
-		nglGetIntegeri_v(value, index, MemoryUtil.getAddress(data), function_pointer);
-		return data.get(0);
+		return ctx.getParameteri(index);
 	}
 
 	public static void glEnablei(int target, int index) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glEnablei;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglEnablei(target, index, function_pointer);
+		ctx.enable(target);
 	}
 	static native void nglEnablei(int target, int index, long function_pointer);
 
 	public static void glDisablei(int target, int index) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glDisablei;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglDisablei(target, index, function_pointer);
+		ctx.disable(target);
 	}
 	static native void nglDisablei(int target, int index, long function_pointer);
 
 	public static boolean glIsEnabledi(int target, int index) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glIsEnabledi;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		boolean __result = nglIsEnabledi(target, index, function_pointer);
-		return __result;
+		return ctx.isEnabled(target);
 	}
 	static native boolean nglIsEnabledi(int target, int index, long function_pointer);
 
 	public static void glBindBufferRange(int target, int index, int buffer, long offset, long size) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glBindBufferRange;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglBindBufferRange(target, index, buffer, offset, size, function_pointer);
+		ctx.bindBufferRange(target, index, (WebGLBuffer) get(buffer).getObject(), index, buffer);
 	}
 	static native void nglBindBufferRange(int target, int index, int buffer, long offset, long size, long function_pointer);
 
 	public static void glBindBufferBase(int target, int index, int buffer) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glBindBufferBase;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglBindBufferBase(target, index, buffer, function_pointer);
+		ctx.bindBufferBase(target, index, (WebGLBuffer) get(buffer).getObject());
 	}
 	static native void nglBindBufferBase(int target, int index, int buffer, long function_pointer);
 
 	public static void glBeginTransformFeedback(int primitiveMode) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glBeginTransformFeedback;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglBeginTransformFeedback(primitiveMode, function_pointer);
+		ctx.beginTransformFeedback(primitiveMode);
 	}
 	static native void nglBeginTransformFeedback(int primitiveMode, long function_pointer);
 
 	public static void glEndTransformFeedback() {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glEndTransformFeedback;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglEndTransformFeedback(function_pointer);
+		ctx.endTransformFeedback();
+		
 	}
 	static native void nglEndTransformFeedback(long function_pointer);
 
 	public static void glTransformFeedbackVaryings(int program, int count, ByteBuffer varyings, int bufferMode) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glTransformFeedbackVaryings;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkDirect(varyings);
-		BufferChecks.checkNullTerminated(varyings, count);
-		nglTransformFeedbackVaryings(program, count, MemoryUtil.getAddress(varyings), bufferMode, function_pointer);
+		ctx.transformFeedbackVaryings((WebGLProgram) get(program).getObject(), new String[] {varyings.asCharBuffer().toString()}, bufferMode);
 	}
 	static native void nglTransformFeedbackVaryings(int program, int count, long varyings, int bufferMode, long function_pointer);
 
 	/** Overloads glTransformFeedbackVaryings. */
 	public static void glTransformFeedbackVaryings(int program, CharSequence[] varyings, int bufferMode) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glTransformFeedbackVaryings;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkArray(varyings);
-		nglTransformFeedbackVaryings(program, varyings.length, APIUtil.getBufferNT(caps, varyings), bufferMode, function_pointer);
+		ctx.transformFeedbackVaryings((WebGLProgram) get(program).getObject(), new String[] {varyings.toString()}, bufferMode);
 	}
 
 	public static void glGetTransformFeedbackVarying(int program, int index, IntBuffer length, IntBuffer size, IntBuffer type, ByteBuffer name) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetTransformFeedbackVarying;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		if (length != null)
-			BufferChecks.checkBuffer(length, 1);
-		BufferChecks.checkBuffer(size, 1);
-		BufferChecks.checkBuffer(type, 1);
-		BufferChecks.checkDirect(name);
-		nglGetTransformFeedbackVarying(program, index, name.remaining(), MemoryUtil.getAddressSafe(length), MemoryUtil.getAddress(size), MemoryUtil.getAddress(type), MemoryUtil.getAddress(name), function_pointer);
+		WebGLActiveInfo wai = ctx.getTransformFeedbackVarying((WebGLProgram) get(program).getObject(), index);
+		length.put(wai.getSize());
+		size.put(wai.getSize());
+		type.put(wai.getType());
+		name.asCharBuffer().put(wai.getName());
 	}
 	static native void nglGetTransformFeedbackVarying(int program, int index, int name_bufSize, long length, long size, long type, long name, long function_pointer);
 
 	/** Overloads glGetTransformFeedbackVarying. */
 	public static String glGetTransformFeedbackVarying(int program, int index, int bufSize, IntBuffer size, IntBuffer type) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetTransformFeedbackVarying;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkBuffer(size, 1);
-		BufferChecks.checkBuffer(type, 1);
-		IntBuffer name_length = APIUtil.getLengths(caps);
-		ByteBuffer name = APIUtil.getBufferByte(caps, bufSize);
-		nglGetTransformFeedbackVarying(program, index, bufSize, MemoryUtil.getAddress0(name_length), MemoryUtil.getAddress(size), MemoryUtil.getAddress(type), MemoryUtil.getAddress(name), function_pointer);
-		name.limit(name_length.get(0));
-		return APIUtil.getString(caps, name);
+		WebGLActiveInfo wai = ctx.getTransformFeedbackVarying((WebGLProgram) get(program).getObject(), index);
+		size.put(wai.getSize());
+		type.put(wai.getType());
+		
+		return wai.getName();
 	}
 
 	public static void glBindVertexArray(int array) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glBindVertexArray;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		StateTracker.bindVAO(caps, array);
-		nglBindVertexArray(array, function_pointer);
+		ctx.bindVertexArray((WebGLVertexArrayObject) get(array).getObject());
 	}
 	static native void nglBindVertexArray(int array, long function_pointer);
 
 	public static void glDeleteVertexArrays(IntBuffer arrays) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glDeleteVertexArrays;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		StateTracker.deleteVAO(caps, arrays);
-		BufferChecks.checkDirect(arrays);
-		nglDeleteVertexArrays(arrays.remaining(), MemoryUtil.getAddress(arrays), function_pointer);
+		ctx.deleteVertexArray((WebGLVertexArrayObject) get(arrays.get()).getObject());
 	}
 	static native void nglDeleteVertexArrays(int arrays_n, long arrays, long function_pointer);
 
 	/** Overloads glDeleteVertexArrays. */
 	public static void glDeleteVertexArrays(int array) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glDeleteVertexArrays;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		StateTracker.deleteVAO(caps, array);
-		nglDeleteVertexArrays(1, APIUtil.getInt(caps, array), function_pointer);
+		ctx.deleteVertexArray((WebGLVertexArrayObject) get(array).getObject());
 	}
 
 	public static void glGenVertexArrays(IntBuffer arrays) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGenVertexArrays;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkDirect(arrays);
-		nglGenVertexArrays(arrays.remaining(), MemoryUtil.getAddress(arrays), function_pointer);
+		for (int i = 0; i < arrays.remaining(); i++) {
+			arrays.put(glGenVertexArrays());
+		}
 	}
 	static native void nglGenVertexArrays(int arrays_n, long arrays, long function_pointer);
-
+	
 	/** Overloads glGenVertexArrays. */
 	public static int glGenVertexArrays() {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGenVertexArrays;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		IntBuffer arrays = APIUtil.getBufferInt(caps);
-		nglGenVertexArrays(1, MemoryUtil.getAddress(arrays), function_pointer);
-		return arrays.get(0);
+		return newObject(GL_OBJECT_VAOS, ctx.createVertexArray());
 	}
 
 	public static boolean glIsVertexArray(int array) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glIsVertexArray;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		boolean __result = nglIsVertexArray(array, function_pointer);
-		return __result;
+		return get(array).getType() == GL_OBJECT_VAOS;
 	}
 	static native boolean nglIsVertexArray(int array, long function_pointer);
 }

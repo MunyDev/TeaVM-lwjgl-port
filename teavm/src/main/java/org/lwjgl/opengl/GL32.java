@@ -2,7 +2,10 @@
 
 package org.lwjgl.opengl;
 
-import org.lwjgl.*;
+import org.munydev.teavm.lwjgl.CurrentContext;
+import org.teavm.jso.core.JSNumber;
+import org.teavm.webgl2.WebGL2RenderingContext;
+
 import java.nio.*;
 
 public final class GL32 {
@@ -208,13 +211,9 @@ public final class GL32 {
 		GL_WAIT_FAILED = 0x911D;
 
 	private GL32() {}
-
+	private static WebGL2RenderingContext ctx = (WebGL2RenderingContext) CurrentContext.getContext();
 	public static void glGetBufferParameter(int target, int pname, LongBuffer params) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetBufferParameteri64v;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkBuffer(params, 4);
-		nglGetBufferParameteri64v(target, pname, MemoryUtil.getAddress(params), function_pointer);
+		params.put((long) ((JSNumber) ctx.getBufferParameter(target, pname)).intValue());
 	}
 	static native void nglGetBufferParameteri64v(int target, int pname, long params, long function_pointer);
 
@@ -226,258 +225,125 @@ public final class GL32 {
 	@Deprecated
 	public static long glGetBufferParameter(int target, int pname) {
 		return GL32.glGetBufferParameteri64(target, pname);
+		
 	}
 
 	/** Overloads glGetBufferParameteri64v. */
 	public static long glGetBufferParameteri64(int target, int pname) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetBufferParameteri64v;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		LongBuffer params = APIUtil.getBufferLong(caps);
-		nglGetBufferParameteri64v(target, pname, MemoryUtil.getAddress(params), function_pointer);
-		return params.get(0);
+		return (long) ((JSNumber) ctx.getBufferParameter(target, pname)).intValue();
 	}
 
 	public static void glDrawElementsBaseVertex(int mode, ByteBuffer indices, int basevertex) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glDrawElementsBaseVertex;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		GLChecks.ensureElementVBOdisabled(caps);
-		BufferChecks.checkDirect(indices);
-		nglDrawElementsBaseVertex(mode, indices.remaining(), GL11.GL_UNSIGNED_BYTE, MemoryUtil.getAddress(indices), basevertex, function_pointer);
+		
 	}
 	public static void glDrawElementsBaseVertex(int mode, IntBuffer indices, int basevertex) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glDrawElementsBaseVertex;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		GLChecks.ensureElementVBOdisabled(caps);
-		BufferChecks.checkDirect(indices);
-		nglDrawElementsBaseVertex(mode, indices.remaining(), GL11.GL_UNSIGNED_INT, MemoryUtil.getAddress(indices), basevertex, function_pointer);
+	
 	}
 	public static void glDrawElementsBaseVertex(int mode, ShortBuffer indices, int basevertex) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glDrawElementsBaseVertex;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		GLChecks.ensureElementVBOdisabled(caps);
-		BufferChecks.checkDirect(indices);
-		nglDrawElementsBaseVertex(mode, indices.remaining(), GL11.GL_UNSIGNED_SHORT, MemoryUtil.getAddress(indices), basevertex, function_pointer);
 	}
 	static native void nglDrawElementsBaseVertex(int mode, int indices_count, int type, long indices, int basevertex, long function_pointer);
 	public static void glDrawElementsBaseVertex(int mode, int indices_count, int type, long indices_buffer_offset, int basevertex) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glDrawElementsBaseVertex;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		GLChecks.ensureElementVBOenabled(caps);
-		nglDrawElementsBaseVertexBO(mode, indices_count, type, indices_buffer_offset, basevertex, function_pointer);
 	}
 	static native void nglDrawElementsBaseVertexBO(int mode, int indices_count, int type, long indices_buffer_offset, int basevertex, long function_pointer);
 
 	public static void glDrawRangeElementsBaseVertex(int mode, int start, int end, ByteBuffer indices, int basevertex) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glDrawRangeElementsBaseVertex;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		GLChecks.ensureElementVBOdisabled(caps);
-		BufferChecks.checkDirect(indices);
-		nglDrawRangeElementsBaseVertex(mode, start, end, indices.remaining(), GL11.GL_UNSIGNED_BYTE, MemoryUtil.getAddress(indices), basevertex, function_pointer);
 	}
 	public static void glDrawRangeElementsBaseVertex(int mode, int start, int end, IntBuffer indices, int basevertex) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glDrawRangeElementsBaseVertex;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		GLChecks.ensureElementVBOdisabled(caps);
-		BufferChecks.checkDirect(indices);
-		nglDrawRangeElementsBaseVertex(mode, start, end, indices.remaining(), GL11.GL_UNSIGNED_INT, MemoryUtil.getAddress(indices), basevertex, function_pointer);
 	}
 	public static void glDrawRangeElementsBaseVertex(int mode, int start, int end, ShortBuffer indices, int basevertex) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glDrawRangeElementsBaseVertex;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		GLChecks.ensureElementVBOdisabled(caps);
-		BufferChecks.checkDirect(indices);
-		nglDrawRangeElementsBaseVertex(mode, start, end, indices.remaining(), GL11.GL_UNSIGNED_SHORT, MemoryUtil.getAddress(indices), basevertex, function_pointer);
 	}
 	static native void nglDrawRangeElementsBaseVertex(int mode, int start, int end, int indices_count, int type, long indices, int basevertex, long function_pointer);
 	public static void glDrawRangeElementsBaseVertex(int mode, int start, int end, int indices_count, int type, long indices_buffer_offset, int basevertex) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glDrawRangeElementsBaseVertex;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		GLChecks.ensureElementVBOenabled(caps);
-		nglDrawRangeElementsBaseVertexBO(mode, start, end, indices_count, type, indices_buffer_offset, basevertex, function_pointer);
 	}
 	static native void nglDrawRangeElementsBaseVertexBO(int mode, int start, int end, int indices_count, int type, long indices_buffer_offset, int basevertex, long function_pointer);
 
 	public static void glDrawElementsInstancedBaseVertex(int mode, ByteBuffer indices, int primcount, int basevertex) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glDrawElementsInstancedBaseVertex;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		GLChecks.ensureElementVBOdisabled(caps);
-		BufferChecks.checkDirect(indices);
-		nglDrawElementsInstancedBaseVertex(mode, indices.remaining(), GL11.GL_UNSIGNED_BYTE, MemoryUtil.getAddress(indices), primcount, basevertex, function_pointer);
 	}
 	public static void glDrawElementsInstancedBaseVertex(int mode, IntBuffer indices, int primcount, int basevertex) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glDrawElementsInstancedBaseVertex;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		GLChecks.ensureElementVBOdisabled(caps);
-		BufferChecks.checkDirect(indices);
-		nglDrawElementsInstancedBaseVertex(mode, indices.remaining(), GL11.GL_UNSIGNED_INT, MemoryUtil.getAddress(indices), primcount, basevertex, function_pointer);
 	}
 	public static void glDrawElementsInstancedBaseVertex(int mode, ShortBuffer indices, int primcount, int basevertex) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glDrawElementsInstancedBaseVertex;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		GLChecks.ensureElementVBOdisabled(caps);
-		BufferChecks.checkDirect(indices);
-		nglDrawElementsInstancedBaseVertex(mode, indices.remaining(), GL11.GL_UNSIGNED_SHORT, MemoryUtil.getAddress(indices), primcount, basevertex, function_pointer);
 	}
 	static native void nglDrawElementsInstancedBaseVertex(int mode, int indices_count, int type, long indices, int primcount, int basevertex, long function_pointer);
 	public static void glDrawElementsInstancedBaseVertex(int mode, int indices_count, int type, long indices_buffer_offset, int primcount, int basevertex) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glDrawElementsInstancedBaseVertex;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		GLChecks.ensureElementVBOenabled(caps);
-		nglDrawElementsInstancedBaseVertexBO(mode, indices_count, type, indices_buffer_offset, primcount, basevertex, function_pointer);
 	}
 	static native void nglDrawElementsInstancedBaseVertexBO(int mode, int indices_count, int type, long indices_buffer_offset, int primcount, int basevertex, long function_pointer);
 
 	public static void glProvokingVertex(int mode) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glProvokingVertex;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglProvokingVertex(mode, function_pointer);
 	}
 	static native void nglProvokingVertex(int mode, long function_pointer);
 
 	public static void glTexImage2DMultisample(int target, int samples, int internalformat, int width, int height, boolean fixedsamplelocations) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glTexImage2DMultisample;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglTexImage2DMultisample(target, samples, internalformat, width, height, fixedsamplelocations, function_pointer);
 	}
 	static native void nglTexImage2DMultisample(int target, int samples, int internalformat, int width, int height, boolean fixedsamplelocations, long function_pointer);
 
 	public static void glTexImage3DMultisample(int target, int samples, int internalformat, int width, int height, int depth, boolean fixedsamplelocations) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glTexImage3DMultisample;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglTexImage3DMultisample(target, samples, internalformat, width, height, depth, fixedsamplelocations, function_pointer);
 	}
 	static native void nglTexImage3DMultisample(int target, int samples, int internalformat, int width, int height, int depth, boolean fixedsamplelocations, long function_pointer);
 
 	public static void glGetMultisample(int pname, int index, FloatBuffer val) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetMultisamplefv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkBuffer(val, 2);
-		nglGetMultisamplefv(pname, index, MemoryUtil.getAddress(val), function_pointer);
+		
 	}
 	static native void nglGetMultisamplefv(int pname, int index, long val, long function_pointer);
 
 	public static void glSampleMaski(int index, int mask) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glSampleMaski;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglSampleMaski(index, mask, function_pointer);
+	
 	}
 	static native void nglSampleMaski(int index, int mask, long function_pointer);
 
 	public static void glFramebufferTexture(int target, int attachment, int texture, int level) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glFramebufferTexture;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglFramebufferTexture(target, attachment, texture, level, function_pointer);
+		ctx.framebufferTexture2D(target, attachment, target, null, level);
 	}
 	static native void nglFramebufferTexture(int target, int attachment, int texture, int level, long function_pointer);
 
 	public static GLSync glFenceSync(int condition, int flags) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glFenceSync;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		GLSync __result = new GLSync(nglFenceSync(condition, flags, function_pointer));
-		return __result;
+		return new GLSync(ctx.fenceSync(condition, flags));
 	}
 	static native long nglFenceSync(int condition, int flags, long function_pointer);
 
 	public static boolean glIsSync(GLSync sync) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glIsSync;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		boolean __result = nglIsSync(sync.getPointer(), function_pointer);
-		return __result;
+		return true;
 	}
 	static native boolean nglIsSync(long sync, long function_pointer);
 
 	public static void glDeleteSync(GLSync sync) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glDeleteSync;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglDeleteSync(sync.getPointer(), function_pointer);
+		sync.delete();
+		
 	}
 	static native void nglDeleteSync(long sync, long function_pointer);
 
 	public static int glClientWaitSync(GLSync sync, int flags, long timeout) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glClientWaitSync;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		int __result = nglClientWaitSync(sync.getPointer(), flags, timeout, function_pointer);
-		return __result;
+		return ctx.clientWaitSync(sync.getSync(), flags, (int) timeout);
 	}
 	static native int nglClientWaitSync(long sync, int flags, long timeout, long function_pointer);
 
 	public static void glWaitSync(GLSync sync, int flags, long timeout) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glWaitSync;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglWaitSync(sync.getPointer(), flags, timeout, function_pointer);
+		glClientWaitSync(sync, flags, timeout);
 	}
 	static native void nglWaitSync(long sync, int flags, long timeout, long function_pointer);
 
 	public static void glGetInteger64(int pname, LongBuffer data) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetInteger64v;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkBuffer(data, 1);
-		nglGetInteger64v(pname, MemoryUtil.getAddress(data), function_pointer);
+		
 	}
 	static native void nglGetInteger64v(int pname, long data, long function_pointer);
 
 	/** Overloads glGetInteger64v. */
 	public static long glGetInteger64(int pname) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetInteger64v;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		LongBuffer data = APIUtil.getBufferLong(caps);
-		nglGetInteger64v(pname, MemoryUtil.getAddress(data), function_pointer);
-		return data.get(0);
+	return 0;
 	}
 
 	public static void glGetInteger64(int value, int index, LongBuffer data) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetInteger64i_v;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkBuffer(data, 4);
-		nglGetInteger64i_v(value, index, MemoryUtil.getAddress(data), function_pointer);
+		
 	}
 	static native void nglGetInteger64i_v(int value, int index, long data, long function_pointer);
 
 	/** Overloads glGetInteger64i_v. */
 	public static long glGetInteger64(int value, int index) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetInteger64i_v;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		LongBuffer data = APIUtil.getBufferLong(caps);
-		nglGetInteger64i_v(value, index, MemoryUtil.getAddress(data), function_pointer);
-		return data.get(0);
+		return 0;
 	}
 
 	public static void glGetSync(GLSync sync, int pname, IntBuffer length, IntBuffer values) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetSynciv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		if (length != null)
-			BufferChecks.checkBuffer(length, 1);
-		BufferChecks.checkDirect(values);
-		nglGetSynciv(sync.getPointer(), pname, values.remaining(), MemoryUtil.getAddressSafe(length), MemoryUtil.getAddress(values), function_pointer);
+		length.put(1);
+		values.put(((JSNumber) ctx.getSyncParameter(sync.getSync(), pname)).intValue());
 	}
 	static native void nglGetSynciv(long sync, int pname, int values_bufSize, long length, long values, long function_pointer);
 
@@ -493,11 +359,6 @@ public final class GL32 {
 
 	/** Overloads glGetSynciv. */
 	public static int glGetSynci(GLSync sync, int pname) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetSynciv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		IntBuffer values = APIUtil.getBufferInt(caps);
-		nglGetSynciv(sync.getPointer(), pname, 1, 0L, MemoryUtil.getAddress(values), function_pointer);
-		return values.get(0);
+		return ((JSNumber) ctx.getSyncParameter(sync.getSync(), pname)).intValue();
 	}
 }
