@@ -1,7 +1,6 @@
 package org.lwjgl.input;
 
 import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 
@@ -10,11 +9,8 @@ import java.util.Map;
 
 import org.teavm.jso.dom.html.HTMLCanvasElement;
 import org.teavm.jso.dom.html.HTMLDocument;
-import org.teavm.jso.dom.xml.Document;
 import org.teavm.jso.webgl.WebGLRenderingContext;
-import org.teavm.webgl2.WebGL2RenderingContext;
 import org.munydev.teavm.lwjgl.CurrentContext;
-import org.teavm.jso.browser.Window;
 import org.teavm.jso.dom.events.*;
 
 
@@ -34,6 +30,7 @@ import org.teavm.jso.dom.events.*;
  * @version $Revision$
  * $Id$
  */
+@SuppressWarnings("unused")
 public class Mouse {
 	/** Internal use - event size in bytes */
 	public static final int	EVENT_SIZE									= 1 + 1 + 4 + 4 + 4 + 8;
@@ -41,24 +38,12 @@ public class Mouse {
 	/** Has the mouse been created? */
 	private static boolean		created;
 
-	/** The mouse buttons status from the last poll */
-	private static ByteBuffer	buttons;
-	
 	/** Mouse absolute X position in pixels */
 	private static int				x;
 
 	/** Mouse absolute Y position in pixels */
 	private static int				y;
 	
-	/** Mouse absolute X position in pixels without any clipping */
-	private static int				absolute_x;
-	
-	/** Mouse absolute Y position in pixels without any clipping */
-	private static int				absolute_y;
-
-	/** Buffer to hold the deltas dx, dy and dwheel */
-	private static IntBuffer	coord_buffer;
-
 	/** Delta X */
 	private static int				dx;
 
@@ -68,11 +53,7 @@ public class Mouse {
 	/** Delta Z */
 	private static int				dwheel;
 
-	/** Number of buttons supported by the mouse */
-	private static int			buttonCount									= -1;
-
-	/** Does this mouse support a scroll wheel */
-	private static boolean		hasWheel;
+	
 
 	/** The current native cursor, if any */
 //	private static Cursor		currentCursor;
@@ -82,9 +63,6 @@ public class Mouse {
 
 	/** hashmap of button names, for fast lookup */
 	private static final Map<String, Integer>	buttonMap									= new HashMap<String, Integer>(16);
-
-	/** Lazy initialization */
-	private static boolean		initialized;
 
 	/** The mouse button events from the last read */
 	private static ByteBuffer	readBuffer;
@@ -102,24 +80,10 @@ public class Mouse {
 	/** The current absolute position of the mouse in the event queue */
 	private static int			event_x;
 	private static int			event_y;
-	private static long			event_nanos;
-	/** The position of the mouse it was grabbed at */
-	private static int			grab_x;
-	private static int			grab_y;
-	/** The last absolute mouse event position (before clipping) for delta computation */
-	private static int			last_event_raw_x;
-	private static int			last_event_raw_y;
-
-	/** Buffer size in events */
-	private static final int	BUFFER_SIZE									= 50;
-
 	private static boolean		isGrabbed;
 	public static boolean isSupposedToBeGrabbed = true;
 
 //	private static InputImplementation implementation;
-
-	/** Whether we need cursor animation emulation */
-	private static final boolean emulateCursorAnimation = 	false;
 
 	private static  boolean clipMouseCoordinatesToWindow = true;
 
@@ -185,10 +149,9 @@ public class Mouse {
 			buttonName[i] = "BUTTON" + i;
 			buttonMap.put(buttonName[i], i);
 		}
-
-		initialized = true;
 	}
 
+	
 	private static void resetMouse() {
 		dx = dy = dwheel = 0;
 		readBuffer.position(readBuffer.limit());
@@ -215,13 +178,15 @@ public class Mouse {
 		if (created) return;
 		WebGLRenderingContext wglr = (WebGLRenderingContext)CurrentContext.getContext();
 		HTMLCanvasElement hce = wglr.getCanvas();
-		buttonCount = 5;
 		created = true;
 		hce.addEventListener("mousemove", new EventListener<MouseEvent>() {
 
 			@Override
 			public void handleEvent(MouseEvent evt) {
 				// TODO Auto-generated method stub
+				if (isSupposedToBeGrabbed) {
+//					((WebGLRenderingContext)CurrentContext.getContext()).getCanvas().requestPointerLock()?;
+				}
 				dx = (int) evt.getMovementX();
 				dy = (int) evt.getMovementY();
 				x = (int) evt.getClientX();
@@ -235,7 +200,7 @@ public class Mouse {
 			}
 			
 		});
-		hce.addEventListener("pointerlockchange", new EventListener() {
+		hce.addEventListener("pointerlockchange", new EventListener<Event>() {
 
 			@Override
 			public void handleEvent(Event evt) {
@@ -305,17 +270,25 @@ public class Mouse {
 			public void handleEvent(WheelEvent evt) {
 				// TODO Auto-generated method stub
 				isInsideWindow = false;
+				dx = 0;
+				dy = 0;
+				x = 0;
+				y = 0;
 				evt.preventDefault();
 				evt.stopPropagation();
 			}
 			
 		});
-		hce.addEventListener("mouseenter", new EventListener<WheelEvent>() {
+		hce.addEventListener("mouseenter", new EventListener<MouseEvent>() {
 
 			@Override
-			public void handleEvent(WheelEvent evt) {
+			public void handleEvent(MouseEvent evt) {
 				// TODO Auto-generated method stub
 				isInsideWindow = true;
+				dx = 0;
+				dy = 0;
+				x = evt.getClientX();
+				y = evt.getClientY();
 				evt.preventDefault();
 				evt.stopPropagation();
 			}
@@ -362,7 +335,8 @@ public class Mouse {
 	 * @see org.lwjgl.input.Mouse#getDWheel()
 	 */
 	public static void poll() {
-		
+		Mouse.dx += Mouse.dx * -0.5f;
+		Mouse.dy += Mouse.dy * -0.5f;
 	}
 
 //	private static void read() {
