@@ -11,55 +11,52 @@ import org.teavm.webgl2.WebGL2RenderingContext;
 
 import static org.teavm.jso.webgl.WebGLRenderingContext.*;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
+import org.lwjgl.opengl.GL11;
 
 import static org.teavm.jso.browser.Window.*;
 public class Client {
     public static void main(String[] args) {
-        HTMLDocument document = HTMLDocument.current();
-        HTMLCanvasElement canvas = (HTMLCanvasElement)document.createElement("canvas");
-        document.getBody().getStyle().setProperty("margin", "0");
-        document.getBody().getStyle().setProperty("padding", "0");
-        canvas.setWidth(Window.current().getInnerWidth());
-        canvas.setHeight(Window.current().getInnerHeight());
         
-        WebGL2RenderingContext ctx = (WebGL2RenderingContext)canvas.getContext("webgl2");
+    	DisplayMode dm = new DisplayMode(640, 480, true);
+//        document.getBody().appendChild(canvas);
+        Display.setDisplayMode(dm);
+        Display.create();
         
-        if (ctx == null) {
-        	alert("Could not initialize OpenGL context");
-        }
-        document.getBody().getStyle().setProperty("overflow", "hidden");
-        Window.current().addEventListener("resize", new EventListener<Event>() {
-
-			@Override
-			public void handleEvent(Event evt) {
-				// TODO Auto-generated method stub
-				ctx.getCanvas().setWidth(Window.current().getInnerWidth());
-				ctx.getCanvas().setHeight(Window.current().getInnerHeight());
-				ctx.viewport(0, 0, document.getBody().getClientWidth(), document.getBody().getClientHeight());
-			}
-        	
-        });
-        CurrentContext.setCurrentContext(ctx);
-        Mouse.create();
+//        CurrentContext.setCurrentContext(Di);
+        Display.setFullscreen(true);
+        Display.setFullscreenKey(Keyboard.KEY_F11);
         requestAnimationFrame(new AnimationFrameCallback() {
 
 			@Override
 			public void onAnimationFrame(double timestamp) {
 				// TODO Auto-generated method stub
-				ctx.clearColor(0, 0, 1, 1);
-				ctx.clear(COLOR_BUFFER_BIT);
-				
-				
-				requestAnimationFrame(this);
+				 		GL11.glClearColor(0, 0, 0, 1);
+			        	GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+			        	GL11.glBegin(GL11.GL_TRIANGLES);
+			        	GL11.glVertex3f(-0.5f, 0.5f, 0);
+			        	GL11.glVertex3f(0.5f, 0.5f, 0);
+			        	GL11.glVertex3f(0.5f, -0.5f, 0);
+			        	GL11.glVertex3f(-0.5f, 0.5f, 0);
+			        	GL11.glVertex3f(0.5f, -0.5f, 0);
+			        	GL11.glVertex3f(-0.5f, -0.5f, 0);
+			        	GL11.glEnd();
+			        	Display.update();
+						Mouse.poll();
+//						log("hello", Display.getWindow());
+//						log(String.valueOf(Keyboard.isKeyDown(Keyboard.KEY_F11)), Display.getWindow());
+						requestAnimationFrame(this);
+			        
 			}
         	
         });
-        document.getBody().appendChild(canvas);
-        
-        
-        
     }
+    
+    @JSBody(script = "window.console.log(param);", params = {"param", "window"})
+    public native static void log(String param, Window w);
     @JSBody(script = "window.showOpenDirectoryPicker()")
     public native static void showOpenDirectoryPicker();
     
