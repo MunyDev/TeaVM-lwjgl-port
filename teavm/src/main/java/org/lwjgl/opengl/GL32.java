@@ -225,6 +225,7 @@ public final class GL32 {
 	@Deprecated
 	public static long glGetBufferParameter(int target, int pname) {
 		return GL32.glGetBufferParameteri64(target, pname);
+		
 	}
 
 	/** Overloads glGetBufferParameteri64v. */
