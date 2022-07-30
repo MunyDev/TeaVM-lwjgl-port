@@ -2,12 +2,18 @@
 
 package org.lwjgl.opengl;
 
-import org.lwjgl.*;
+import org.lwjgl.util.GLUtil;
 import org.munydev.teavm.lwjgl.CurrentContext;
+import org.teavm.jso.core.JSNumber;
 import org.teavm.jso.typedarrays.ArrayBuffer;
-import org.teavm.jso.typedarrays.DataView;
+import org.teavm.jso.typedarrays.Float32Array;
+import org.teavm.jso.typedarrays.Float64Array;
+import org.teavm.jso.typedarrays.Int8Array;
 import org.teavm.jso.typedarrays.Uint8Array;
+import org.teavm.jso.webgl.WebGLBuffer;
+import org.teavm.jso.webgl.WebGLRenderingContext;
 import org.teavm.webgl2.WebGL2RenderingContext;
+import org.teavm.webgl2.WebGLQuery;
 
 import java.nio.*;
 import static org.lwjgl.opengl.GLObjectBuffers.*;
@@ -81,14 +87,14 @@ public final class GL15 {
 	private GL15() {}
 
 	public static void glBindBuffer(int target, int buffer) {
-		ctx.bindBuffer(ConstantMapper.cmBuffers.mapRealToWebGL(target), buffers[buffer]);
+		ctx.bindBuffer(ConstantMapper.cmBuffers.mapRealToWebGL(target), (WebGLBuffer) get(buffer).getObject());
 	}
 	static native void nglBindBuffer(int target, int buffer, long function_pointer);
 
 	public static void glDeleteBuffers(IntBuffer buffers) {
 		while (buffers.remaining() > 0) {
-			int buf = buffers.get();
-			ctx.deleteBuffer(GLObjectBuffers.buffers[buf]);
+			
+			glDeleteBuffers(buffers.get());
 			
 		}
 	}
@@ -96,7 +102,7 @@ public final class GL15 {
 
 	/** Overloads glDeleteBuffers. */
 	public static void glDeleteBuffers(int buffer) {
-		ctx.deleteBuffer(buffers[buffer]);
+		ctx.deleteBuffer((WebGLBuffer) get(buffer).getObject());
 	}
 
 	public static void glGenBuffers(IntBuffer buffers) {
@@ -109,127 +115,108 @@ public final class GL15 {
 
 	/** Overloads glGenBuffers. */
 	public static int glGenBuffers() {
-		int result = bufferCount;
-		bufferCount++;
-		buffers[result] = ctx.createBuffer();
-		return result;
+		
+		return newObject(GL_OBJECT_BUFFERS, ctx.createBuffer());
 	}
 
 	public static boolean glIsBuffer(int buffer) {
-		return true;
+		return get(buffer).getType() == GL_OBJECT_BUFFERS;
 	}
 	static native boolean nglIsBuffer(int buffer, long function_pointer);
 
 	public static void glBufferData(int target, long data_size, int usage) {
-		ctx.bufferData(ConstantMapper.cmBuffers.mapRealToWebGL(target), (int) data_size, usage);
+		ctx.bufferData(target, (int) data_size, usage);
 	}
 	public static void glBufferData(int target, ByteBuffer data, int usage) {
-		int len = data.remaining();
-		Uint8Array b = Uint8Array.create(len);
-		for (int i = 0; i < len; i++) {
-			b.set(i, data.get());
-		}
 		
-		ctx.bufferData(ConstantMapper.cmBuffers.mapRealToWebGL(target), b, usage);
+		
+		ctx.bufferData(target, GLUtil.glCreateBufferFromJava(data), usage);
 		
 	}
 	public static void glBufferData(int target, DoubleBuffer data, int usage) {
-		
+		ctx.bufferData(target, GLUtil.glCreateBufferFromJava(data), usage);
 	}
 	public static void glBufferData(int target, FloatBuffer data, int usage) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glBufferData;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkDirect(data);
-		nglBufferData(target, (data.remaining() << 2), MemoryUtil.getAddress(data), usage, function_pointer);
+		ctx.bufferData(target, GLUtil.glCreateBufferFromJava(data), usage);
+
 	}
 	public static void glBufferData(int target, IntBuffer data, int usage) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glBufferData;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkDirect(data);
-		nglBufferData(target, (data.remaining() << 2), MemoryUtil.getAddress(data), usage, function_pointer);
+		ctx.bufferData(target, GLUtil.glCreateBufferFromJava(data), usage);
+
 	}
 	public static void glBufferData(int target, ShortBuffer data, int usage) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glBufferData;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkDirect(data);
-		nglBufferData(target, (data.remaining() << 1), MemoryUtil.getAddress(data), usage, function_pointer);
+		ctx.bufferData(target, GLUtil.glCreateBufferFromJava(data), usage);
 	}
-	static native void nglBufferData(int target, long data_size, long data, int usage, long function_pointer);
 
 	public static void glBufferSubData(int target, long offset, ByteBuffer data) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glBufferSubData;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkDirect(data);
-		nglBufferSubData(target, offset, data.remaining(), MemoryUtil.getAddress(data), function_pointer);
+		ctx.bufferSubData(target, (int) offset, GLUtil.glCreateBufferFromJava(data));
+
 	}
 	public static void glBufferSubData(int target, long offset, DoubleBuffer data) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glBufferSubData;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkDirect(data);
-		nglBufferSubData(target, offset, (data.remaining() << 3), MemoryUtil.getAddress(data), function_pointer);
+		ctx.bufferSubData(target, (int) offset, GLUtil.glCreateBufferFromJava(data));
+
 	}
 	public static void glBufferSubData(int target, long offset, FloatBuffer data) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glBufferSubData;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkDirect(data);
-		nglBufferSubData(target, offset, (data.remaining() << 2), MemoryUtil.getAddress(data), function_pointer);
+		ctx.bufferSubData(target, (int) offset, GLUtil.glCreateBufferFromJava(data));
+
 	}
 	public static void glBufferSubData(int target, long offset, IntBuffer data) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glBufferSubData;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkDirect(data);
-		nglBufferSubData(target, offset, (data.remaining() << 2), MemoryUtil.getAddress(data), function_pointer);
+		ctx.bufferSubData(target, (int) offset, GLUtil.glCreateBufferFromJava(data));
+
 	}
 	public static void glBufferSubData(int target, long offset, ShortBuffer data) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glBufferSubData;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkDirect(data);
-		nglBufferSubData(target, offset, (data.remaining() << 1), MemoryUtil.getAddress(data), function_pointer);
+		ctx.bufferSubData(target, (int) offset, GLUtil.glCreateBufferFromJava(data));
+
 	}
 	static native void nglBufferSubData(int target, long offset, long data_size, long data, long function_pointer);
 
 	public static void glGetBufferSubData(int target, long offset, ByteBuffer data) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetBufferSubData;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkDirect(data);
-		nglGetBufferSubData(target, offset, data.remaining(), MemoryUtil.getAddress(data), function_pointer);
+		Int8Array ua = Int8Array.create(GLUtil.glNewBuffer(data));
+		ctx.getBufferSubData(target, 0, ua , 0, ua.getByteLength());
+		data.flip();
+		GLUtil.glWriteArrayBufferToJavab(ua.getBuffer(), data);
 	}
 	public static void glGetBufferSubData(int target, long offset, DoubleBuffer data) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetBufferSubData;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkDirect(data);
-		nglGetBufferSubData(target, offset, (data.remaining() << 3), MemoryUtil.getAddress(data), function_pointer);
+		Float64Array arr = Float64Array.create(GLUtil.glNewBuffer(data));
+		ctx.getBufferSubData(target, (int) offset, arr, 0, target);
+		data.flip();
+		GLUtil.glWriteArrayBufferToJava(arr.getBuffer(), data);
+		data.flip();
+		
+		
 	}
 	public static void glGetBufferSubData(int target, long offset, FloatBuffer data) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetBufferSubData;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkDirect(data);
-		nglGetBufferSubData(target, offset, (data.remaining() << 2), MemoryUtil.getAddress(data), function_pointer);
+
+		Float32Array arr = Float32Array.create(GLUtil.glNewBuffer(data));
+		ctx.getBufferSubData(target, (int) offset, arr, 0, target);
+		data.flip();
+		GLUtil.glWriteArrayBufferToJava(arr.getBuffer(), data);
+		data.flip();
+
+
+
 	}
 	public static void glGetBufferSubData(int target, long offset, IntBuffer data) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetBufferSubData;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkDirect(data);
-		nglGetBufferSubData(target, offset, (data.remaining() << 2), MemoryUtil.getAddress(data), function_pointer);
+
+
+		Float64Array arr = Float64Array.create(GLUtil.glNewBuffer(data));
+		ctx.getBufferSubData(target, (int) offset, arr, 0, target);
+		data.flip();
+		GLUtil.glWriteArrayBufferToJava(arr.getBuffer(), data);
+		data.flip();
+
+
 	}
 	public static void glGetBufferSubData(int target, long offset, ShortBuffer data) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetBufferSubData;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkDirect(data);
-		nglGetBufferSubData(target, offset, (data.remaining() << 1), MemoryUtil.getAddress(data), function_pointer);
+
+		Float64Array arr = Float64Array.create(GLUtil.glNewBuffer(data));
+		ctx.getBufferSubData(target, (int) offset, arr, 0, target);
+		data.flip();
+		GLUtil.glWriteArrayBufferToJava(arr.getBuffer(), data);
+		data.flip();
+
+
+
 	}
 	static native void nglGetBufferSubData(int target, long offset, long data_size, long data, long function_pointer);
 
@@ -256,13 +243,13 @@ public final class GL15 {
 	 *  @return A ByteBuffer representing the mapped buffer memory.
 	 */
 	public static ByteBuffer glMapBuffer(int target, int access, ByteBuffer old_buffer) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glMapBuffer;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		if (old_buffer != null)
-			BufferChecks.checkDirect(old_buffer);
-		ByteBuffer __result = nglMapBuffer(target, access, glGetBufferParameteri(target, GL_BUFFER_SIZE), old_buffer, function_pointer);
-		return LWJGLUtil.CHECKS && __result == null ? null : __result.order(ByteOrder.nativeOrder());
+
+		return null;
+
+
+
+
+
 	}
 	/**
 	 *  glMapBuffer maps a GL buffer object to a ByteBuffer. The old_buffer argument can be null,
@@ -287,31 +274,31 @@ public final class GL15 {
 	 *  @return A ByteBuffer representing the mapped buffer memory.
 	 */
 	public static ByteBuffer glMapBuffer(int target, int access, long length, ByteBuffer old_buffer) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glMapBuffer;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		if (old_buffer != null)
-			BufferChecks.checkDirect(old_buffer);
-		ByteBuffer __result = nglMapBuffer(target, access, length, old_buffer, function_pointer);
-		return LWJGLUtil.CHECKS && __result == null ? null : __result.order(ByteOrder.nativeOrder());
+
+
+
+		return null;
+
+
+
 	}
 	static native ByteBuffer nglMapBuffer(int target, int access, long result_size, ByteBuffer old_buffer, long function_pointer);
 
 	public static boolean glUnmapBuffer(int target) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glUnmapBuffer;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		boolean __result = nglUnmapBuffer(target, function_pointer);
-		return __result;
+
+		
+		return false;
+
+
 	}
 	static native boolean nglUnmapBuffer(int target, long function_pointer);
 
 	public static void glGetBufferParameter(int target, int pname, IntBuffer params) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetBufferParameteriv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkBuffer(params, 4);
-		nglGetBufferParameteriv(target, pname, MemoryUtil.getAddress(params), function_pointer);
+		int param = ((JSNumber) ctx.getBufferParameter(target, pname)).intValue();
+
+		params.put(param);
+
+
 	}
 	static native void nglGetBufferParameteriv(int target, int pname, long params, long function_pointer);
 
@@ -327,90 +314,97 @@ public final class GL15 {
 
 	/** Overloads glGetBufferParameteriv. */
 	public static int glGetBufferParameteri(int target, int pname) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetBufferParameteriv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		IntBuffer params = APIUtil.getBufferInt(caps);
-		nglGetBufferParameteriv(target, pname, MemoryUtil.getAddress(params), function_pointer);
-		return params.get(0);
+		
+		
+		return ((JSNumber) ctx.getBufferParameter(target, pname)).intValue();
+		
+		
+		
 	}
 
 	public static ByteBuffer glGetBufferPointer(int target, int pname) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetBufferPointerv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		ByteBuffer __result = nglGetBufferPointerv(target, pname, glGetBufferParameteri(target, GL_BUFFER_SIZE), function_pointer);
-		return LWJGLUtil.CHECKS && __result == null ? null : __result.order(ByteOrder.nativeOrder());
+		int x = ((JSNumber) ctx.getBufferParameter(target, WebGLRenderingContext.BUFFER_SIZE)).intValue();
+		ArrayBuffer buf = ArrayBuffer.create(x);
+		Uint8Array ua = Uint8Array.create(buf);
+		ctx.getBufferSubData(target, 0, ua, 0, pname);
+		ByteBuffer result = ByteBuffer.allocate(x);
+		result.flip();
+		GLUtil.glWriteArrayBufferToJavau(ua.getBuffer(), result);
+		result.flip();
+		return result;
+		
 	}
 	static native ByteBuffer nglGetBufferPointerv(int target, int pname, long result_size, long function_pointer);
 
 	public static void glGenQueries(IntBuffer ids) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGenQueries;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkDirect(ids);
-		nglGenQueries(ids.remaining(), MemoryUtil.getAddress(ids), function_pointer);
+		ids.put(newObject(GL_OBJECT_QUERIES, ctx.createQuery()));
+
+		ids.flip();
+
+
 	}
 	static native void nglGenQueries(int ids_n, long ids, long function_pointer);
 
 	/** Overloads glGenQueries. */
 	public static int glGenQueries() {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGenQueries;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		IntBuffer ids = APIUtil.getBufferInt(caps);
-		nglGenQueries(1, MemoryUtil.getAddress(ids), function_pointer);
-		return ids.get(0);
+
+		
+		
+		return newObject(GL_OBJECT_QUERIES, ctx.createQuery());
+		
+
+
 	}
 
 	public static void glDeleteQueries(IntBuffer ids) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glDeleteQueries;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkDirect(ids);
-		nglDeleteQueries(ids.remaining(), MemoryUtil.getAddress(ids), function_pointer);
+		ctx.deleteQuery((WebGLQuery) get(ids.get()).getObject());
+
+
+
 	}
 	static native void nglDeleteQueries(int ids_n, long ids, long function_pointer);
 
 	/** Overloads glDeleteQueries. */
 	public static void glDeleteQueries(int id) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glDeleteQueries;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglDeleteQueries(1, APIUtil.getInt(caps, id), function_pointer);
+
+		ctx.deleteQuery((WebGLQuery) get(id).getObject());
+		
+		
+
+
 	}
 
 	public static boolean glIsQuery(int id) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glIsQuery;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		boolean __result = nglIsQuery(id, function_pointer);
-		return __result;
+		return true;
+
+
+
+
 	}
 	static native boolean nglIsQuery(int id, long function_pointer);
 
 	public static void glBeginQuery(int target, int id) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glBeginQuery;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglBeginQuery(target, id, function_pointer);
+
+		ctx.beginQuery(target, (WebGLQuery) get(id).getObject());
+
+
 	}
 	static native void nglBeginQuery(int target, int id, long function_pointer);
 
 	public static void glEndQuery(int target) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glEndQuery;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		nglEndQuery(target, function_pointer);
+
+		ctx.endQuery(target);
+
+
 	}
 	static native void nglEndQuery(int target, long function_pointer);
 
 	public static void glGetQuery(int target, int pname, IntBuffer params) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetQueryiv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkBuffer(params, 1);
-		nglGetQueryiv(target, pname, MemoryUtil.getAddress(params), function_pointer);
+
+
+		params.put(find(ctx.getQuery(target, pname)));
+
+
 	}
 	static native void nglGetQueryiv(int target, int pname, long params, long function_pointer);
 
@@ -426,49 +420,51 @@ public final class GL15 {
 
 	/** Overloads glGetQueryiv. */
 	public static int glGetQueryi(int target, int pname) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetQueryiv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		IntBuffer params = APIUtil.getBufferInt(caps);
-		nglGetQueryiv(target, pname, MemoryUtil.getAddress(params), function_pointer);
-		return params.get(0);
+		
+
+		return find(ctx.getQuery(target, pname));
+
+
+
 	}
 
 	public static void glGetQueryObject(int id, int pname, IntBuffer params) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetQueryObjectiv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkBuffer(params, 1);
-		nglGetQueryObjectiv(id, pname, MemoryUtil.getAddress(params), function_pointer);
+
+		params.put(((JSNumber) ctx.getQueryParameter((WebGLQuery) get(id).getObject(), pname)).intValue());
+
+
+
 	}
 	static native void nglGetQueryObjectiv(int id, int pname, long params, long function_pointer);
 
 	/** Overloads glGetQueryObjectiv. */
 	public static int glGetQueryObjecti(int id, int pname) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetQueryObjectiv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		IntBuffer params = APIUtil.getBufferInt(caps);
-		nglGetQueryObjectiv(id, pname, MemoryUtil.getAddress(params), function_pointer);
-		return params.get(0);
+		
+		
+		
+		return ((JSNumber) ctx.getQueryParameter((WebGLQuery) get(id).getObject(), pname)).intValue();
+
+
+
+
 	}
 
 	public static void glGetQueryObjectu(int id, int pname, IntBuffer params) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetQueryObjectuiv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		BufferChecks.checkBuffer(params, 1);
-		nglGetQueryObjectuiv(id, pname, MemoryUtil.getAddress(params), function_pointer);
+		params.put(((JSNumber) ctx.getQueryParameter((WebGLQuery) get(id).getObject(), pname)).intValue());
+
+
+
+
 	}
 	static native void nglGetQueryObjectuiv(int id, int pname, long params, long function_pointer);
 
 	/** Overloads glGetQueryObjectuiv. */
 	public static int glGetQueryObjectui(int id, int pname) {
-		ContextCapabilities caps = GLContext.getCapabilities();
-		long function_pointer = caps.glGetQueryObjectuiv;
-		BufferChecks.checkFunctionAddress(function_pointer);
-		IntBuffer params = APIUtil.getBufferInt(caps);
-		nglGetQueryObjectuiv(id, pname, MemoryUtil.getAddress(params), function_pointer);
-		return params.get(0);
+
+
+		return ((JSNumber) ctx.getQueryParameter((WebGLQuery) get(id).getObject(), pname)).intValue();
+
+
+
 	}
 }
