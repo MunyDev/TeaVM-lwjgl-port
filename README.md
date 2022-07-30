@@ -1,4 +1,4 @@
-# TeaVM-lwjgl-port
+# TeaVM LWJGL Port
 TeaVM-LWJGL-Port<br />
 This is a port of LWJGL2 that attempts to simulate the library.
 JAVAU files are unfinished java files.
