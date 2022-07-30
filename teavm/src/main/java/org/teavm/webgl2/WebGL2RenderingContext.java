@@ -289,7 +289,7 @@ public interface WebGL2RenderingContext extends WebGLRenderingContext{
 	void clearBufferfv( int buffer,  int drawbuffer,  Float32Array values, int srcOffset);
 	void clearBufferiv( int buffer,  int drawbuffer,  Int32Array values, int srcOffset);
 	void clearBufferuiv( int buffer,  int drawbuffer,  ArrayBuffer values, int srcOffset);
-	int clientWaitSync( WebGLSync sync,  int flags,  long timeout);
+	int clientWaitSync( WebGLSync sync,  int flags,  int timeout);
 	void compressedTexImage3D( int target,  int level,  int internalformat,  int width,  int height,  int depth,  int border,  int imageSize,  int offset);
 	void compressedTexImage3D( int target,  int level,  int internalformat,  int width,  int height,  int depth,  int border,  ArrayBufferView srcData, int srcOffset, int srcLengthOverride);
 	void compressedTexSubImage3D( int target,  int level,  int xoffset,  int yoffset,  int zoffset,  int width,  int height,  int depth,  int format,  int imageSize,  int offset);
@@ -353,12 +353,16 @@ public interface WebGL2RenderingContext extends WebGLRenderingContext{
 	void transformFeedbackVaryings( WebGLProgram program,  String varyings[],  int bufferMode);
 	void uniform1ui( WebGLUniformLocation location,  int v0);
 	void uniform1uiv( WebGLUniformLocation location,  ArrayBuffer data, int srcOffset, int srcLength);
+	void uniform1uiv( WebGLUniformLocation location,  ArrayBuffer data);
 	void uniform2ui( WebGLUniformLocation location,  int v0,  int v1);
 	void uniform2uiv( WebGLUniformLocation location,  ArrayBuffer data, int srcOffset, int srcLength);
+	void uniform2uiv( WebGLUniformLocation location,  ArrayBuffer data);
 	void uniform3ui( WebGLUniformLocation location,  int v0,  int v1,  int v2);
 	void uniform3uiv( WebGLUniformLocation location,  ArrayBuffer data, int srcOffset, int srcLength);
+	void uniform3uiv( WebGLUniformLocation location,  ArrayBuffer data);
 	void uniform4ui( WebGLUniformLocation location,  int v0,  int v1,  int v2,  int v3);
 	void uniform4uiv( WebGLUniformLocation location,  ArrayBuffer data, int srcOffset, int srcLength);
+	void uniform4uiv( WebGLUniformLocation location,  ArrayBuffer data);
 	void uniformBlockBinding( WebGLProgram program,  int uniformBlockIndex,  int uniformBlockBinding);
 	void uniformMatrix2x3fv( WebGLUniformLocation location,  boolean transpose,  Float32Array data, int srcOffset, int srcLength);
 	void uniformMatrix2x4fv( WebGLUniformLocation location,  boolean transpose,  Float32Array data, int srcOffset, int srcLength);
@@ -373,6 +377,22 @@ public interface WebGL2RenderingContext extends WebGLRenderingContext{
 	void vertexAttribI4uiv( int index,  ArrayBuffer values);
 	void vertexAttribIPointer( int index,  int size,  int type,  int stride,  int offset);
 	
+	void uniformMatrix4x2fv(WebGLUniformLocation location, boolean transpose,Float32Array data);
+
+
+	void uniformMatrix2x3fv(WebGLUniformLocation location, boolean transpose,Float32Array data);
+
+
+//	void uniformMatrix3fv(WebGLUniformLocation location, boolean transpose,Float32Array data);
+
+	void uniformMatrix3x2fv(WebGLUniformLocation location, boolean transpose,Float32Array data);
+	void uniformMatrix4x3fv(WebGLUniformLocation location, boolean transpose,Float32Array data);
+
+	void uniformMatrix2x4fv(WebGLUniformLocation location, boolean transpose,Float32Array data);
+
+	void uniformMatrix3x4fv(WebGLUniformLocation location, boolean transpose,Float32Array data);
+
+    
 	
 	// Overloads
 	void bufferData(int target, int size, int usage);
