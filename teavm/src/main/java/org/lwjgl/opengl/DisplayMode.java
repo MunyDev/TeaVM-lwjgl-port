@@ -65,6 +65,12 @@ public final class DisplayMode {
 	public DisplayMode(int width, int height) {
 		this(width, height, 0, 0, false);
 	}
+	/**
+	 * Constructs a DisplaMode.
+	 * @param width The Display width
+	 * @param height The Display height
+	 * @param popup if it is a window popup(if true, width and height will be used in the popup otherwise will be unused.)
+	 */
 	public DisplayMode(int width, int height, boolean popup) {
 		this(width, height, 0, 0, false);
 		this.popup = popup;

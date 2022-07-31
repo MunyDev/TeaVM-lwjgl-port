@@ -21,7 +21,7 @@ import static org.teavm.jso.browser.Window.*;
 public class Client {
     public static void main(String[] args) {
         
-    	DisplayMode dm = new DisplayMode(640, 480, true);
+    	DisplayMode dm = new DisplayMode(640, 480, false);
 //        document.getBody().appendChild(canvas);
         Display.setDisplayMode(dm);
         Display.create();
@@ -37,12 +37,14 @@ public class Client {
 				 		GL11.glClearColor(0, 0, 0, 1);
 			        	GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 			        	GL11.glBegin(GL11.GL_TRIANGLES);
+			        	GL11.glColor4f(0, 0, 1, 1);
 			        	GL11.glVertex3f(-0.5f, 0.5f, 0);
 			        	GL11.glVertex3f(0.5f, 0.5f, 0);
 			        	GL11.glVertex3f(0.5f, -0.5f, 0);
 			        	GL11.glVertex3f(-0.5f, 0.5f, 0);
 			        	GL11.glVertex3f(0.5f, -0.5f, 0);
 			        	GL11.glVertex3f(-0.5f, -0.5f, 0);
+			        
 			        	GL11.glEnd();
 			        	Display.update();
 						Mouse.poll();
