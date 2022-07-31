@@ -21,7 +21,7 @@ import static org.teavm.jso.browser.Window.*;
 public class Client {
     public static void main(String[] args) {
         
-    	DisplayMode dm = new DisplayMode(640, 480, true);
+    	DisplayMode dm = new DisplayMode(640, 480, false);
 //        document.getBody().appendChild(canvas);
         Display.setDisplayMode(dm);
         Display.create();
