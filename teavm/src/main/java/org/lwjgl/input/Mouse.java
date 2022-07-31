@@ -279,6 +279,19 @@ public class Mouse {
 			}
 			
 		});
+		hce.addEventListener("contextmenu", new EventListener<MouseEvent>() {
+
+			@Override
+			public void handleEvent(MouseEvent evt) {
+				// TODO Auto-generated method stub
+				if (isSupposedToBeGrabbed) {
+					((WebGLRenderingContext)CurrentContext.getContext()).getCanvas().requestPointerLock();
+				}
+				evt.preventDefault();
+				evt.stopPropagation();
+			}
+			
+		});
 		hce.addEventListener("mouseenter", new EventListener<MouseEvent>() {
 
 			@Override
