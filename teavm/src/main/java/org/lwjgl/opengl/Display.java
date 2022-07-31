@@ -457,12 +457,12 @@ import java.nio.ByteBuffer;
 		 *
 		 * @
 		 */
-		public static void create()  {
+		public static void create() throws Exception {
 			create((Object)null);
 		}
 		
 		
-		public static void create(Object... unused) {
+		public static void create(Object... unused) throws Exception {
 			DisplayMode dm = getDisplayMode();
 			if (dm == null) {
 				dm = new DisplayMode(800, 600);
