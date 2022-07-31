@@ -256,7 +256,7 @@ import org.teavm.webgl2.WebGL2RenderingContext;
 			
 		}
 		private static Keyboard.Event curEvent;
-		private static PriorityQueue<Keyboard.Event> queue = new PriorityQueue<Keyboard.Event>();
+//		private static PriorityQueue<Keyboard.Event> queue = new PriorityQueue<Keyboard.Event>(20);
 		
 		
 //		private static int counter;
@@ -490,7 +490,7 @@ import org.teavm.webgl2.WebGL2RenderingContext;
 					}else {
 						System.out.println(String.format("%s is not available", evt.getCode()));
 					}
-					queue.add(new Keyboard.Event(true, keyMap.get(evt.getCode()), (char) evt.getCharCode(), evt.isRepeat()));
+//					queue.add(new Keyboard.Event(true, keyMap.get(evt.getCode()), (char) evt.getCharCode(), evt.isRepeat()));
 					evt.preventDefault();
 					evt.stopPropagation();
 					
@@ -506,7 +506,7 @@ import org.teavm.webgl2.WebGL2RenderingContext;
 //						System.out.printf("%s, %d", evt.getCode(), keyMap.get(evt.getCode()));
 //						System.out.println(keyMap.get(evt.getCode()));
 						keyArr[keyMap.get(evt.getCode())] = false;
-						queue.add(new Keyboard.Event(false, keyMap.get(evt.getCode()), (char) evt.getCharCode(), false));
+//						queue.add(new Keyboard.Event(false, keyMap.get(evt.getCode()), (char) evt.getCharCode(), false));
 					}else {
 //						System.out.printf("%s is not available", evt.getCode());
 					}
@@ -622,12 +622,14 @@ import org.teavm.webgl2.WebGL2RenderingContext;
 		 * @return true if a keyboard event was read, false otherwise
 		 */
 		public static boolean next() {
-			if (queue.isEmpty()) {
-				return false;
-			}else {
-				curEvent = queue.poll();
-				return true;
-			}
+//			if (queue.isEmpty()) {
+//				return false;
+//			}else {
+//				curEvent = queue.poll();
+//				return true;
+//			}
+			
+			return true;
 		}
 
 		/**
@@ -678,7 +680,7 @@ import org.teavm.webgl2.WebGL2RenderingContext;
 		 * @return The key from the current event
 		 */
 		public static int getEventKey() {
-			return curEvent.getKeyCode();
+			return 0;
 		}
 
 		/**
@@ -688,7 +690,7 @@ import org.teavm.webgl2.WebGL2RenderingContext;
 		 * @return True if key was down, or false if released
 		 */
 		public static boolean getEventKeyState() {
-			return curEvent.isState();
+			return true;
 		}
 
 		/**
@@ -708,7 +710,7 @@ import org.teavm.webgl2.WebGL2RenderingContext;
 		 * the current event is not a repeat even or if repeat events are disabled.
 		 */
 		public static boolean isRepeatEvent() {
-			return curEvent.repeat;
+			return false;
 		}
 
 		
