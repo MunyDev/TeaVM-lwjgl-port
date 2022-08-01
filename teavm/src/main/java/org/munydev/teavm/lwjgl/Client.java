@@ -26,6 +26,7 @@ public class Client {
         Display.setDisplayMode(dm);
         try {
 			Display.create();
+			Display.setTitle("woah");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
