@@ -24,7 +24,12 @@ public class Client {
     	DisplayMode dm = new DisplayMode(640, 480, false);
 //        document.getBody().appendChild(canvas);
         Display.setDisplayMode(dm);
-        Display.create();
+        try {
+			Display.create();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         
 //        CurrentContext.setCurrentContext(Di);
         Display.setFullscreen(true);
