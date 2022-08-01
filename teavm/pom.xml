@@ -24,11 +24,7 @@
     </dependency>
 
 	<!-- https://mvnrepository.com/artifact/org.joml/joml -->
-<dependency>
-    <groupId>org.joml</groupId>
-    <artifactId>joml</artifactId>
-    <version>1.10.4</version>
-</dependency>
+
 	
     <!-- JavaScriptObjects (JSO) - a JavaScript binding for TeaVM -->
     <dependency>
@@ -91,6 +87,7 @@
             </goals>
             <phase>process-classes</phase>
             <configuration>
+            
               <!-- Directory where TeaVM should put generated files. This configuration conforms to the settings
                    of the WAR plugin -->
               <targetDirectory>${teavm.dir}</targetDirectory>
