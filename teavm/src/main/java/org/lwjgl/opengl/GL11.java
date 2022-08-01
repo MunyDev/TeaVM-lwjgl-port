@@ -894,7 +894,7 @@ public class GL11 {
 		params.put((double) ctx.getParameterf(pname));
 		params.flip();
     }
-	static int	glGetError(){
+	public static int	glGetError(){
 		return ctx.getError();
     }
 	static float glGetFloat(int pname) {
