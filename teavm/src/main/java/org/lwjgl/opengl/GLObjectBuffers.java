@@ -1,5 +1,6 @@
 package org.lwjgl.opengl;
 
+import org.teavm.jso.JSBody;
 import org.teavm.jso.JSObject;
 
 public class GLObjectBuffers {
@@ -35,23 +36,17 @@ public class GLObjectBuffers {
 	 * @param obj The actual object
 	 * @return returns the id
 	 */
-	public static int newObject(int type, JSObject obj) {
-		int savedCount = objectCount;
-		
-		objects[savedCount] = new GLObject(obj, type);
-		
-		
-		objectCount = savedCount+1;
-		return savedCount;
-	}
+	@JSBody(script="return window.globjs.push({type: type, object: obj});", params = {"type", "obj"})
+	public static native int newObject(int type, JSObject obj);
 	
-	public static GLObject get(int idx) {
-		return objects[idx];
-	}
+	@JSBody(script = "return window.globjs[idx].object;", params= {"idx"})
+	public static native JSObject getObject(int idx);
 	
+	@JSBody(script = "return window.globjs[idx].type;")
+	public static native int getType(int idx);
 	public static int find(JSObject obj) {
 		for (int i = 0; i < objects.length; i++) {
-			if (objects[i].getObject().equals(obj)) {
+			if (objects[i].equals(obj)) {
 				return i;
 			}
 		}

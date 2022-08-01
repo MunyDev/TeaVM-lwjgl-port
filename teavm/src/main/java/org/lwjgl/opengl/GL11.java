@@ -1,6 +1,7 @@
 package org.lwjgl.opengl;
 
 import org.munydev.teavm.lwjgl.CurrentContext;
+import org.joml.Matrix4f;
 import static org.lwjgl.opengl.GLObjectBuffers.*;
 import org.teavm.jso.core.JSArray;
 import org.teavm.jso.core.JSBoolean;
@@ -12,9 +13,11 @@ import org.teavm.webgl2.WebGL2RenderingContext;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
+import java.util.Arrays;
 
 import org.lwjgl.util.GLUtil;
 import org.teavm.jso.*;
+import org.joml.*;
 /**
  * This class attempts to simulate the LWJGL2/LWJGL3 GL11 class
  * @author MunyDev
@@ -553,10 +556,17 @@ public class GL11 {
 			GL_T4F_C4F_N3F_V4F = 0x2A2D,
 			GL_LOGIC_OP = 0xBF1,
 			GL_TEXTURE_COMPONENTS = 0x1003;
+	private static Matrix4f modelMatrix = new Matrix4f();
+//	private static Matrix4f viewMatrix = new Matrix4f();
+	private static Matrix4f projectionMatrix = new Matrix4f();
+	private static Matrix4f currentMatrixStack;
 	public static WebGL2RenderingContext ctx = (WebGL2RenderingContext) CurrentContext.getContext();
 	private static Batch currentBatch;
 //	private static WebGLTexture[] texBatch = new WebGLTexture[4096];
 //	private static WebGLShader[] s = new WebGLShader[4096];
+	static {
+		currentMatrixStack = projectionMatrix;
+	}
 	public static void	glAccum(int op, float value){
 		System.out.println("stub");
     }
@@ -584,7 +594,7 @@ public class GL11 {
 		
 		
 		
-		ctx.bindTexture(target, (WebGLTexture) get(texture).getObject());
+		ctx.bindTexture(target, (WebGLTexture) getObject(texture));
     }
 	public static void	glBitmap(int width, int height, float xorig, float yorig, float xmove, float ymove, java.nio.ByteBuffer bitmap){
 		System.out.println("currently a stub!");
@@ -742,9 +752,11 @@ public class GL11 {
 		ctx.depthRange((float) zNear,(float) zFar);
     }
 	public static void	glDisable(int cap){
+		ctx.disable(cap);
 		return;
     }
 	public static void	glDisableClientState(int cap){
+		ctx.disable(cap);
 		return;
     }
 	public static void	glDrawArrays(int mode, int first, int count){
@@ -752,25 +764,25 @@ public class GL11 {
 		ctx.drawArrays(mode, first, count);
     }
 	public static void	glDrawBuffer(int mode){
-		
+		ctx.drawBuffers(new int[] {mode});
     }
 	public static void	glDrawElements(int mode, java.nio.ByteBuffer indices){
 		System.out.println("unsupported");
     }
 	public static void	glDrawElements(int mode, java.nio.IntBuffer indices){
-
+		
     }
 	public static void	glDrawElements(int mode, int count, int type, java.nio.ByteBuffer indices) {
 
     }
 	public static void	glDrawElements(int mode, int indices_count, int type, long indices_buffer_offset){
-
-    }
+		ctx.drawElements(mode, indices_count, type,(int)indices_buffer_offset);
+	}
 	public static void	glDrawElements(int mode, java.nio.ShortBuffer indices){
 
     }
 	public static void	glDrawPixels(int width, int height, int format, int type, java.nio.ByteBuffer pixels){
-
+		
     }
 	public static void	glDrawPixels(int width, int height, int format, int type, java.nio.IntBuffer pixels){
 
@@ -782,7 +794,7 @@ public class GL11 {
 
     }
 	public static void	glEdgeFlag(boolean flag){
-
+		
     }
 	public static void	glEdgeFlagPointer(int stride, java.nio.ByteBuffer pointer){
 
@@ -827,16 +839,16 @@ public class GL11 {
 
     }
 	public static void	glFeedbackBuffer(int type, java.nio.FloatBuffer buffer){
-
+		
     }
 	public static void	glFinish(){
-
+		ctx.finish();
     }
 	public static void	glFlush(){
-
+		ctx.flush();
     }
 	public static void	glFog(int pname, java.nio.FloatBuffer params){
-
+		
     }
 	public static void	glFog(int pname, java.nio.IntBuffer params){
 
@@ -848,7 +860,7 @@ public class GL11 {
 
     }
 	public static void	glFrontFace(int mode){
-
+		ctx.frontFace(mode);
     }
 	public static void	glFrustum(double left, double right, double bottom, double top, double zNear, double zFar){
 
@@ -1138,16 +1150,16 @@ public class GL11 {
 
     }
 	public static void	glLoadIdentity(){
-		
+		currentMatrixStack.identity();
     }
 	public static void	glLoadMatrix(java.nio.DoubleBuffer m){
-
+		
     }
 	public static void	glLoadMatrix(java.nio.FloatBuffer m){
-
+		currentMatrixStack.set(m);
     }
 	public static void	glLoadName(int name){
-
+	
     }
 	public static void	glLogicOp(int opcode){
 
@@ -1189,13 +1201,22 @@ public class GL11 {
 
     }
 	public static void	glMatrixMode(int mode){
+		switch (mode) {
+		case GL11.GL_MODELVIEW_MATRIX:
+			currentMatrixStack = modelMatrix;
+			break;
+		case GL11.GL_PROJECTION_MATRIX:
+			currentMatrixStack = projectionMatrix;
+			break;
+		
+		}
 		
     }
 	public static void	glMultMatrix(java.nio.DoubleBuffer m){
 
     }
 	public static void	glMultMatrix(java.nio.FloatBuffer m){
-
+		currentMatrixStack.mul(new Matrix4f(m));
     }
 	public static void	glNewList(int list, int mode){
 
@@ -1231,10 +1252,11 @@ public class GL11 {
 
     }
 	public static void	glOrtho(double left, double right, double bottom, double top, double zNear, double zFar){
-
+		currentMatrixStack.ortho((float) left, (float) right, (float) bottom, (float) top, (float) zNear, (float) zFar);
+		
     }
 	public static void	glPassThrough(float token){
-
+		
     }
 	public static void	glPixelMap(int map, java.nio.FloatBuffer values){
 
@@ -1261,7 +1283,7 @@ public class GL11 {
 	
     }
 	public static void	glPixelTransferf(int pname, float param){
-
+		
     }
 	public static void	glPixelTransferi(int pname, int param){
 
@@ -1270,10 +1292,10 @@ public class GL11 {
 
     }
 	public static void	glPointSize(float size){
-
+		
     }
 	public static void	glPolygonMode(int face, int mode){
-
+		
     }
 	public static void	glPolygonOffset(float factor, float units){
 

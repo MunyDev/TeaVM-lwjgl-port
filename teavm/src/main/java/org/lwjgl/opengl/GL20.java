@@ -204,18 +204,18 @@ public final class GL20 {
 	 *  @param string
 	 */
 	public static void glShaderSource(int shader, ByteBuffer string) {
-		wglc.shaderSource((WebGLShader) get(shader).getObject(), string.asCharBuffer().toString());
+		wglc.shaderSource((WebGLShader) getObject(shader), string.asCharBuffer().toString());
 	}
 	static native void nglShaderSource(int shader, int count, long string, int string_length, long function_pointer);
 
 	/** Overloads glShaderSource. */
 	public static void glShaderSource(int shader, CharSequence string) {
-		wglc.shaderSource((WebGLShader) get(shader).getObject(), string.toString());
+		wglc.shaderSource((WebGLShader) getObject(shader), string.toString());
 	}
 
 	/** Overloads glShaderSource. */
 	public static void glShaderSource(int shader, CharSequence[] strings) {
-		wglc.shaderSource((WebGLShader) get(shader).getObject(), null);
+		wglc.shaderSource((WebGLShader) getObject(shader), null);
 	}
 	static native void nglShaderSource3(int shader, int count, long strings, long length, long function_pointer);
 
@@ -227,19 +227,19 @@ public final class GL20 {
 
 	public static boolean glIsShader(int shader) {
 		
-		return get(shader).getType() == GL_OBJECT_SHADERS;
+		return getType(shader) == GL_OBJECT_SHADERS;
 	}
 	static native boolean nglIsShader(int shader, long function_pointer);
 
 	public static void glCompileShader(int shader) {
-		WebGLShader s = (WebGLShader) get(shader).getObject();
+		WebGLShader s = (WebGLShader) getObject(shader);
 		wglc.compileShader(s);
 	}
 	static native void nglCompileShader(int shader, long function_pointer);
 
 	public static void glDeleteShader(int shader) {
 		
-		wglc.deleteShader((WebGLShader) get(shader).getObject());
+		wglc.deleteShader((WebGLShader) getObject(shader));
 	}
 	static native void nglDeleteShader(int shader, long function_pointer);
 
@@ -250,96 +250,96 @@ public final class GL20 {
 	static native int nglCreateProgram(long function_pointer);
 
 	public static boolean glIsProgram(int program) {
-		return get(program).getType() == GL_OBJECT_PROGRAMS;
+		return getType(program) == GL_OBJECT_PROGRAMS;
 	}
 	static native boolean nglIsProgram(int program, long function_pointer);
 
 	public static void glAttachShader(int program, int shader) {
-		WebGLProgram pr = (WebGLProgram) get(program).getObject();
-		WebGLShader sh = (WebGLShader) get(program).getObject();;
+		WebGLProgram pr = (WebGLProgram) getObject(program);
+		WebGLShader sh = (WebGLShader) getObject(program);;
 		
 		wglc.attachShader(pr, sh);
 	}
 	static native void nglAttachShader(int program, int shader, long function_pointer);
 
 	public static void glDetachShader(int program, int shader) {
-		wglc.detachShader((WebGLProgram) get(program).getObject(),(WebGLShader) get(shader).getObject());
+		wglc.detachShader((WebGLProgram) getObject(program),(WebGLShader) getObject(shader));
 	}
 	static native void nglDetachShader(int program, int shader, long function_pointer);
 
 	public static void glLinkProgram(int program) {
-		wglc.linkProgram((WebGLProgram) get(program).getObject());
+		wglc.linkProgram((WebGLProgram) getObject(program));
 	}
 	static native void nglLinkProgram(int program, long function_pointer);
 
 	public static void glUseProgram(int program) {
-		wglc.useProgram((WebGLProgram) get(program).getObject());
+		wglc.useProgram((WebGLProgram) getObject(program));
 	}
 	static native void nglUseProgram(int program, long function_pointer);
 
 	public static void glValidateProgram(int program) {
-		wglc.validateProgram((WebGLProgram) get(program).getObject());
+		wglc.validateProgram((WebGLProgram) getObject(program));
 	}
 	static native void nglValidateProgram(int program, long function_pointer);
 
 	public static void glDeleteProgram(int program) {
-		wglc.deleteProgram((WebGLProgram) get(program).getObject());
+		wglc.deleteProgram((WebGLProgram) getObject(program));
 	}
 	static native void nglDeleteProgram(int program, long function_pointer);
 
 	public static void glUniform1f(int location, float v0) {
-		wglc.uniform1f((WebGLUniformLocation) get(location).getObject(), v0);
+		wglc.uniform1f((WebGLUniformLocation) getObject(location), v0);
 	}
 	static native void nglUniform1f(int location, float v0, long function_pointer);
 
 	public static void glUniform2f(int location, float v0, float v1) {
-		wglc.uniform2f((WebGLUniformLocation) get(location).getObject(), v0, v1);
+		wglc.uniform2f((WebGLUniformLocation) getObject(location), v0, v1);
 	}
 	static native void nglUniform2f(int location, float v0, float v1, long function_pointer);
 
 	public static void glUniform3f(int location, float v0, float v1, float v2) {
-		wglc.uniform3f((WebGLUniformLocation) get(location).getObject(), v0, v1, v2);
+		wglc.uniform3f((WebGLUniformLocation) getObject(location), v0, v1, v2);
 	}
 	static native void nglUniform3f(int location, float v0, float v1, float v2, long function_pointer);
 
 	public static void glUniform4f(int location, float v0, float v1, float v2, float v3) {
-		wglc.uniform4f((WebGLUniformLocation) get(location).getObject(), v0, v1, v2, v3);
+		wglc.uniform4f((WebGLUniformLocation) getObject(location), v0, v1, v2, v3);
 		
 	}
 	static native void nglUniform4f(int location, float v0, float v1, float v2, float v3, long function_pointer);
 
 	public static void glUniform1i(int location, int v0) {
-		wglc.uniform1i((WebGLUniformLocation) get(location).getObject(), v0);
+		wglc.uniform1i((WebGLUniformLocation) getObject(location), v0);
 	}
 	static native void nglUniform1i(int location, int v0, long function_pointer);
 
 	public static void glUniform2i(int location, int v0, int v1) {
-		wglc.uniform2i((WebGLUniformLocation) get(location).getObject(), v0, v1);
+		wglc.uniform2i((WebGLUniformLocation) getObject(location), v0, v1);
 		
 	}
 	static native void nglUniform2i(int location, int v0, int v1, long function_pointer);
 
 	public static void glUniform3i(int location, int v0, int v1, int v2) {
-		wglc.uniform3i((WebGLUniformLocation) get(location).getObject(), v0, v1, v2);
+		wglc.uniform3i((WebGLUniformLocation) getObject(location), v0, v1, v2);
 	}
 	static native void nglUniform3i(int location, int v0, int v1, int v2, long function_pointer);
 
 	public static void glUniform4i(int location, int v0, int v1, int v2, int v3) {
-		wglc.uniform4i((WebGLUniformLocation) get(location).getObject(), v0, v1, v2, v3);
+		wglc.uniform4i((WebGLUniformLocation) getObject(location), v0, v1, v2, v3);
 	}
 	static native void nglUniform4i(int location, int v0, int v1, int v2, int v3, long function_pointer);
 
 	public static void glUniform1(int location, FloatBuffer values) {
 		float[] arr = new float[values.remaining()];
 		values.get(arr);
-		wglc.uniform4fv((WebGLUniformLocation) get(location).getObject(), arr);
+		wglc.uniform4fv((WebGLUniformLocation) getObject(location), arr);
 	}
 	static native void nglUniform1fv(int location, int values_count, long values, long function_pointer);
 
 	public static void glUniform2(int location, FloatBuffer values) {
 		float[] arr = new float[values.remaining()];
 		values.get(arr);
-		wglc.uniform4fv((WebGLUniformLocation) get(location).getObject(), arr);
+		wglc.uniform4fv((WebGLUniformLocation) getObject(location), arr);
 		
 	}
 	static native void nglUniform2fv(int location, int values_count, long values, long function_pointer);
@@ -347,7 +347,7 @@ public final class GL20 {
 	public static void glUniform3(int location, FloatBuffer values) {
 		float[] arr = new float[values.remaining()];
 		values.get(arr);
-		wglc.uniform4fv((WebGLUniformLocation) get(location).getObject(), arr);
+		wglc.uniform4fv((WebGLUniformLocation) getObject(location), arr);
 		
 	}
 	static native void nglUniform3fv(int location, int values_count, long values, long function_pointer);
@@ -355,14 +355,14 @@ public final class GL20 {
 	public static void glUniform4(int location, FloatBuffer values) {
 		float[] arr = new float[values.remaining()];
 		values.get(arr);
-		wglc.uniform4fv((WebGLUniformLocation) get(location).getObject(), arr);
+		wglc.uniform4fv((WebGLUniformLocation) getObject(location), arr);
 	}
 	static native void nglUniform4fv(int location, int values_count, long values, long function_pointer);
 
 	public static void glUniform1(int location, IntBuffer values) {
 		int[] arr = new int[values.remaining()];
 		values.get(arr);
-		wglc.uniform1iv((WebGLUniformLocation) get(location).getObject(), arr);
+		wglc.uniform1iv((WebGLUniformLocation) getObject(location), arr);
 	}
 	static native void nglUniform1iv(int location, int values_count, long values, long function_pointer);
 
@@ -370,7 +370,7 @@ public final class GL20 {
 		int[] arr = new int[values.remaining()];
 		
 		values.get(arr);
-		wglc.uniform2iv((WebGLUniformLocation) get(location).getObject(), arr);
+		wglc.uniform2iv((WebGLUniformLocation) getObject(location), arr);
 	}
 	static native void nglUniform2iv(int location, int values_count, long values, long function_pointer);
 
@@ -378,7 +378,7 @@ public final class GL20 {
 		int[] arr = new int[values.remaining()];
 		
 		values.get(arr);
-		wglc.uniform3iv((WebGLUniformLocation) get(location).getObject(), arr);
+		wglc.uniform3iv((WebGLUniformLocation) getObject(location), arr);
 	}
 	static native void nglUniform3iv(int location, int values_count, long values, long function_pointer);
 
@@ -389,7 +389,7 @@ public final class GL20 {
 		for (i = 0; i < len; i++) {
 			fa.set(i, values.get());
 		}
-		wglc.uniform4fv((WebGLUniformLocation) get(location).getObject(), fa);
+		wglc.uniform4fv((WebGLUniformLocation) getObject(location), fa);
 		
 	}
 	static native void nglUniform4iv(int location, int values_count, long values, long function_pointer);
@@ -401,7 +401,7 @@ public final class GL20 {
 		for (i = 0; i < len; i++) {
 			fa.set(i, matrices.get());
 		}
-		wglc.uniformMatrix2fv((WebGLUniformLocation) get(location).getObject(), transpose, fa);
+		wglc.uniformMatrix2fv((WebGLUniformLocation) getObject(location), transpose, fa);
 	}
 	static native void nglUniformMatrix2fv(int location, int matrices_count, boolean transpose, long matrices, long function_pointer);
 
@@ -412,7 +412,7 @@ public final class GL20 {
 		for (i = 0; i < len; i++) {
 			fa.set(i, matrices.get());
 		}
-		wglc.uniformMatrix3fv((WebGLUniformLocation) get(location).getObject(), transpose, fa);
+		wglc.uniformMatrix3fv((WebGLUniformLocation) getObject(location), transpose, fa);
 	}
 	static native void nglUniformMatrix3fv(int location, int matrices_count, boolean transpose, long matrices, long function_pointer);
 
@@ -423,12 +423,12 @@ public final class GL20 {
 		for (i = 0; i < len; i++) {
 			fa.set(i, matrices.get());
 		}
-		wglc.uniformMatrix4fv((WebGLUniformLocation) get(location).getObject(), transpose, fa);
+		wglc.uniformMatrix4fv((WebGLUniformLocation) getObject(location), transpose, fa);
 	}
 	static native void nglUniformMatrix4fv(int location, int matrices_count, boolean transpose, long matrices, long function_pointer);
 
 	public static void glGetShader(int shader, int pname, IntBuffer params) {
-		params.put(wglc.getShaderParameteri((WebGLShader) get(shader).getObject(), pname));
+		params.put(wglc.getShaderParameteri((WebGLShader) getObject(shader), pname));
 		params.flip();
 	}
 	static native void nglGetShaderiv(int shader, int pname, long params, long function_pointer);
@@ -445,13 +445,13 @@ public final class GL20 {
 
 	/** Overloads glGetShaderiv. */
 	public static int glGetShaderi(int shader, int pname) {
-		return wglc.getShaderParameteri((WebGLShader) get(shader).getObject(), pname);
+		return wglc.getShaderParameteri((WebGLShader) getObject(shader), pname);
 		
 		
 	}
 
 	public static void glGetProgram(int program, int pname, IntBuffer params) {
-		params.put(wglc.getProgramParameteri((WebGLProgram) get(program).getObject(), pname));
+		params.put(wglc.getProgramParameteri((WebGLProgram) getObject(program), pname));
 		params.flip();
 	}
 	static native void nglGetProgramiv(int program, int pname, long params, long function_pointer);
@@ -468,23 +468,23 @@ public final class GL20 {
 
 	/** Overloads glGetProgramiv. */
 	public static int glGetProgrami(int program, int pname) {
-		return wglc.getProgramParameteri((WebGLProgram) get(program).getObject(), pname);
+		return wglc.getProgramParameteri((WebGLProgram) getObject(program), pname);
 	}
 
 	public static void glGetShaderInfoLog(int shader, IntBuffer length, ByteBuffer infoLog) {
-		infoLog.put(wglc.getShaderInfoLog((WebGLShader) get(shader).getObject()).getBytes(StandardCharsets.UTF_8));
-		length.put(wglc.getShaderInfoLog((WebGLShader) get(shader).getObject()).getBytes(StandardCharsets.UTF_8).length * Byte.BYTES);
+		infoLog.put(wglc.getShaderInfoLog((WebGLShader) getObject(shader)).getBytes(StandardCharsets.UTF_8));
+		length.put(wglc.getShaderInfoLog((WebGLShader) getObject(shader)).getBytes(StandardCharsets.UTF_8).length * Byte.BYTES);
 		infoLog.flip(); length.flip();
 	}
 	static native void nglGetShaderInfoLog(int shader, int infoLog_maxLength, long length, long infoLog, long function_pointer);
 
 	/** Overloads glGetShaderInfoLog. */
 	public static String glGetShaderInfoLog(int shader, int maxLength) {
-		return wglc.getShaderInfoLog((WebGLShader) get(shader).getObject()).substring(0, maxLength);
+		return wglc.getShaderInfoLog((WebGLShader) getObject(shader)).substring(0, maxLength);
 	}
 
 	public static void glGetProgramInfoLog(int program, IntBuffer length, ByteBuffer infoLog) {
-		byte[] programInfoLog = wglc.getProgramInfoLog((WebGLProgram) get(program).getObject()).getBytes(StandardCharsets.UTF_8);
+		byte[] programInfoLog = wglc.getProgramInfoLog((WebGLProgram) getObject(program)).getBytes(StandardCharsets.UTF_8);
 		infoLog.put(programInfoLog);
 		length.put(programInfoLog.length);
 	}
@@ -492,7 +492,7 @@ public final class GL20 {
 
 	/** Overloads glGetProgramInfoLog. */
 	public static String glGetProgramInfoLog(int program, int maxLength) {
-		return wglc.getProgramInfoLog((WebGLProgram) get(program).getObject());
+		return wglc.getProgramInfoLog((WebGLProgram) getObject(program));
 	}
 
 	public static void glGetAttachedShaders(int program, IntBuffer count, IntBuffer shaders1) {
@@ -510,7 +510,7 @@ public final class GL20 {
 	 */
 	public static int glGetUniformLocation(int program, ByteBuffer name) {
 		
-		return newObject(GL_OBJECT_UNIFORMS, wglc.getUniformLocation((WebGLProgram) get(program).getObject(), name.asCharBuffer().toString()));
+		return newObject(GL_OBJECT_UNIFORMS, wglc.getUniformLocation((WebGLProgram) getObject(program), name.asCharBuffer().toString()));
 		
 	}
 	static native int nglGetUniformLocation(int program, long name, long function_pointer);
@@ -518,11 +518,11 @@ public final class GL20 {
 	/** Overloads glGetUniformLocation. */
 	public static int glGetUniformLocation(int program, CharSequence name) {
 		
-		return newObject(GL_OBJECT_UNIFORMS, wglc.getUniformLocation((WebGLProgram) get(program).getObject(), name.toString()));
+		return newObject(GL_OBJECT_UNIFORMS, wglc.getUniformLocation((WebGLProgram) getObject(program), name.toString()));
 	}
 
 	public static void glGetActiveUniform(int program, int index, IntBuffer length, IntBuffer size, IntBuffer type, ByteBuffer name) {
-		WebGLActiveInfo info = wglc.getActiveUniform((WebGLProgram) get(program), index);
+		WebGLActiveInfo info = wglc.getActiveUniform((WebGLProgram) getObject(program), index);
 		
 		length.put(info.getSize());
 		type.put(info.getType());
@@ -539,9 +539,9 @@ public final class GL20 {
 	 * Overloads glGetActiveUniform. This version returns both size and type in the sizeType buffer (at .position() and .position() + 1). 
 	 */
 	public static String glGetActiveUniform(int program, int index, int maxLength, IntBuffer sizeType) {
-		sizeType.put(wglc.getActiveUniform((WebGLProgram) get(program).getObject(), index).getSize());
-		sizeType.put(wglc.getActiveUniform((WebGLProgram) get(program).getObject(), index).getType());
-		return wglc.getActiveUniform((WebGLProgram) get(program).getObject(), index).getName();
+		sizeType.put(wglc.getActiveUniform((WebGLProgram) getObject(program), index).getSize());
+		sizeType.put(wglc.getActiveUniform((WebGLProgram) getObject(program), index).getType());
+		return wglc.getActiveUniform((WebGLProgram) getObject(program), index).getName();
 	}
 
 	/**
@@ -550,7 +550,7 @@ public final class GL20 {
 	 * Overloads glGetActiveUniformARB. This version returns only the uniform name. 
 	 */
 	public static String glGetActiveUniform(int program, int index, int maxLength) {
-		return wglc.getActiveUniform((WebGLProgram) get(program).getObject(), index).getName();
+		return wglc.getActiveUniform((WebGLProgram) getObject(program), index).getName();
 	}
 
 	/**
@@ -559,7 +559,7 @@ public final class GL20 {
 	 * Overloads glGetActiveUniform. This version returns only the uniform size. 
 	 */
 	public static int glGetActiveUniformSize(int program, int index) {
-		return wglc.getActiveUniform((WebGLProgram) get(program).getObject(), index).getSize();
+		return wglc.getActiveUniform((WebGLProgram) getObject(program), index).getSize();
 		
 	}
 
@@ -569,11 +569,11 @@ public final class GL20 {
 	 * Overloads glGetActiveUniform. This version returns only the uniform type. 
 	 */
 	public static int glGetActiveUniformType(int program, int index) {
-		return ConstantMapper.cmShaderTypes.mapWebGLToReal(wglc.getActiveUniform((WebGLProgram) get(program).getObject(), index).getType());
+		return ConstantMapper.cmShaderTypes.mapWebGLToReal(wglc.getActiveUniform((WebGLProgram) getObject(program), index).getType());
 	}
 
 	public static void glGetUniform(int program, WebGLUniformLocation location, FloatBuffer params) {
-		Float32Array s = (Float32Array) wglc.getUniform((WebGLProgram) get(program).getObject(), location);
+		Float32Array s = (Float32Array) wglc.getUniform((WebGLProgram) getObject(program), location);
 		for (int a = 0; a < s.getLength(); a++) {
 			params.put(s.get(a));
 		}
@@ -582,7 +582,7 @@ public final class GL20 {
 	static native void nglGetUniformfv(int program, int location, long params, long function_pointer);
 
 	public static void glGetUniform(int program, int location, IntBuffer params) {
-		wglc.getUniform((WebGLProgram) get(program).getObject(), (WebGLUniformLocation) get(location).getObject());
+		wglc.getUniform((WebGLProgram) getObject(program), (WebGLUniformLocation) getObject(location));
 	}
 	static native void nglGetUniformiv(int program, int location, long params, long function_pointer);
 
@@ -593,7 +593,7 @@ public final class GL20 {
 
 	/** Overloads glGetShaderSource. */
 	public static String glGetShaderSource(int shader, int maxLength) {
-		return wglc.getShaderSource((WebGLShader) get(shader).getObject()).substring(0, maxLength);
+		return wglc.getShaderSource((WebGLShader) getObject(shader)).substring(0, maxLength);
 	}
 
 	public static void glVertexAttrib1s(int index, short x) {
@@ -749,18 +749,18 @@ public final class GL20 {
 	static native void nglGetVertexAttribPointerv2(int index, int pname, long pointer, long function_pointer);
 
 	public static void glBindAttribLocation(int program, int index, ByteBuffer name) {
-		wglc.bindAttribLocation((WebGLProgram) get(program).getObject(), index, name.asCharBuffer().toString());
+		wglc.bindAttribLocation((WebGLProgram) getObject(program), index, name.asCharBuffer().toString());
 	}
 	static native void nglBindAttribLocation(int program, int index, long name, long function_pointer);
 
 	/** Overloads glBindAttribLocation. */
 	public static void glBindAttribLocation(int program, int index, CharSequence name) {
-		wglc.bindAttribLocation((WebGLProgram) get(program).getObject(), index, name.toString());
+		wglc.bindAttribLocation((WebGLProgram) getObject(program), index, name.toString());
 	}
 
 	public static void glGetActiveAttrib(int program, int index, IntBuffer length, IntBuffer size, IntBuffer type, ByteBuffer name) {
 		WebGLRenderingContext c = ((WebGLRenderingContext) CurrentContext.getContext());
-		WebGLActiveInfo wai = c.getActiveAttrib((WebGLProgram) get(program).getObject(), index);
+		WebGLActiveInfo wai = c.getActiveAttrib((WebGLProgram) getObject(program), index);
 		length.put(wai.getSize());
 		length.flip();
 		size.put(wai.getSize());
@@ -778,10 +778,10 @@ public final class GL20 {
 	 * Overloads glGetActiveAttrib. This version returns both size and type in the sizeType buffer (at .position() and .position() + 1). 
 	 */
 	public static String glGetActiveAttrib(int program, int index, int maxLength, IntBuffer sizeType) {
-		sizeType.put(wglc.getActiveAttrib((WebGLProgram) get(program).getObject(), index).getSize());
-		sizeType.put(wglc.getActiveAttrib((WebGLProgram) get(program).getObject(), index).getType());
+		sizeType.put(wglc.getActiveAttrib((WebGLProgram) getObject(program), index).getSize());
+		sizeType.put(wglc.getActiveAttrib((WebGLProgram) getObject(program), index).getType());
 		sizeType.flip();
-		return wglc.getActiveAttrib((WebGLProgram) get(program).getObject(), index).getName();
+		return wglc.getActiveAttrib((WebGLProgram) getObject(program), index).getName();
 		
 	}
 
@@ -791,7 +791,7 @@ public final class GL20 {
 	 * Overloads glGetActiveAttrib. This version returns only the attrib name. 
 	 */
 	public static String glGetActiveAttrib(int program, int index, int maxLength) {
-		return wglc.getActiveAttrib((WebGLProgram) get(program).getObject(), index).getName();
+		return wglc.getActiveAttrib((WebGLProgram) getObject(program), index).getName();
 	}
 
 	/**
@@ -800,7 +800,7 @@ public final class GL20 {
 	 * Overloads glGetActiveAttribARB. This version returns only the attrib size. 
 	 */
 	public static int glGetActiveAttribSize(int program, int index) {
-		return wglc.getActiveAttrib((WebGLProgram) get(program).getObject(), index).getSize();
+		return wglc.getActiveAttrib((WebGLProgram) getObject(program), index).getSize();
 	}
 
 	/**
@@ -809,17 +809,17 @@ public final class GL20 {
 	 * Overloads glGetActiveAttrib. This version returns only the attrib type. 
 	 */
 	public static int glGetActiveAttribType(int program, int index) {
-		return wglc.getActiveAttrib((WebGLProgram) get(program).getObject(), index).getType();
+		return wglc.getActiveAttrib((WebGLProgram) getObject(program), index).getType();
 	}
 
 	public static int glGetAttribLocation(int program, ByteBuffer name) {
-		return wglc.getAttribLocation((WebGLProgram) get(program).getObject(), name.asCharBuffer().toString());
+		return wglc.getAttribLocation((WebGLProgram) getObject(program), name.asCharBuffer().toString());
 	}
 	static native int nglGetAttribLocation(int program, long name, long function_pointer);
 
 	/** Overloads glGetAttribLocation. */
 	public static int glGetAttribLocation(int program, CharSequence name) {
-		return wglc.getAttribLocation((WebGLProgram) get(program).getObject(), name.toString());
+		return wglc.getAttribLocation((WebGLProgram) getObject(program), name.toString());
 	}
 
 	public static void glDrawBuffers(IntBuffer buffers) {

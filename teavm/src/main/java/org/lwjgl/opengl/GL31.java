@@ -211,19 +211,19 @@ public final class GL31 {
 	static native void nglTexBuffer(int target, int internalformat, int buffer, long function_pointer);
 
 	public static void glGetUniformIndices(int program, ByteBuffer uniformNames, IntBuffer uniformIndices) {
-		ctx.getUniformIndices((WebGLProgram) get(program).getObject(), new String[] {uniformNames.asCharBuffer().toString()});
+		ctx.getUniformIndices((WebGLProgram) getObject(program), new String[] {uniformNames.asCharBuffer().toString()});
 	}
 	static native void nglGetUniformIndices(int program, int uniformIndices_uniformCount, long uniformNames, long uniformIndices, long function_pointer);
 
 	/** Overloads glGetUniformIndices. */
 	public static void glGetUniformIndices(int program, CharSequence[] uniformNames, IntBuffer uniformIndices) {
-		uniformIndices.put(ctx.getUniformIndices((WebGLProgram) get(program).getObject(), (String[]) uniformNames));
+		uniformIndices.put(ctx.getUniformIndices((WebGLProgram) getObject(program), (String[]) uniformNames));
 	}
 
 	public static void glGetActiveUniforms(int program, IntBuffer uniformIndices, int pname, IntBuffer params) {
 		int[] arr = new int[uniformIndices.remaining()];
 		uniformIndices.get(arr);
-		params.put(ctx.getActiveUniforms((WebGLProgram) get(program).getObject(), arr, pname).<JSNumber> cast().intValue());
+		params.put(ctx.getActiveUniforms((WebGLProgram) getObject(program), arr, pname).<JSNumber> cast().intValue());
 		
 	}
 	static native void nglGetActiveUniformsiv(int program, int uniformIndices_uniformCount, long uniformIndices, int pname, long params, long function_pointer);
@@ -242,11 +242,11 @@ public final class GL31 {
 	public static int glGetActiveUniformsi(int program, int uniformIndex, int pname) {
 	
 		
-		return ctx.getActiveUniforms((WebGLProgram) get(program).getObject(), new int[] {uniformIndex}, pname).<JSNumber> cast().intValue();
+		return ctx.getActiveUniforms((WebGLProgram) getObject(program), new int[] {uniformIndex}, pname).<JSNumber> cast().intValue();
 	}
 
 	public static void glGetActiveUniformName(int program, int uniformIndex, IntBuffer length, ByteBuffer uniformName) {
-		WebGLActiveInfo wai = ctx.getActiveUniform((WebGLProgram) get(program).getObject(), uniformIndex);
+		WebGLActiveInfo wai = ctx.getActiveUniform((WebGLProgram) getObject(program), uniformIndex);
 		length.put(wai.getName().length());
 		uniformName.asCharBuffer().put(wai.getName());
 	}
@@ -254,22 +254,22 @@ public final class GL31 {
 
 	/** Overloads glGetActiveUniformName. */
 	public static String glGetActiveUniformName(int program, int uniformIndex, int bufSize) {
-		WebGLActiveInfo wai = ctx.getActiveUniform((WebGLProgram) get(program).getObject(), uniformIndex);
+		WebGLActiveInfo wai = ctx.getActiveUniform((WebGLProgram) getObject(program), uniformIndex);
 		return wai.getName();
 	}
 
 	public static int glGetUniformBlockIndex(int program, ByteBuffer uniformBlockName) {
-		return ctx.getUniformBlockIndex((WebGLProgram) get(program).getObject(), uniformBlockName.asCharBuffer().toString());
+		return ctx.getUniformBlockIndex((WebGLProgram) getObject(program), uniformBlockName.asCharBuffer().toString());
 	}
 	static native int nglGetUniformBlockIndex(int program, long uniformBlockName, long function_pointer);
 
 	/** Overloads glGetUniformBlockIndex. */
 	public static int glGetUniformBlockIndex(int program, CharSequence uniformBlockName) {
-		return ctx.getUniformBlockIndex((WebGLProgram) get(program).getObject(), (String) uniformBlockName);
+		return ctx.getUniformBlockIndex((WebGLProgram) getObject(program), (String) uniformBlockName);
 	}
 
 	public static void glGetActiveUniformBlock(int program, int uniformBlockIndex, int pname, IntBuffer params) {
-		params.put(((JSNumber) ctx.getActiveUniformBlockParameter((WebGLProgram) get(program).getObject(), uniformBlockIndex, pname)).intValue());
+		params.put(((JSNumber) ctx.getActiveUniformBlockParameter((WebGLProgram) getObject(program), uniformBlockIndex, pname)).intValue());
 	}
 	static native void nglGetActiveUniformBlockiv(int program, int uniformBlockIndex, int pname, long params, long function_pointer);
 
@@ -285,21 +285,21 @@ public final class GL31 {
 
 	/** Overloads glGetActiveUniformBlockiv. */
 	public static int glGetActiveUniformBlocki(int program, int uniformBlockIndex, int pname) {
-		return ((JSNumber) ctx.getActiveUniformBlockParameter((WebGLProgram) get(program).getObject(), uniformBlockIndex, pname)).intValue();
+		return ((JSNumber) ctx.getActiveUniformBlockParameter((WebGLProgram) getObject(program), uniformBlockIndex, pname)).intValue();
 	}
 
 	public static void glGetActiveUniformBlockName(int program, int uniformBlockIndex, IntBuffer length, ByteBuffer uniformBlockName) {
-		uniformBlockName.asCharBuffer().put(ctx.getActiveUniformBlockName((WebGLProgram) get(program).getObject(), uniformBlockIndex));
+		uniformBlockName.asCharBuffer().put(ctx.getActiveUniformBlockName((WebGLProgram) getObject(program), uniformBlockIndex));
 	}
 	static native void nglGetActiveUniformBlockName(int program, int uniformBlockIndex, int uniformBlockName_bufSize, long length, long uniformBlockName, long function_pointer);
 
 	/** Overloads glGetActiveUniformBlockName. */
 	public static String glGetActiveUniformBlockName(int program, int uniformBlockIndex, int bufSize) {
-		return ctx.getActiveUniformBlockName((WebGLProgram) get(program).getObject(), uniformBlockIndex);
+		return ctx.getActiveUniformBlockName((WebGLProgram) getObject(program), uniformBlockIndex);
 	}
 
 	public static void glUniformBlockBinding(int program, int uniformBlockIndex, int uniformBlockBinding) {
-		ctx.uniformBlockBinding((WebGLProgram) get(program).getObject(), uniformBlockIndex, uniformBlockBinding);
+		ctx.uniformBlockBinding((WebGLProgram) getObject(program), uniformBlockIndex, uniformBlockBinding);
 	}
 	static native void nglUniformBlockBinding(int program, int uniformBlockIndex, int uniformBlockBinding, long function_pointer);
 }

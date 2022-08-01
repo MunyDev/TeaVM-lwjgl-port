@@ -781,47 +781,47 @@ public final class GL30 {
 	static native void nglGetVertexAttribIuiv(int index, int pname, long params, long function_pointer);
 
 	public static void glUniform1ui(int location, int v0) {
-		ctx.uniform1ui((WebGLUniformLocation) get(location).getObject(), v0);
+		ctx.uniform1ui((WebGLUniformLocation) getObject(location), v0);
 	}
 	static native void nglUniform1ui(int location, int v0, long function_pointer);
 
 	public static void glUniform2ui(int location, int v0, int v1) {
-		ctx.uniform2ui((WebGLUniformLocation) get(location).getObject(), v0, v1);
+		ctx.uniform2ui((WebGLUniformLocation) getObject(location), v0, v1);
 	}
 	static native void nglUniform2ui(int location, int v0, int v1, long function_pointer);
 
 	public static void glUniform3ui(int location, int v0, int v1, int v2) {
-		ctx.uniform3ui((WebGLUniformLocation) get(location).getObject(), v0, v1, v2);
+		ctx.uniform3ui((WebGLUniformLocation) getObject(location), v0, v1, v2);
 	}
 	static native void nglUniform3ui(int location, int v0, int v1, int v2, long function_pointer);
 
 	public static void glUniform4ui(int location, int v0, int v1, int v2, int v3) {
-		ctx.uniform4ui((WebGLUniformLocation) get(location).getObject(), v0, v1, v2, v3);
+		ctx.uniform4ui((WebGLUniformLocation) getObject(location), v0, v1, v2, v3);
 	}
 	static native void nglUniform4ui(int location, int v0, int v1, int v2, int v3, long function_pointer);
 
 	public static void glUniform1u(int location, IntBuffer value) {
-		ctx.uniform1uiv((WebGLUniformLocation) get(location).getObject(), GLUtil.glCreateBufferFromJava(value));
+		ctx.uniform1uiv((WebGLUniformLocation) getObject(location), GLUtil.glCreateBufferFromJava(value));
 	}
 	static native void nglUniform1uiv(int location, int value_count, long value, long function_pointer);
 
 	public static void glUniform2u(int location, IntBuffer value) {
-		ctx.uniform2uiv((WebGLUniformLocation) get(location).getObject(), GLUtil.glCreateBufferFromJava(value));
+		ctx.uniform2uiv((WebGLUniformLocation) getObject(location), GLUtil.glCreateBufferFromJava(value));
 	}
 	static native void nglUniform2uiv(int location, int value_count, long value, long function_pointer);
 
 	public static void glUniform3u(int location, IntBuffer value) {
-		ctx.uniform3uiv((WebGLUniformLocation) get(location).getObject(), GLUtil.glCreateBufferFromJava(value));
+		ctx.uniform3uiv((WebGLUniformLocation) getObject(location), GLUtil.glCreateBufferFromJava(value));
 	}
 	static native void nglUniform3uiv(int location, int value_count, long value, long function_pointer);
 
 	public static void glUniform4u(int location, IntBuffer value) {
-		ctx.uniform4uiv((WebGLUniformLocation) get(location).getObject(), GLUtil.glCreateBufferFromJava(value));
+		ctx.uniform4uiv((WebGLUniformLocation) getObject(location), GLUtil.glCreateBufferFromJava(value));
 	}
 	static native void nglUniform4uiv(int location, int value_count, long value, long function_pointer);
 
 	public static void glGetUniformu(int program, int location, IntBuffer params) {
-		ctx.getUniform((WebGLProgram) get(program).getObject(), (WebGLUniformLocation) get(location).getObject());
+		ctx.getUniform((WebGLProgram) getObject(program), (WebGLUniformLocation) getObject(location));
 	}
 	static native void nglGetUniformuiv(int program, int location, long params, long function_pointer);
 
@@ -836,14 +836,14 @@ public final class GL30 {
 	}
 
 	public static int glGetFragDataLocation(int program, ByteBuffer name) {
-		return ctx.getFragDataLocation((WebGLProgram) get(program).getObject(), name.asCharBuffer().toString());
+		return ctx.getFragDataLocation((WebGLProgram) getObject(program), name.asCharBuffer().toString());
 	}
 	static native int nglGetFragDataLocation(int program, long name, long function_pointer);
 
 	/** Overloads glGetFragDataLocation. */
 	public static int glGetFragDataLocation(int program, CharSequence name) {
 	
-		return ctx.getFragDataLocation((WebGLProgram) get(program).getObject(), name.toString());
+		return ctx.getFragDataLocation((WebGLProgram) getObject(program), name.toString());
 	}
 
 	public static void glBeginConditionalRender(int id, int mode) {
@@ -886,23 +886,23 @@ public final class GL30 {
 	static native void nglClampColor(int target, int clamp, long function_pointer);
 
 	public static boolean glIsRenderbuffer(int renderbuffer) {
-		return get(renderbuffer).getType() == GL_OBJECT_RENDERBUFFER;
+		return getType(renderbuffer) == GL_OBJECT_RENDERBUFFER;
 	}
 	static native boolean nglIsRenderbuffer(int renderbuffer, long function_pointer);
 
 	public static void glBindRenderbuffer(int target, int renderbuffer) {
-		ctx.bindRenderbuffer(target, (WebGLRenderbuffer) get(renderbuffer).getObject());
+		ctx.bindRenderbuffer(target, (WebGLRenderbuffer) getObject(renderbuffer));
 	}
 	static native void nglBindRenderbuffer(int target, int renderbuffer, long function_pointer);
 
 	public static void glDeleteRenderbuffers(IntBuffer renderbuffers) {
-		ctx.deleteRenderbuffer((WebGLRenderbuffer) get(renderbuffers.get()).getObject());
+		ctx.deleteRenderbuffer((WebGLRenderbuffer) getObject(renderbuffers.get()));
 	}
 	static native void nglDeleteRenderbuffers(int renderbuffers_n, long renderbuffers, long function_pointer);
 
 	/** Overloads glDeleteRenderbuffers. */
 	public static void glDeleteRenderbuffers(int renderbuffer) {
-		ctx.deleteRenderbuffer((WebGLRenderbuffer) get(renderbuffer).getObject());
+		ctx.deleteRenderbuffer((WebGLRenderbuffer) getObject(renderbuffer));
 	}
 
 	public static void glGenRenderbuffers(IntBuffer renderbuffers) {
@@ -944,25 +944,25 @@ public final class GL30 {
 	}
 
 	public static boolean glIsFramebuffer(int framebuffer) {
-		return get(framebuffer).getType() == GL_OBJECT_FRAMEBUFFER;
+		return getType(framebuffer) == GL_OBJECT_FRAMEBUFFER;
 	}
 	static native boolean nglIsFramebuffer(int framebuffer, long function_pointer);
 
 	public static void glBindFramebuffer(int target, int framebuffer) {
-		ctx.bindFramebuffer(target, (WebGLFramebuffer) get(framebuffer).getObject());
+		ctx.bindFramebuffer(target, (WebGLFramebuffer) getObject(framebuffer));
 	}
 	static native void nglBindFramebuffer(int target, int framebuffer, long function_pointer);
 
 	public static void glDeleteFramebuffers(IntBuffer framebuffers) {
 		for (int i = 0; i < framebuffers.remaining(); i++) {
-			ctx.deleteFramebuffer((WebGLFramebuffer) get(framebuffers.get()).getObject());
+			ctx.deleteFramebuffer((WebGLFramebuffer) getObject(framebuffers.get()));
 		}
 	}
 	static native void nglDeleteFramebuffers(int framebuffers_n, long framebuffers, long function_pointer);
 
 	/** Overloads glDeleteFramebuffers. */
 	public static void glDeleteFramebuffers(int framebuffer) {
-		ctx.deleteFramebuffer((WebGLFramebuffer) get(framebuffer).getObject());
+		ctx.deleteFramebuffer((WebGLFramebuffer) getObject(framebuffer));
 	}
 
 	public static void glGenFramebuffers(IntBuffer framebuffers) {
@@ -988,7 +988,7 @@ public final class GL30 {
 	static native void nglFramebufferTexture1D(int target, int attachment, int textarget, int texture, int level, long function_pointer);
 
 	public static void glFramebufferTexture2D(int target, int attachment, int textarget, int texture, int level) {
-		ctx.framebufferTexture2D(target, attachment, textarget, (WebGLTexture) get(texture).getObject(), level);
+		ctx.framebufferTexture2D(target, attachment, textarget, (WebGLTexture) getObject(texture), level);
 	}
 	static native void nglFramebufferTexture2D(int target, int attachment, int textarget, int texture, int level, long function_pointer);
 
@@ -998,7 +998,7 @@ public final class GL30 {
 	static native void nglFramebufferTexture3D(int target, int attachment, int textarget, int texture, int level, int zoffset, long function_pointer);
 
 	public static void glFramebufferRenderbuffer(int target, int attachment, int renderbuffertarget, int renderbuffer) {
-		ctx.framebufferRenderbuffer(target, attachment, renderbuffertarget, (WebGLRenderbuffer) get(renderbuffer).getObject());
+		ctx.framebufferRenderbuffer(target, attachment, renderbuffertarget, (WebGLRenderbuffer) getObject(renderbuffer));
 	}
 	static native void nglFramebufferRenderbuffer(int target, int attachment, int renderbuffertarget, int renderbuffer, long function_pointer);
 
@@ -1099,7 +1099,7 @@ public final class GL30 {
 	}
 
 	public static void glFramebufferTextureLayer(int target, int attachment, int texture, int level, int layer) {
-		ctx.framebufferTextureLayer(target, attachment, (WebGLTexture) get(texture).getObject(), level, layer);
+		ctx.framebufferTextureLayer(target, attachment, (WebGLTexture) getObject(texture), level, layer);
 	}
 	static native void nglFramebufferTextureLayer(int target, int attachment, int texture, int level, int layer, long function_pointer);
 
@@ -1144,12 +1144,12 @@ public final class GL30 {
 	static native boolean nglIsEnabledi(int target, int index, long function_pointer);
 
 	public static void glBindBufferRange(int target, int index, int buffer, long offset, long size) {
-		ctx.bindBufferRange(target, index, (WebGLBuffer) get(buffer).getObject(), index, buffer);
+		ctx.bindBufferRange(target, index, (WebGLBuffer) getObject(buffer), index, buffer);
 	}
 	static native void nglBindBufferRange(int target, int index, int buffer, long offset, long size, long function_pointer);
 
 	public static void glBindBufferBase(int target, int index, int buffer) {
-		ctx.bindBufferBase(target, index, (WebGLBuffer) get(buffer).getObject());
+		ctx.bindBufferBase(target, index, (WebGLBuffer) getObject(buffer));
 	}
 	static native void nglBindBufferBase(int target, int index, int buffer, long function_pointer);
 
@@ -1165,17 +1165,17 @@ public final class GL30 {
 	static native void nglEndTransformFeedback(long function_pointer);
 
 	public static void glTransformFeedbackVaryings(int program, int count, ByteBuffer varyings, int bufferMode) {
-		ctx.transformFeedbackVaryings((WebGLProgram) get(program).getObject(), new String[] {varyings.asCharBuffer().toString()}, bufferMode);
+		ctx.transformFeedbackVaryings((WebGLProgram) getObject(program), new String[] {varyings.asCharBuffer().toString()}, bufferMode);
 	}
 	static native void nglTransformFeedbackVaryings(int program, int count, long varyings, int bufferMode, long function_pointer);
 
 	/** Overloads glTransformFeedbackVaryings. */
 	public static void glTransformFeedbackVaryings(int program, CharSequence[] varyings, int bufferMode) {
-		ctx.transformFeedbackVaryings((WebGLProgram) get(program).getObject(), new String[] {varyings.toString()}, bufferMode);
+		ctx.transformFeedbackVaryings((WebGLProgram) getObject(program), new String[] {varyings.toString()}, bufferMode);
 	}
 
 	public static void glGetTransformFeedbackVarying(int program, int index, IntBuffer length, IntBuffer size, IntBuffer type, ByteBuffer name) {
-		WebGLActiveInfo wai = ctx.getTransformFeedbackVarying((WebGLProgram) get(program).getObject(), index);
+		WebGLActiveInfo wai = ctx.getTransformFeedbackVarying((WebGLProgram) getObject(program), index);
 		length.put(wai.getSize());
 		size.put(wai.getSize());
 		type.put(wai.getType());
@@ -1185,7 +1185,7 @@ public final class GL30 {
 
 	/** Overloads glGetTransformFeedbackVarying. */
 	public static String glGetTransformFeedbackVarying(int program, int index, int bufSize, IntBuffer size, IntBuffer type) {
-		WebGLActiveInfo wai = ctx.getTransformFeedbackVarying((WebGLProgram) get(program).getObject(), index);
+		WebGLActiveInfo wai = ctx.getTransformFeedbackVarying((WebGLProgram) getObject(program), index);
 		size.put(wai.getSize());
 		type.put(wai.getType());
 		
@@ -1193,18 +1193,18 @@ public final class GL30 {
 	}
 
 	public static void glBindVertexArray(int array) {
-		ctx.bindVertexArray((WebGLVertexArrayObject) get(array).getObject());
+		ctx.bindVertexArray((WebGLVertexArrayObject) getObject(array));
 	}
 	static native void nglBindVertexArray(int array, long function_pointer);
 
 	public static void glDeleteVertexArrays(IntBuffer arrays) {
-		ctx.deleteVertexArray((WebGLVertexArrayObject) get(arrays.get()).getObject());
+		ctx.deleteVertexArray((WebGLVertexArrayObject) getObject(arrays.get()));
 	}
 	static native void nglDeleteVertexArrays(int arrays_n, long arrays, long function_pointer);
 
 	/** Overloads glDeleteVertexArrays. */
 	public static void glDeleteVertexArrays(int array) {
-		ctx.deleteVertexArray((WebGLVertexArrayObject) get(array).getObject());
+		ctx.deleteVertexArray((WebGLVertexArrayObject) getObject(array));
 	}
 
 	public static void glGenVertexArrays(IntBuffer arrays) {
@@ -1220,7 +1220,7 @@ public final class GL30 {
 	}
 
 	public static boolean glIsVertexArray(int array) {
-		return get(array).getType() == GL_OBJECT_VAOS;
+		return getType(array) == GL_OBJECT_VAOS;
 	}
 	static native boolean nglIsVertexArray(int array, long function_pointer);
 }
