@@ -906,7 +906,16 @@ public class GL11 {
 		return ctx.getParameterf(pname);
     }
 	public static void	glGetFloat(int pname, java.nio.FloatBuffer params){
-		params.put(ctx.getParameterf(pname));
+		switch (pname) {
+		case GL_MODELVIEW_MATRIX:
+			modelMatrix.get(params);
+			break;
+		case GL_PROJECTION_MATRIX:
+			projectionMatrix.get(params);
+			break;
+		default:
+			params.put(ctx.getParameterf(pname));
+		}
     }
 	static int	glGetInteger(int pname){
 		if (pname == GL11.GL_MAX_CLIP_PLANES) return 5;
@@ -1202,10 +1211,10 @@ public class GL11 {
     }
 	public static void	glMatrixMode(int mode){
 		switch (mode) {
-		case GL11.GL_MODELVIEW_MATRIX:
+		case GL11.GL_MODELVIEW:
 			currentMatrixStack = modelMatrix;
 			break;
-		case GL11.GL_PROJECTION_MATRIX:
+		case GL11.GL_PROJECTION:
 			currentMatrixStack = projectionMatrix;
 			break;
 		
