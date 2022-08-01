@@ -27,6 +27,6 @@ jobs:
       run: mvn package --file teavm/pom.xml
 
     - name: Publish to GitHub Packages Apache Maven
-      run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
+      run: mvn deploy:deploy-file -Dfile="teavm/target/lwjgl-port.jar" -DpomFile=./pom.xml -DrepositoryId=github -Durl=https://maven.pkg.github.com/[OWNER]/[REPO] -Dtoken=GH_TOKEN
       env:
         GITHUB_TOKEN: ${{ github.token }}
