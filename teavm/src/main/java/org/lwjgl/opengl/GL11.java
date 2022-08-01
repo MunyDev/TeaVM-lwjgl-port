@@ -561,6 +561,7 @@ public class GL11 {
 	private static Stack<Object> modelviewStack;
 	
 	private static Matrix4f projection = new Matrix4f();
+	private static Matrix4f currentMatrix = modelview;
 //	private static WebGLTexture[] texBatch = new WebGLTexture[4096];
 //	private static WebGLShader[] s = new WebGLShader[4096];
 	public static void	glAccum(int op, float value){
@@ -1155,10 +1156,11 @@ public class GL11 {
 
     }
 	public static void	glLoadIdentity(){
+		currentMatrix.identity();
 		
     }
 	public static void	glLoadMatrix(java.nio.DoubleBuffer m){
-
+		
     }
 	public static void	glLoadMatrix(java.nio.FloatBuffer m){
 		
