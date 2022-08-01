@@ -408,6 +408,7 @@ import java.nio.ByteBuffer;
 			Mouse.poll();
 			Keyboard.poll();
 			wasResized = false;
+			jsWin.getDocument().setTitle(title);
 		}
 
 		static void pollDevices() {

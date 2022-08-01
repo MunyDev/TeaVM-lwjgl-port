@@ -19,6 +19,8 @@ import org.lwjgl.opengl.GL11;
 
 import static org.teavm.jso.browser.Window.*;
 public class Client {
+	private static float deltaTime = 0;
+	private static float lastTime = 0;
     public static void main(String[] args) {
         
     	DisplayMode dm = new DisplayMode(640, 480, true);
@@ -41,6 +43,8 @@ public class Client {
 			@Override
 			public void onAnimationFrame(double timestamp) {
 				// TODO Auto-generated method stub
+						deltaTime = (float) (timestamp - lastTime) * 100;
+						lastTime = (float) timestamp;
 				 		GL11.glClearColor(0, 0, 0, 1);
 			        	GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 			        	GL11.glBegin(GL11.GL_TRIANGLES);
@@ -53,6 +57,7 @@ public class Client {
 			        	GL11.glVertex3f(-0.5f, -0.5f, 0);
 			        
 			        	GL11.glEnd();
+			        	Display.setTitle(String.valueOf(deltaTime));
 			        	Display.update();
 						Mouse.poll();
 //						log("hello", Display.getWindow());

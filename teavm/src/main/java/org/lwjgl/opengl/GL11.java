@@ -1144,7 +1144,7 @@ public class GL11 {
 
     }
 	public static void	glLoadMatrix(java.nio.FloatBuffer m){
-
+		
     }
 	public static void	glLoadName(int name){
 
