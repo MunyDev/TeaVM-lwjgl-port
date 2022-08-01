@@ -12,7 +12,9 @@ import org.teavm.webgl2.WebGL2RenderingContext;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
+import java.util.Stack;
 
+import org.joml.Matrix4f;
 import org.lwjgl.util.GLUtil;
 import org.teavm.jso.*;
 /**
@@ -555,6 +557,10 @@ public class GL11 {
 			GL_TEXTURE_COMPONENTS = 0x1003;
 	public static WebGL2RenderingContext ctx = (WebGL2RenderingContext) CurrentContext.getContext();
 	private static Batch currentBatch;
+	private static Matrix4f modelview = new Matrix4f();
+	private static Stack<Object> modelviewStack;
+	
+	private static Matrix4f projection = new Matrix4f();
 //	private static WebGLTexture[] texBatch = new WebGLTexture[4096];
 //	private static WebGLShader[] s = new WebGLShader[4096];
 	public static void	glAccum(int op, float value){
@@ -894,7 +900,18 @@ public class GL11 {
 		return ctx.getParameterf(pname);
     }
 	public static void	glGetFloat(int pname, java.nio.FloatBuffer params){
-		params.put(ctx.getParameterf(pname));
+		switch (pname) {
+		case GL_MODELVIEW_MATRIX:
+			modelview.get(params);
+			break;
+		case GL_PROJECTION_MATRIX:
+			projection.get(params);
+			break;
+		default:
+			params.put(ctx.getParameterf(pname));
+		}
+		
+		
     }
 	static int	glGetInteger(int pname){
 		if (pname == GL11.GL_MAX_CLIP_PLANES) return 5;
@@ -1291,7 +1308,7 @@ public class GL11 {
 
     }
 	public static void	glPopMatrix(){
-
+		modelview = (Matrix4f) modelviewStack.pop();
     }
 	public static void	glPopName(){
 
@@ -1306,10 +1323,12 @@ public class GL11 {
 
     }
 	public static void	glPushMatrix(){
-
+		
+		modelviewStack.push((Object) modelview);
+		modelview = new Matrix4f(modelview);
     }
 	public static void	glPushName(int name){
-
+		
     }
 	public static void	glRasterPos2d(double x, double y){
 

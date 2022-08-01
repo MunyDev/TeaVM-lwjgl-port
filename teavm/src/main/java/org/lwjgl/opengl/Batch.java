@@ -9,6 +9,7 @@ import org.lwjgl.util.GLUtil;
 import org.munydev.teavm.lwjgl.CurrentContext;
 import org.teavm.jso.JSBody;
 import org.teavm.jso.JSObject;
+import org.teavm.jso.typedarrays.Float32Array;
 import org.teavm.jso.webgl.WebGLBuffer;
 import org.teavm.jso.webgl.WebGLProgram;
 import org.teavm.jso.webgl.WebGLRenderingContext;
@@ -70,7 +71,7 @@ public class Batch {
 				+ "\toutNormals = normals;\n"
 				+ "\toutTexCoords = texCoords;\n"
 				+ "}\n";
-				vsource = "attribute vec3 vertices;\nattribute vec4 colors;\nattribute vec3 normals;\nattribute vec2 texCoords;\n\nvarying vec4 outColors;\nvarying vec3 outNormals;\nvarying vec2 outTexCoords;\n\nvoid main() {\n\tgl_Position = vec4(vertices, 1);\n\toutColors = colors;\n\toutNormals = normals;\n\toutTexCoords = texCoords;\n\n}";
+				vsource = "uniform mat4 modelview;\n uniform mat4 perspective;\nattribute vec3 vertices;\nattribute vec4 colors;\nattribute vec3 normals;\nattribute vec2 texCoords;\n\nvarying vec4 outColors;\nvarying vec3 outNormals;\nvarying vec2 outTexCoords;\n\nvoid main() {\n\tgl_Position = perspective * modelview * vec4(vertices, 1);\n\toutColors = colors;\n\toutNormals = normals;\n\toutTexCoords = texCoords;\n\n}";
 //		fsource = "#version 200 es\n"
 //				+ "varying vec3 outColors;\n"
 //				+ "varying vec3 outNormals;\n"
@@ -209,6 +210,14 @@ public class Batch {
 		WebGLVertexArrayObject wglva = ctx.createVertexArray();
 		ctx.bindVertexArray(wglva);
 		ctx.useProgram(wglp1);
+		FloatBuffer fb = FloatBuffer.allocate(16);
+		GL11.glGetFloat(GL_MODELVIEW_MATRIX, fb);
+		ctx.uniformMatrix4fv(ctx.getUniformLocation(wglp1, "modelview"), false,Float32Array.create(GLUtil.glCreateBufferFromJava(fb)));
+		fb.flip();
+		GL11.glGetFloat(GL_PROJECTION_MATRIX, fb);
+		ctx.uniformMatrix4fv(ctx.getUniformLocation(wglp1, "perspective"),false, Float32Array.create(GLUtil.glCreateBufferFromJava(fb)));
+		
+		
 		WebGLBuffer wglb = ctx.createBuffer();
 //		log(Float32Array.create(GLUtil.glCreateBufferFromJava(batch)));GL11.glV
 		ctx.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, wglb);
