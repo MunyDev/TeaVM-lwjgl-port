@@ -1,16 +1,7 @@
 package org.munydev.teavm.lwjgl;
 
-import org.teavm.jso.dom.events.Event;
-
-import org.teavm.jso.dom.events.EventListener;
-import org.teavm.jso.dom.html.HTMLCanvasElement;
-import org.teavm.jso.dom.html.HTMLDocument;
 import org.teavm.jso.*;
 import org.teavm.jso.browser.*;
-import org.teavm.webgl2.WebGL2RenderingContext;
-
-import static org.teavm.jso.webgl.WebGLRenderingContext.*;
-
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -22,7 +13,7 @@ public class Client {
 	private static float deltaTime = 0;
 	private static float lastTime = 0;
     public static void main(String[] args) {
-        
+        System.setProperty("joml.nounsafe", "true");
     	DisplayMode dm = new DisplayMode(640, 480, true);
 //        document.getBody().appendChild(canvas);
         Display.setDisplayMode(dm);
