@@ -21,12 +21,13 @@ import static org.teavm.jso.browser.Window.*;
 public class Client {
     public static void main(String[] args) {
         
-    	DisplayMode dm = new DisplayMode(640, 480, false);
+    	DisplayMode dm = new DisplayMode(640, 480, true);
 //        document.getBody().appendChild(canvas);
         Display.setDisplayMode(dm);
         try {
+        	Display.setTitle("woah");
 			Display.create();
-			Display.setTitle("woah");
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

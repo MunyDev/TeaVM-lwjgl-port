@@ -336,7 +336,7 @@ import java.nio.ByteBuffer;
 		 * @param newTitle The new window title
 		 */
 		public static void setTitle(String newTitle) {
-			jsWin.setName(newTitle);
+			title = newTitle;
 		}
 
 		/** @return true if the user or operating system has asked the window to close */
