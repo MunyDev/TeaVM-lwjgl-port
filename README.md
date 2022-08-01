@@ -32,4 +32,5 @@ For these featurs a new repo will be created for this called TeaVM-FS-Port
  - TeaVM-Font-Port
  -Loads fonts using browser apis.
  
- Use this as a library by looking in the release section.
+ Use this as a library by looking in the packages section.
+ DON'T USE TESTING, USE org.munydev.ports.lwjgl
