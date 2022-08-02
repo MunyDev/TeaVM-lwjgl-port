@@ -1,6 +1,7 @@
 package org.lwjgl.opengl;
 
 import org.teavm.jso.JSBody;
+import org.teavm.jso.browser.AnimationFrameCallback;
 import org.teavm.jso.browser.Window;
 import org.teavm.jso.dom.events.Event;
 import org.teavm.jso.dom.events.EventListener;
@@ -62,15 +63,19 @@ import org.munydev.teavm.lwjgl.CurrentContext;
 
 import java.nio.ByteBuffer;
 
-	public final class Display {
-		private static boolean wasResized = false;
-		private static final Thread shutdown_hook = new Thread() {
-			public void run() {
-				reset();
-			}
-		};
-		private static Window jsWin;
-		/** The display implementor */
+public final class Display {
+	private static boolean wasResized = false;
+//		private static final Thread shutdown_hook = new Thread() {
+//			public void run() {
+//				reset();
+//			}
+//		};
+	public interface FrameCallback {
+		public abstract void onFrame();
+	}
+	private static FrameCallback f = ()->{};
+	private static Window jsWin;
+	/** The display implementor */
 //		private static final DisplayImplementation display_impl;
 
 		/** The initial display mode */
@@ -79,52 +84,52 @@ import java.nio.ByteBuffer;
 		/** The parent, if any */
 //		private static Canvas parent;
 
-		/** The current display mode, if created */
-		private static DisplayMode current_mode;
+/** The current display mode, if created */
+private static DisplayMode current_mode;
 
-		/** X coordinate of the window */
-		private static int x = -1;
+/** X coordinate of the window */
+private static int x = -1;
 
-		/** Cached window icons, for when Display is recreated */
-		private static ByteBuffer[] cached_icons;
+/** Cached window icons, for when Display is recreated */
+	private static ByteBuffer[] cached_icons;
 
-		/**
-		 * Y coordinate of the window. Y in window coordinates is from the top of the display down,
-		 * unlike GL, where it is typically at the bottom of the display.
-		 */
-		private static int y = -1;
+	/**
+	 * Y coordinate of the window. Y in window coordinates is from the top of the display down,
+	 * unlike GL, where it is typically at the bottom of the display.
+	 */
+	private static int y = -1;
 
-		private static boolean fullscreenReq = false;
-		/** the width of the Display window */
-		private static int width = 0;
+	private static boolean fullscreenReq = false;
+	/** the width of the Display window */
+	private static int width = 0;
 
-		/** the height of the Display window */
-		private static int height = 0;
+	/** the height of the Display window */
+	private static int height = 0;
 
-		/** Title of the window (never null) */
-		private static String title = "Game";
+	/** Title of the window (never null) */
+	private static String title = "Game";
 
-		/** Fullscreen */
-		private static boolean fullscreen;
+	/** Fullscreen */
+	private static boolean fullscreen;
 
-		/** Swap interval */
-		private static int swap_interval;
+	/** Swap interval */
+	private static int swap_interval;
 
-		/** The Drawable instance that tracks the current Display context */
+	/** The Drawable instance that tracks the current Display context */
 //		private static DrawableLWJGL drawable;
 
-		private static boolean window_created;
+	private static boolean window_created;
 
-		private static boolean parent_resized;
+	private static boolean parent_resized;
 
-		private static boolean window_resized;
+	private static boolean window_resized;
 
-		private static boolean window_resizable;
+	private static boolean window_resizable;
 
-		/** Initial Background Color of Display */
-		private static float r, g, b;
-		private static boolean closeRequested;
-		private static int fkey;
+	/** Initial Background Color of Display */
+	private static float r, g, b;
+	private static boolean closeRequested;
+	private static int fkey;
 	
 //		private static final ComponentListener component_listener = new ComponentAdapter() {
 //			public void componentResized(ComponentEvent e) {
@@ -134,7 +139,7 @@ import java.nio.ByteBuffer;
 //			}
 //		};
 
-		
+	
 
 //		/**
 //		 * Fetch the Drawable from the Display.
@@ -145,382 +150,382 @@ import java.nio.ByteBuffer;
 //		
 //		}
 
-		private static void createDisplayImplementation() {
+	private static void createDisplayImplementation() {
 
-		}
+	}
 
-		/** Only constructed by ourselves */
-		private Display() {
-		}
+	/** Only constructed by ourselves */
+	private Display() {
+	}
 
-		/**
-		 * Returns the entire list of possible fullscreen display modes as an array, in no
-		 * particular order. Although best attempts to filter out invalid modes are done, any
-		 * given mode is not guaranteed to be available nor is it guaranteed to be within the
-		 * current monitor specs (this is especially a problem with the frequency parameter).
-		 * Furthermore, it is not guaranteed that create() will detect an illegal display mode.
-		 * <p/>
-		 * The only certain way to check
-		 * is to call create() and make sure it works.
-		 * Only non-palette-indexed modes are returned (ie. bpp will be 16, 24, or 32).
-		 * Only DisplayModes from this call can be used when the Display is in fullscreen
-		 * mode.
-		 *
-		 * @return an array of all display modes the system reckons it can handle.
-		 */
-		public static DisplayMode[] getAvailableDisplayModes()  {
-			return null;
-		}
+	/**
+	 * Returns the entire list of possible fullscreen display modes as an array, in no
+	 * particular order. Although best attempts to filter out invalid modes are done, any
+	 * given mode is not guaranteed to be available nor is it guaranteed to be within the
+	 * current monitor specs (this is especially a problem with the frequency parameter).
+	 * Furthermore, it is not guaranteed that create() will detect an illegal display mode.
+	 * <p/>
+	 * The only certain way to check
+	 * is to call create() and make sure it works.
+	 * Only non-palette-indexed modes are returned (ie. bpp will be 16, 24, or 32).
+	 * Only DisplayModes from this call can be used when the Display is in fullscreen
+	 * mode.
+	 *
+	 * @return an array of all display modes the system reckons it can handle.
+	 */
+	public static DisplayMode[] getAvailableDisplayModes()  {
+		return null;
+	}
 
-		/**
-		 * Return the initial desktop display mode.
-		 *
-		 * @return The desktop display mode
-		 */
-		public static DisplayMode getDesktopDisplayMode() {
-			return new DisplayMode(640, 480);
-		}
+	/**
+	 * Return the initial desktop display mode.
+	 *
+	 * @return The desktop display mode
+	 */
+	public static DisplayMode getDesktopDisplayMode() {
+		return new DisplayMode(640, 480);
+	}
 
-		/**
-		 * Return the current display mode, as set by setDisplayMode().
-		 *
-		 * @return The current display mode
-		 */
-		public static DisplayMode getDisplayMode() {
-			return current_mode;
-		}
+	/**
+	 * Return the current display mode, as set by setDisplayMode().
+	 *
+	 * @return The current display mode
+	 */
+	public static DisplayMode getDisplayMode() {
+		return current_mode;
+	}
 
-		/**
-		 * Set the current display mode. If no OpenGL context has been created, the given mode will apply to
-		 * the context when create() is called, and no immediate mode switching will happen. If there is a
-		 * context already, it will be resized according to the given mode. If the context is also a
-		 * fullscreen context, the mode will also be switched immediately. The native cursor position
-		 * is also reset.
-		 *
-		 * @param mode The new display mode to set
-		 *
-		 * @ if the display mode could not be set
-		 */
-		public static void setDisplayMode(DisplayMode mode)  {
-			current_mode = mode;
-		}
+	/**
+	 * Set the current display mode. If no OpenGL context has been created, the given mode will apply to
+	 * the context when create() is called, and no immediate mode switching will happen. If there is a
+	 * context already, it will be resized according to the given mode. If the context is also a
+	 * fullscreen context, the mode will also be switched immediately. The native cursor position
+	 * is also reset.
+	 *
+	 * @param mode The new display mode to set
+	 *
+	 * @ if the display mode could not be set
+	 */
+	public static void setDisplayMode(DisplayMode mode)  {
+		current_mode = mode;
+	}
 
-		private static DisplayMode getEffectiveMode() {
-			return new DisplayMode(640, 480);
-		}
+	private static DisplayMode getEffectiveMode() {
+		return new DisplayMode(640, 480);
+	}
 
-		private static int getWindowX() {
-			return jsWin.getScreenX();
-		}
+	private static int getWindowX() {
+		return jsWin.getScreenX();
+	}
 
-		private static int getWindowY() {
-			return jsWin.getScreenY();
-		}
+	private static int getWindowY() {
+		return jsWin.getScreenY();
+	}
 
-		/**
-		 * Create the native window peer from the given mode and fullscreen flag.
-		 * A native context must exist, and it will be attached to the window.
-		 */
-		private static void createWindow()  {
-			
-		}
+	/**
+	 * Create the native window peer from the given mode and fullscreen flag.
+	 * A native context must exist, and it will be attached to the window.
+	 */
+	private static void createWindow()  {
+		
+	}
 
-		private static void releaseDrawable() {
+	private static void releaseDrawable() {
 
-		}
+	}
 
-		private static void destroyWindow() {
+	private static void destroyWindow() {
 
-		}
+	}
 
-		private static void switchDisplayMode()  {
+	private static void switchDisplayMode()  {
 
-		}
+	}
 
-		/**
-		 * Set the display configuration to the specified gamma, brightness and contrast.
-		 * The configuration changes will be reset when destroy() is called.
-		 *
-		 * @param gamma      The gamma value
-		 * @param brightness The brightness value between -1.0 and 1.0, inclusive
-		 * @param contrast   The contrast, larger than 0.0.
-		 */
-		public static void setDisplayConfiguration(float gamma, float brightness, float contrast)  {
+	/**
+	 * Set the display configuration to the specified gamma, brightness and contrast.
+	 * The configuration changes will be reset when destroy() is called.
+	 *
+	 * @param gamma      The gamma value
+	 * @param brightness The brightness value between -1.0 and 1.0, inclusive
+	 * @param contrast   The contrast, larger than 0.0.
+	 */
+	public static void setDisplayConfiguration(float gamma, float brightness, float contrast)  {
 
-		}
+	}
 
-		/**
-		 * An accurate sync method that will attempt to run at a constant frame rate.
-		 * It should be called once every frame.
-		 *
-		 * @param fps - the desired frame rate, in frames per second
-		 */
-		public static void sync(int fps) {
+	/**
+	 * An accurate sync method that will attempt to run at a constant frame rate.
+	 * It should be called once every frame.
+	 *
+	 * @param fps - the desired frame rate, in frames per second
+	 */
+	public static void sync(int fps) {
 	
-		}
+	}
 
-		/** @return the title of the window */
-		public static String getTitle() {
-			
-			return jsWin.getDocument().getTitle();
-		}
+	/** @return the title of the window */
+	public static String getTitle() {
+		
+		return jsWin.getDocument().getTitle();
+	}
 
-		/** Return the last parent set with setParent(). */
-		public static Object getParent() {
-			return CurrentContext.getContext();
-		}
+	/** Return the last parent set with setParent(). */
+	public static Object getParent() {
+		return CurrentContext.getContext();
+	}
 
-		/**
-		 * Set the parent of the Display. If parent is null, the Display will appear as a top level window.
-		 * If parent is not null, the Display is made a child of the parent. A parent's isDisplayable() must be true when
-		 * setParent() is called and remain true until setParent() is called again with
-		 * null or a different parent. This generally means that the parent component must remain added to it's parent container.<p>
-		 * It is not advisable to call this method from an AWT thread, since the context will be made current on the thread
-		 * and it is difficult to predict which AWT thread will process any given AWT event.<p>
-		 * While the Display is in fullscreen mode, the current parent will be ignored. Additionally, when a non null parent is specified,
-		 * the Dispaly will inherit the size of the parent, disregarding the currently set display mode.<p>
-		 */
+	/**
+	 * Set the parent of the Display. If parent is null, the Display will appear as a top level window.
+	 * If parent is not null, the Display is made a child of the parent. A parent's isDisplayable() must be true when
+	 * setParent() is called and remain true until setParent() is called again with
+	 * null or a different parent. This generally means that the parent component must remain added to it's parent container.<p>
+	 * It is not advisable to call this method from an AWT thread, since the context will be made current on the thread
+	 * and it is difficult to predict which AWT thread will process any given AWT event.<p>
+	 * While the Display is in fullscreen mode, the current parent will be ignored. Additionally, when a non null parent is specified,
+	 * the Dispaly will inherit the size of the parent, disregarding the currently set display mode.<p>
+	 */
 //		public static void setParent(Canvas parent)  {
 //
 //		}
 
-		/**
-		 * Set the fullscreen mode of the context. If no context has been created through create(),
-		 * the mode will apply when create() is called. If fullscreen is true, the context will become
-		 * a fullscreen context and the display mode is switched to the mode given by getDisplayMode(). If
-		 * fullscreen is false, the context will become a windowed context with the dimensions given in the
-		 * mode returned by getDisplayMode(). The native cursor position is also reset.
-		 *
-		 * @param fullscreen Specify the fullscreen mode of the context.
-		 *
-		 * @ If fullscreen is true, and the current DisplayMode instance is not
-		 *                        from getAvailableDisplayModes() or if the mode switch fails.
-		 */
-		public static void setFullscreen(boolean fullscreen)  {
-			if (fullscreen) {
-				fullscreenReq = true;
-			}else {
-				exitFullscreen(jsWin);
-			}
+	/**
+	 * Set the fullscreen mode of the context. If no context has been created through create(),
+	 * the mode will apply when create() is called. If fullscreen is true, the context will become
+	 * a fullscreen context and the display mode is switched to the mode given by getDisplayMode(). If
+	 * fullscreen is false, the context will become a windowed context with the dimensions given in the
+	 * mode returned by getDisplayMode(). The native cursor position is also reset.
+	 *
+	 * @param fullscreen Specify the fullscreen mode of the context.
+	 *
+	 * @ If fullscreen is true, and the current DisplayMode instance is not
+	 *                        from getAvailableDisplayModes() or if the mode switch fails.
+	 */
+	public static void setFullscreen(boolean fullscreen)  {
+		if (fullscreen) {
+			fullscreenReq = true;
+		}else {
+			exitFullscreen(jsWin);
 		}
-		public static void setFullscreenKey(int key) {
-			Display.fkey = key;
-		}
-		/**
-		 * Set the mode of the context. If no context has been created through create(),
-		 * the mode will apply when create() is called. If mode.isFullscreenCapable() is true, the context will become
-		 * a fullscreen context and the display mode is switched to the mode given by getDisplayMode(). If
-		 * mode.isFullscreenCapable() is false, the context will become a windowed context with the dimensions given in the
-		 * mode returned by getDisplayMode(). The native cursor position is also reset.
-		 *
-		 * @param mode The new display mode to set. Must be non-null.
-		 *
-		 * @ If the mode switch fails.
-		 */
-		public static void setDisplayModeAndFullscreen(DisplayMode mode)  {
+	}
+	public static void setFullscreenKey(int key) {
+		Display.fkey = key;
+	}
+	/**
+	 * Set the mode of the context. If no context has been created through create(),
+	 * the mode will apply when create() is called. If mode.isFullscreenCapable() is true, the context will become
+	 * a fullscreen context and the display mode is switched to the mode given by getDisplayMode(). If
+	 * mode.isFullscreenCapable() is false, the context will become a windowed context with the dimensions given in the
+	 * mode returned by getDisplayMode(). The native cursor position is also reset.
+	 *
+	 * @param mode The new display mode to set. Must be non-null.
+	 *
+	 * @ If the mode switch fails.
+	 */
+	public static void setDisplayModeAndFullscreen(DisplayMode mode)  {
 
-		}
+	}
 
-		private static void setDisplayModeAndFullscreenInternal(boolean fullscreen, DisplayMode mode)  {
+	private static void setDisplayModeAndFullscreenInternal(boolean fullscreen, DisplayMode mode)  {
 
-		}
+	}
 
-		/** @return whether the Display is in fullscreen mode */
-		public static boolean isFullscreen() {
-			return isFullscreen(((WebGL2RenderingContext)CurrentContext.getContext()).getCanvas());
-		}
+	/** @return whether the Display is in fullscreen mode */
+	public static boolean isFullscreen() {
+		return isFullscreen(((WebGL2RenderingContext)CurrentContext.getContext()).getCanvas());
+	}
 
-		/**
-		 * Set the title of the window. This may be ignored by the underlying OS.
-		 *
-		 * @param newTitle The new window title
-		 */
-		public static void setTitle(String newTitle) {
-			title = newTitle;
-		}
+	/**
+	 * Set the title of the window. This may be ignored by the underlying OS.
+	 *
+	 * @param newTitle The new window title
+	 */
+	public static void setTitle(String newTitle) {
+		title = newTitle;
+	}
 
-		/** @return true if the user or operating system has asked the window to close */
-		public static boolean isCloseRequested() {
-			return closeRequested;
-		}
-		@JSBody(script = "return window.document.visibilityState == \"visible\";")
-		public static native boolean nisVisible();
-		/** @return true if the window is visible, false if not */
-		public static boolean isVisible() {
-			return nisVisible();
-		}
+	/** @return true if the user or operating system has asked the window to close */
+	public static boolean isCloseRequested() {
+		return closeRequested;
+	}
+	@JSBody(script = "return window.document.visibilityState == \"visible\";")
+	public static native boolean nisVisible();
+	/** @return true if the window is visible, false if not */
+	public static boolean isVisible() {
+		return nisVisible();
+	}
 
-		/** @return true if window is active, that is, the foreground display of the operating system. */
-		public static boolean isActive() {
-			return nisVisible();
-		}
+	/** @return true if window is active, that is, the foreground display of the operating system. */
+	public static boolean isActive() {
+		return nisVisible();
+	}
 
-		/**
-		 * Determine if the window's contents have been damaged by external events.
-		 * If you are writing a straightforward game rendering loop and simply paint
-		 * every frame regardless, you can ignore this flag altogether. If you are
-		 * trying to be kind to other processes you can check this flag and only
-		 * redraw when it returns true. The flag is cleared when update() or isDirty() is called.
-		 *
-		 * @return true if the window has been damaged by external changes
-		 *         and needs to repaint itself
-		 */
-		public static boolean isDirty() {
-			return false;
-		}
+	/**
+	 * Determine if the window's contents have been damaged by external events.
+	 * If you are writing a straightforward game rendering loop and simply paint
+	 * every frame regardless, you can ignore this flag altogether. If you are
+	 * trying to be kind to other processes you can check this flag and only
+	 * redraw when it returns true. The flag is cleared when update() or isDirty() is called.
+	 *
+	 * @return true if the window has been damaged by external changes
+	 *         and needs to repaint itself
+	 */
+	public static boolean isDirty() {
+		return false;
+	}
 
-		/**
-		 * Process operating system events. Call this to update the Display's state and to receive new
-		 * input device events. This method is called from update(), so it is not necessary to call
-		 * this method if update() is called periodically.
-		 */
-		public static void processMessages() {
-			
-		}
-
-		/**
-		 * Swap the display buffers. This method is called from update(), and should normally not be called by
-		 * the application.
-		 *
-		 * @throws OpenGLException if an OpenGL error has occured since the last call to glGetError()
-		 */
-		public static void swapBuffers()  {
-
-		}
-
-		/**
-		 * Update the window. If the window is visible clears
-		 * the dirty flag and calls swapBuffers() and finally
-		 * polls the input devices.
-		 */
-		public static void update() {
-			update(true);
-		}
-
-		/**
-		 * Update the window. If the window is visible clears
-		 * the dirty flag and calls swapBuffers() and finally
-		 * polls the input devices if processMessages is true.
-		 *
-		 * @param processMessages Poll input devices if true
-		 */
-		public static void update(boolean processMessages) {
-			Mouse.poll();
-			Keyboard.poll();
-			wasResized = false;
-			
-			jsWin.getDocument().setTitle(title);
-			
-		}
-
-		static void pollDevices() {
-			// Poll the input devices while we're here
-			
-		}
-
-		/**
-		 * Release the Display context.
-		 *
-		 * @ If the context could not be released
-		 */
-		public static void releaseContext()  {
-			
-		}
-
-		/** Returns true if the Display's context is current in the current thread. */
-		public static boolean isCurrent()  {
-			return true;
-		}
-
-		/**
-		 * Make the Display the current rendering context for GL calls.
-		 *
-		 * @ If the context could not be made current
-		 */
-		public static void makeCurrent()  {
-			
-		}
-
-		private static void removeShutdownHook() {
-
-		}
-
-		private static void registerShutdownHook() {
-
-		}
-
-		/**
-		 * Create the OpenGL context. If isFullscreen() is true or if windowed
-		 * context are not supported on the platform, the display mode will be switched to the mode returned by
-		 * getDisplayMode(), and a fullscreen context will be created. If isFullscreen() is false, a windowed context
-		 * will be created with the dimensions given in the mode returned by getDisplayMode(). If a context can't be
-		 * created with the given parameters, a LWJGLException will be thrown.
-		 * <p/>
-		 * <p>The window created will be set up in orthographic 2D projection, with 1:1 pixel ratio with GL coordinates.
-		 *
-		 * @
-		 */
-		public static void create() throws Exception {
-			create((Object)null);
-		}
+	/**
+	 * Process operating system events. Call this to update the Display's state and to receive new
+	 * input device events. This method is called from update(), so it is not necessary to call
+	 * this method if update() is called periodically.
+	 */
+	public static void processMessages() {
 		
+	}
+
+	/**
+	 * Swap the display buffers. This method is called from update(), and should normally not be called by
+	 * the application.
+	 *
+	 * @throws OpenGLException if an OpenGL error has occured since the last call to glGetError()
+	 */
+	public static void swapBuffers()  {
+
+	}
+
+	/**
+	 * Update the window. If the window is visible clears
+	 * the dirty flag and calls swapBuffers() and finally
+	 * polls the input devices.
+	 */
+	public static void update() {
+		update(true);
+	}
+
+	/**
+	 * Update the window. If the window is visible clears
+	 * the dirty flag and calls swapBuffers() and finally
+	 * polls the input devices if processMessages is true.
+	 *
+	 * @param processMessages Poll input devices if true
+	 */
+	public static void update(boolean processMessages) {
+		Mouse.poll();
+		Keyboard.poll();
+		wasResized = false;
 		
-		public static void create(Object... unused) throws Exception {
-			DisplayMode dm = getDisplayMode();
-			if (dm == null) {
-				dm = new DisplayMode(800, 600);
-				dm.setPopup(true);
-			}
-			jsWin = Window.current();
-			if (dm.isPopup()) {
-				jsWin = Window.current().open("", "_blank", "width=" +dm.getWidth()+",height="+dm.getHeight()+",popup,"+"titlebar=no,toolbar=no,status=yes");
-				System.out.println("width=" +dm.getWidth()+",height="+dm.getHeight()+",popup,"+"titlebar=no,toolbar=no,status=yes");
-				System.out.println(jsWin.getInnerWidth());
-				System.out.println(jsWin.getInnerHeight());
-			}
-			HTMLDocument document = jsWin.getDocument();
-			HTMLCanvasElement elem = (HTMLCanvasElement) jsWin.getDocument().createElement("canvas");
-			document.getBody().getStyle().setProperty("margin", "0");
-	        document.getBody().getStyle().setProperty("padding", "0");
-	        
-	        elem.setWidth(jsWin.getInnerWidth());
-	        elem.setHeight(jsWin.getInnerHeight());
-	        WebGL2RenderingContext ctx = (WebGL2RenderingContext) elem.getContext("webgl2");
-	        document.getBody().getStyle().setProperty("overflow", "hidden");
-	        document.setTitle(title);
-	        jsWin.addEventListener("beforeunload", new EventListener<Event>() {
+		jsWin.getDocument().setTitle(title);
+		
+	}
 
-				@Override
-				public void handleEvent(Event evt) {
-					// TODO Auto-generated method stub
-					closeRequested = true;
-				}
-	        	
-	        });
-	        jsWin.addEventListener("keydown", new EventListener<KeyboardEvent>() {
+	static void pollDevices() {
+		// Poll the input devices while we're here
+		
+	}
 
-				@Override
-				public void handleEvent(KeyboardEvent evt) {
-					// TODO Auto-generated method stub
+	/**
+	 * Release the Display context.
+	 *
+	 * @ If the context could not be released
+	 */
+	public static void releaseContext()  {
+		
+	}
+
+	/** Returns true if the Display's context is current in the current thread. */
+	public static boolean isCurrent()  {
+		return true;
+	}
+
+	/**
+	 * Make the Display the current rendering context for GL calls.
+	 *
+	 * @ If the context could not be made current
+	 */
+	public static void makeCurrent()  {
+		
+	}
+
+	private static void removeShutdownHook() {
+
+	}
+
+	private static void registerShutdownHook() {
+
+	}
+
+	/**
+	 * Create the OpenGL context. If isFullscreen() is true or if windowed
+	 * context are not supported on the platform, the display mode will be switched to the mode returned by
+	 * getDisplayMode(), and a fullscreen context will be created. If isFullscreen() is false, a windowed context
+	 * will be created with the dimensions given in the mode returned by getDisplayMode(). If a context can't be
+	 * created with the given parameters, a LWJGLException will be thrown.
+	 * <p/>
+	 * <p>The window created will be set up in orthographic 2D projection, with 1:1 pixel ratio with GL coordinates.
+	 *
+	 * @
+	 */
+	public static void create() throws Exception {
+		create((Object)null);
+	}
+	
+	
+	public static void create(Object... unused) throws Exception {
+		DisplayMode dm = getDisplayMode();
+		if (dm == null) {
+			dm = new DisplayMode(800, 600);
+			dm.setPopup(true);
+		}
+		jsWin = Window.current();
+		if (dm.isPopup()) {
+			jsWin = Window.current().open("", "_blank", "width=" +dm.getWidth()+",height="+dm.getHeight()+",popup,"+"titlebar=no,toolbar=no,status=yes");
+			System.out.println("width=" +dm.getWidth()+",height="+dm.getHeight()+",popup,"+"titlebar=no,toolbar=no,status=yes");
+			System.out.println(jsWin.getInnerWidth());
+			System.out.println(jsWin.getInnerHeight());
+		}
+		HTMLDocument document = jsWin.getDocument();
+		HTMLCanvasElement elem = (HTMLCanvasElement) jsWin.getDocument().createElement("canvas");
+		document.getBody().getStyle().setProperty("margin", "0");
+        document.getBody().getStyle().setProperty("padding", "0");
+        
+        elem.setWidth(jsWin.getInnerWidth());
+        elem.setHeight(jsWin.getInnerHeight());
+        WebGL2RenderingContext ctx = (WebGL2RenderingContext) elem.getContext("webgl2");
+        document.getBody().getStyle().setProperty("overflow", "hidden");
+        document.setTitle(title);
+        jsWin.addEventListener("beforeunload", new EventListener<Event>() {
+
+			@Override
+			public void handleEvent(Event evt) {
+				// TODO Auto-generated method stub
+				closeRequested = true;
+			}
+        	
+        });
+        jsWin.addEventListener("keydown", new EventListener<KeyboardEvent>() {
+
+			@Override
+			public void handleEvent(KeyboardEvent evt) {
+				// TODO Auto-generated method stub
 //					if (evt.getKey() == "Escape") return;
-					if (fullscreenReq && Keyboard.map(fkey).contains(evt.getCode())) {
-					requestFullscreen(elem);
-					}
+				if (fullscreenReq && Keyboard.map(fkey).contains(evt.getCode())) {
+				requestFullscreen(elem);
+				}
 //					fullscreenReq = false;
-					evt.preventDefault();
-					evt.stopPropagation();
-				}
-	        	
-	        });
-	        Window.current().addEventListener("beforeunload", new EventListener<Event>() {
+				evt.preventDefault();
+				evt.stopPropagation();
+			}
+      	
+      });
+      Window.current().addEventListener("beforeunload", new EventListener<Event>() {
 
-				@Override
-				public void handleEvent(Event evt) {
-					// TODO Auto-generated method stub
-					
-				}
-	        	
-	        });
+			@Override
+			public void handleEvent(Event evt) {
+				// TODO Auto-generated method stub
+				
+			}
+      	
+      });
 	        
 	        CurrentContext.setCurrentContext((WebGL2RenderingContext) elem.getContext("webgl2"));
 	        jsWin.addEventListener("resize", new EventListener<Event>() {
@@ -544,14 +549,30 @@ import java.nio.ByteBuffer;
 	        Mouse.create();
 	        
 	        document.getBody().appendChild(ctx.getCanvas());
-	        
+	       
+	        Window.requestAnimationFrame(new AnimationFrameCallback() {
+
+				@Override
+				public void onAnimationFrame(double timestamp) {
+					// TODO Auto-generated method stub
+					f.onFrame();
+		        	SysUpdater.setTime(timestamp);
+		        	Window.requestAnimationFrame(this);
+				}
+	        	
+	        });
 	        
 		}
+		
 		public static Window getWindow() {
 			return jsWin;
 		}
 		
-		
+		public static void setLoop(FrameCallback fc) {
+			f = fc;
+			
+			
+		}
 		@JSBody(script = "elem.requestFullscreen()", params = {"elem"} )
 		private static native void requestFullscreen(HTMLElement elem);
 		
@@ -851,102 +872,102 @@ import java.nio.ByteBuffer;
 			return 1;
 		}
 
-		/**
-		 * Enable or disable the Display window to be resized.
-		 *
-		 * @param resizable set to true to make the Display window resizable;
-		 * false to disable resizing on the Display window.
-		 */
-		public static void setResizable(boolean resizable) {
-			
-		}
-
-		/**
-		 * @return true if the Display window is resizable.
-		 */
-		public static boolean isResizable() {
-			return true;
-		}
-
-		/**
-		 * @return true if the Display window has been resized.
-		 * This value will be updated after a call to Display.update().
-		 *
-		 * This will return false if running in fullscreen or with Display.setParent(Canvas parent)
-		 */
-		public static boolean wasResized() {
-			return wasResized;
-		}
-
-		/**
-		 * @return this method will return the x position (top-left) of the Display window.
-		 *
-		 * If running in fullscreen mode it will return 0.
-		 * If Display.setParent(Canvas parent) is being used, the x position of
-		 * the parent will be returned.
-		 */
-		public static int getX() {
-			return jsWin.getScreenX();
-		}
-
-		/**
-		 * @return this method will return the y position (top-left) of the Display window.
-		 *
-		 * If running in fullscreen mode it will return 0.
-		 * If Display.setParent(Canvas parent) is being used, the y position of
-		 * the parent will be returned.
-		 */
-		public static int getY() {
-			return jsWin.getScreenY();
-		}
-
-		/**
-		 * @return this method will return the width of the Display window.
-		 *
-		 * If running in fullscreen mode it will return the width of the current set DisplayMode.
-		 * If Display.setParent(Canvas parent) is being used, the width of the parent
-		 * will be returned.
-		 *
-		 * This value will be updated after a call to Display.update().
-		 */
-		public static int getWidth() {
-			return jsWin.getInnerWidth();
-		}
-
-		/**
-		 * @return this method will return the height of the Display window.
-		 *
-		 * If running in fullscreen mode it will return the height of the current set DisplayMode.
-		 * If Display.setParent(Canvas parent) is being used, the height of the parent
-		 * will be returned.
-		 *
-		 * This value will be updated after a call to Display.update().
-		 */
-		public static int getHeight() {
-			return jsWin.getInnerHeight();
-		}
+	/**
+	 * Enable or disable the Display window to be resized.
+	 *
+	 * @param resizable set to true to make the Display window resizable;
+	 * false to disable resizing on the Display window.
+	 */
+	public static void setResizable(boolean resizable) {
 		
-		/**
-		 * @return this method will return the pixel scale factor of the Display window.
-		 *
-		 * This method should be used when running in high DPI mode. In such modes Operating
-		 * Systems will scale the Display window to avoid the window shrinking due to high
-		 * resolutions. The OpenGL frame buffer will however use the higher resolution and
-		 * not be scaled to match the Display window size.
-		 * 
-		 * OpenGL methods that require pixel dependent values e.g. glViewport, glTexImage2D,
-		 * glReadPixels, glScissor, glLineWidth, glRenderbufferStorage, etc can convert the 
-		 * scaled Display and Mouse coordinates to the correct high resolution value by 
-		 * multiplying them by the pixel scale factor.
-		 * 
-		 * e.g. Display.getWidth() * Display.getPixelScaleFactor() will return the high DPI
-		 * width of the OpenGL frame buffer. Whereas Display.getWidth() will be the same as
-		 * the OpenGL frame buffer in non high DPI mode.
-		 * 
-		 * Where high DPI mode is not available this method will just return 1.0f therefore
-		 * not have any effect on values that are multiplied by it.
-		 */
-		public static float getPixelScaleFactor() {
-			return 1;
-		}
 	}
+
+	/**
+	 * @return true if the Display window is resizable.
+	 */
+	public static boolean isResizable() {
+		return true;
+	}
+
+	/**
+	 * @return true if the Display window has been resized.
+	 * This value will be updated after a call to Display.update().
+	 *
+	 * This will return false if running in fullscreen or with Display.setParent(Canvas parent)
+	 */
+	public static boolean wasResized() {
+		return wasResized;
+	}
+
+	/**
+	 * @return this method will return the x position (top-left) of the Display window.
+	 *
+	 * If running in fullscreen mode it will return 0.
+	 * If Display.setParent(Canvas parent) is being used, the x position of
+	 * the parent will be returned.
+	 */
+	public static int getX() {
+		return jsWin.getScreenX();
+	}
+
+	/**
+	 * @return this method will return the y position (top-left) of the Display window.
+	 *
+	 * If running in fullscreen mode it will return 0.
+	 * If Display.setParent(Canvas parent) is being used, the y position of
+	 * the parent will be returned.
+	 */
+	public static int getY() {
+		return jsWin.getScreenY();
+	}
+
+	/**
+	 * @return this method will return the width of the Display window.
+	 *
+	 * If running in fullscreen mode it will return the width of the current set DisplayMode.
+	 * If Display.setParent(Canvas parent) is being used, the width of the parent
+	 * will be returned.
+	 *
+	 * This value will be updated after a call to Display.update().
+	 */
+	public static int getWidth() {
+		return jsWin.getInnerWidth();
+	}
+
+	/**
+	 * @return this method will return the height of the Display window.
+	 *
+	 * If running in fullscreen mode it will return the height of the current set DisplayMode.
+	 * If Display.setParent(Canvas parent) is being used, the height of the parent
+	 * will be returned.
+	 *
+	 * This value will be updated after a call to Display.update().
+	 */
+	public static int getHeight() {
+		return jsWin.getInnerHeight();
+	}
+	
+	/**
+	 * @return this method will return the pixel scale factor of the Display window.
+	 *
+	 * This method should be used when running in high DPI mode. In such modes Operating
+	 * Systems will scale the Display window to avoid the window shrinking due to high
+	 * resolutions. The OpenGL frame buffer will however use the higher resolution and
+	 * not be scaled to match the Display window size.
+	 * 
+	 * OpenGL methods that require pixel dependent values e.g. glViewport, glTexImage2D,
+	 * glReadPixels, glScissor, glLineWidth, glRenderbufferStorage, etc can convert the 
+	 * scaled Display and Mouse coordinates to the correct high resolution value by 
+	 * multiplying them by the pixel scale factor.
+	 * 
+	 * e.g. Display.getWidth() * Display.getPixelScaleFactor() will return the high DPI
+	 * width of the OpenGL frame buffer. Whereas Display.getWidth() will be the same as
+	 * the OpenGL frame buffer in non high DPI mode.
+	 * 
+	 * Where high DPI mode is not available this method will just return 1.0f therefore
+	 * not have any effect on values that are multiplied by it.
+	 */
+	public static float getPixelScaleFactor() {
+		return 1;
+	}
+}

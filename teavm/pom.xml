@@ -4,7 +4,7 @@
 
   <groupId>org.munydev.ports</groupId>
   <artifactId>lwjgl</artifactId>
-  <version>A1.0.1</version>
+  <version>A1.0.2</version>
   <packaging>jar</packaging>
 
   <properties>
