@@ -22,11 +22,7 @@
       <version>${teavm.version}</version>
       <scope>provided</scope>
     </dependency>
-    <dependency>
-    	<groupId>com.baislsl</groupId>
-    	<artifactId>png</artifactId>
-    	<version>1.0-SNAPSHOT</version>
-    </dependency>
+    
 	<dependency>
 		<groupId>org.apache.commons</groupId>
 		<artifactId>commons-io</artifactId>
