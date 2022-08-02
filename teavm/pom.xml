@@ -27,7 +27,17 @@
     	<artifactId>png</artifactId>
     	<version>1.0-SNAPSHOT</version>
     </dependency>
-
+	<dependency>
+		<groupId>org.apache.commons</groupId>
+		<artifactId>commons-io</artifactId>
+		<version>1.3.2</version>
+	</dependency>
+	
+	<dependency>
+		<groupId>commons-codec</groupId>
+		<artifactId>commons-codec</artifactId>
+		<version>1.15</version>
+	</dependency>
 	<!-- https://mvnrepository.com/artifact/org.joml/joml -->
 
 	
