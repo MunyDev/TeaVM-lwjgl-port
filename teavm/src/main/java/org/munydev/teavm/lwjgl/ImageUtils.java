@@ -13,7 +13,7 @@ import org.teavm.jso.ajax.ReadyStateChangeHandler;
 import org.teavm.jso.ajax.XMLHttpRequest;
 import org.teavm.jso.typedarrays.ArrayBuffer;
 
-import com.baislsl.png.decode.Decoder;
+//import com.baislsl.png.decode.Decoder;
 
 public class ImageUtils {
 	@Async
