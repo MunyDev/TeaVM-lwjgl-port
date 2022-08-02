@@ -31,6 +31,7 @@
  */
 package org.lwjgl;
 
+import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.SysUpdater;
 import org.teavm.interop.Async;
 import org.teavm.interop.AsyncCallback;
@@ -60,6 +61,30 @@ public final class Sys {
 //	private static final SysImplementation implementation;
 	private static final boolean is64Bit = false;
 
+	private static String clipboard = "";
+	public static boolean clipboardReq = false;
+	public static void updateClipboard() {
+		
+		clipboardReq = true;
+		nReadText(new AsyncCallback<String> () {
+
+			@Override
+			public void complete(String result) {
+				// TODO Auto-generated method stub
+				clipboard = result;
+				clipboardReq = false;
+			}
+
+			@Override
+			public void error(Throwable e) {
+				// TODO Auto-generated method stub
+				clipboardReq = false;
+				
+//				e.printStackTrace();
+			}
+			
+		});
+	}
 	private static void doLoadLibrary(final String lib_name) {
 //		AccessController.doPrivileged(new PrivilegedAction<Object>() {
 //			public Object run() {
@@ -121,6 +146,9 @@ public final class Sys {
 //			throw new LinkageError("Version mismatch: jar version is '" + required_version +
 //                             "', native library version is '" + native_jni_version + "'");
 //		implementation.setDebug(LWJGLUtil.DEBUG);
+		nReadTextAsync((str)->{
+			//Do nothing to ask user if read clipboard
+		});
 	}
 
 //	private static SysImplementation createImplementation() {
@@ -167,7 +195,7 @@ public final class Sys {
 	 * @return timer resolution in ticks per second or 0 if no timer is present.
 	 */
 	public static long getTimerResolution() {
-		return 100;
+		return 1000;
 	}
 
 	/**
@@ -225,11 +253,19 @@ public final class Sys {
 		public void then(String result);
 	}
 	@Async
-	private native static String nReadText();
+	public native static String nReadText();
 	
+	
+	//Weird bug fix until TeaVM sorts this out
+//	@JSBody(script = "return $rt_currentNativeThread;")
+//	public native static JSObject getCurrentThread();
+	
+//	@JSBody(script = "$rt_currentNativeThread = in2;", params={"in2"})
+//	private native static void setCurrentThread(JSObject in2);
 	private static void nReadText(AsyncCallback<String> ac) {
 		
 		ClipboardCallback pc = (res)->{
+			System.out.println("clipboarded");
 			ac.complete(res);
 		};
 		nReadTextAsync(pc);
@@ -247,6 +283,7 @@ public final class Sys {
 	 * @return a String, or null if there is no system clipboard.
 	 */
 	public static String getClipboard() {
-		return nReadText();
+		
+		return clipboard;
 	}
 }

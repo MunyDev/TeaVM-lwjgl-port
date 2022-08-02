@@ -1,6 +1,7 @@
 package org.lwjgl.opengl;
 
 import org.teavm.jso.JSBody;
+import org.teavm.jso.JSObject;
 import org.teavm.jso.browser.AnimationFrameCallback;
 import org.teavm.jso.browser.Window;
 import org.teavm.jso.dom.events.Event;
@@ -10,7 +11,7 @@ import org.teavm.jso.dom.html.HTMLCanvasElement;
 import org.teavm.jso.dom.html.HTMLDocument;
 import org.teavm.jso.dom.html.HTMLElement;
 import org.teavm.webgl2.WebGL2RenderingContext;
-
+import org.lwjgl.Sys;
 
 /*
 	 * Copyright (c) 2002-2008 LWJGL Project
@@ -130,7 +131,8 @@ private static int x = -1;
 	private static float r, g, b;
 	private static boolean closeRequested;
 	private static int fkey;
-	
+	private static JSObject realJSThread = null;
+	private static int count;
 //		private static final ComponentListener component_listener = new ComponentAdapter() {
 //			public void componentResized(ComponentEvent e) {
 //				synchronized ( GlobalLock.lock ) {
@@ -149,10 +151,14 @@ private static int x = -1;
 //		public static Drawable getDrawable() {
 //		
 //		}
-
-	private static void createDisplayImplementation() {
-
+	public static JSObject getJSThread() {
+		return realJSThread;
 	}
+	private static void createDisplayImplementation() {
+		
+	}
+
+	protected static boolean focused;
 
 	/** Only constructed by ourselves */
 	private Display() {
@@ -471,6 +477,7 @@ private static int x = -1;
 	
 	
 	public static void create(Object... unused) throws Exception {
+//		realJSThread = Sys.getCurrentThread();
 		DisplayMode dm = getDisplayMode();
 		if (dm == null) {
 			dm = new DisplayMode(800, 600);
@@ -526,7 +533,7 @@ private static int x = -1;
 			}
       	
       });
-	        
+	        focused = true;
 	        CurrentContext.setCurrentContext((WebGL2RenderingContext) elem.getContext("webgl2"));
 	        jsWin.addEventListener("resize", new EventListener<Event>() {
 
@@ -543,21 +550,53 @@ private static int x = -1;
 				}
 	        	
 	        });
+	        jsWin.addEventListener("focus", new EventListener<Event>() {
 
+				
+
+				@Override
+				public void handleEvent(Event evt) {
+					// TODO Auto-generated method stub
+					focused = true;
+//					System.out.println("hello world");
+					evt.preventDefault();
+					evt.stopPropagation();
+				}
+	        	
+	        });
+	        jsWin.addEventListener("blur", new EventListener<Event>() {
+
+				@Override
+				public void handleEvent(Event evt) {
+					// TODO Auto-generated method stub
+					focused = false;
+					evt.preventDefault();
+					evt.stopPropagation();
+				}
+	        	
+	        });
+	        
+	        
 	        CurrentContext.setCurrentContext(ctx);
 	        Keyboard.create();
 	        Mouse.create();
 	        
 	        document.getBody().appendChild(ctx.getCanvas());
-	       
+	        count = 0;
 	        Window.requestAnimationFrame(new AnimationFrameCallback() {
 
 				@Override
 				public void onAnimationFrame(double timestamp) {
 					// TODO Auto-generated method stub
+					
+					
 					f.onFrame();
 		        	SysUpdater.setTime(timestamp);
+		        	if (focused) {
+		        	SysUpdater.updateClipboard();
+		        	}
 		        	Window.requestAnimationFrame(this);
+//		        	count++;
 				}
 	        	
 	        });

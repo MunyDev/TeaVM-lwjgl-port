@@ -1,5 +1,7 @@
 package org.lwjgl.opengl;
 
+import org.lwjgl.Sys;
+
 public class SysUpdater {
 	private static double time = 0;
 
@@ -10,5 +12,10 @@ public class SysUpdater {
 	
 	protected static void setTime(double time) {
 		SysUpdater.time = time;
+	}
+	protected static void updateClipboard() {
+//		if (!Sys.clipboardReq) {
+			Sys.updateClipboard();
+//		}
 	}
 }
