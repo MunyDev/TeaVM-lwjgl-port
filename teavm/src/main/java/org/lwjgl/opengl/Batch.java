@@ -211,12 +211,15 @@ public class Batch {
 		ctx.bindVertexArray(wglva);
 		ctx.useProgram(wglp1);
 		FloatBuffer fb = FloatBuffer.allocate(16);
+//		fb.mark();
 		GL11.glGetFloat(GL_MODELVIEW_MATRIX, fb);
+		fb.position(0);
 		ctx.uniformMatrix4fv(ctx.getUniformLocation(wglp1, "modelview"), false,Float32Array.create(GLUtil.glCreateBufferFromJava(fb)));
-		fb.flip();
+		fb.position(0);
 		GL11.glGetFloat(GL_PROJECTION_MATRIX, fb);
+		fb.position(0);
 		ctx.uniformMatrix4fv(ctx.getUniformLocation(wglp1, "perspective"),false, Float32Array.create(GLUtil.glCreateBufferFromJava(fb)));
-		
+		fb.position(0);
 		
 		WebGLBuffer wglb = ctx.createBuffer();
 //		log(Float32Array.create(GLUtil.glCreateBufferFromJava(batch)));GL11.glV

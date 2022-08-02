@@ -44,7 +44,7 @@ public final class Options {
     /**
      * Whether <i>not</i> to use sun.misc.Unsafe when copying memory with MemUtil.
      */
-    public static final boolean NO_UNSAFE = hasOption(System.getProperty("joml.nounsafe", "false"));
+    public static final boolean NO_UNSAFE = true;
     /**
      * Whether to <i>force</i> the use of sun.misc.Unsafe when copying memory with MemUtil.
      */
@@ -69,7 +69,7 @@ public final class Options {
      * Whether to use a {@link NumberFormat} producing scientific notation output when formatting matrix,
      * vector and quaternion components to strings.
      */
-    public static final boolean useNumberFormat = hasOption(System.getProperty("joml.format", "true"));
+    public static final boolean useNumberFormat = false;
 
     /**
      * Whether to try using java.lang.Math.fma() in most matrix/vector/quaternion operations if it is available.

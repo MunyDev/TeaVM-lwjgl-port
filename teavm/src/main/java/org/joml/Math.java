@@ -86,79 +86,79 @@ public class Math {
     /**
      * @author theagentd
      */
-    static double sin_theagentd_arith(double x){
-        double xi = floor((x + PI_4) * PI_INV);
-        double x_ = x - xi * PI;
-        double sign = ((int)xi & 1) * -2 + 1;
-        double x2 = x_ * x_;
-        double sin = x_;
-        double tx = x_ * x2;
-        sin += tx * c1; tx *= x2;
-        sin += tx * c2; tx *= x2;
-        sin += tx * c3; tx *= x2;
-        sin += tx * c4; tx *= x2;
-        sin += tx * c5; tx *= x2;
-        sin += tx * c6; tx *= x2;
-        sin += tx * c7;
-        return sign * sin;
-    }
+//    static double sin_theagentd_arith(double x){
+//        double xi = floor((x + PI_4) * PI_INV);
+//        double x_ = x - xi * PI;
+//        double sign = ((int)xi & 1) * -2 + 1;
+//        double x2 = x_ * x_;
+//        double sin = x_;
+//        double tx = x_ * x2;
+//        sin += tx * c1; tx *= x2;
+//        sin += tx * c2; tx *= x2;
+//        sin += tx * c3; tx *= x2;
+//        sin += tx * c4; tx *= x2;
+//        sin += tx * c5; tx *= x2;
+//        sin += tx * c6; tx *= x2;
+//        sin += tx * c7;
+//        return sign * sin;
+//    }
 
     /**
      * Reference: <a href="http://www.java-gaming.org/topics/joml-1-8-0-release/37491/msg/361718/view.html#msg361718">http://www.java-gaming.org/</a>
      */
-    static double sin_roquen_arith(double x) {
-        double xi = Math.floor((x + PI_4) * PI_INV);
-        double x_ = x - xi * PI;
-        double sign = ((int)xi & 1) * -2 + 1;
-        double x2 = x_ * x_;
+//    static double sin_roquen_arith(double x) {
+//        double xi = Math.floor((x + PI_4) * PI_INV);
+//        double x_ = x - xi * PI;
+//        double sign = ((int)xi & 1) * -2 + 1;
+//        double x2 = x_ * x_;
+//
+//        // code from sin_theagentd_arith:
+//        // double sin = x_;
+//        // double tx = x_ * x2;
+//        // sin += tx * c1; tx *= x2;
+//        // sin += tx * c2; tx *= x2;
+//        // sin += tx * c3; tx *= x2;
+//        // sin += tx * c4; tx *= x2;
+//        // sin += tx * c5; tx *= x2;
+//        // sin += tx * c6; tx *= x2;
+//        // sin += tx * c7;
+//        // return sign * sin;
+//
+//        double sin;
+//        x_  = sign*x_;
+//        sin =          c7;
+//        sin = sin*x2 + c6;
+//        sin = sin*x2 + c5;
+//        sin = sin*x2 + c4;
+//        sin = sin*x2 + c3;
+//        sin = sin*x2 + c2;
+//        sin = sin*x2 + c1;
+//        return x_ + x_*x2*sin;
+//    }
 
-        // code from sin_theagentd_arith:
-        // double sin = x_;
-        // double tx = x_ * x2;
-        // sin += tx * c1; tx *= x2;
-        // sin += tx * c2; tx *= x2;
-        // sin += tx * c3; tx *= x2;
-        // sin += tx * c4; tx *= x2;
-        // sin += tx * c5; tx *= x2;
-        // sin += tx * c6; tx *= x2;
-        // sin += tx * c7;
-        // return sign * sin;
-
-        double sin;
-        x_  = sign*x_;
-        sin =          c7;
-        sin = sin*x2 + c6;
-        sin = sin*x2 + c5;
-        sin = sin*x2 + c4;
-        sin = sin*x2 + c3;
-        sin = sin*x2 + c2;
-        sin = sin*x2 + c1;
-        return x_ + x_*x2*sin;
-    }
-
-    private static final double s5 = Double.longBitsToDouble(4523227044276562163L);
-    private static final double s4 = Double.longBitsToDouble(-4671934770969572232L);
-    private static final double s3 = Double.longBitsToDouble(4575957211482072852L);
-    private static final double s2 = Double.longBitsToDouble(-4628199223918090387L);
-    private static final double s1 = Double.longBitsToDouble(4607182418589157889L);
+//    private static final double s5 = Double.longBitsToDouble(4523227044276562163L);
+//    private static final double s4 = Double.longBitsToDouble(-4671934770969572232L);
+//    private static final double s3 = Double.longBitsToDouble(4575957211482072852L);
+//    private static final double s2 = Double.longBitsToDouble(-4628199223918090387L);
+//    private static final double s1 = Double.longBitsToDouble(4607182418589157889L);
 
     /**
      * Reference: <a href="http://www.java-gaming.org/topics/joml-1-8-0-release/37491/msg/361815/view.html#msg361815">http://www.java-gaming.org/</a>
      */
-    static double sin_roquen_9(double v) {
-      double i  = java.lang.Math.rint(v*PI_INV);
-      double x  = v - i * Math.PI;
-      double qs = 1-2*((int)i & 1);
-      double x2 = x*x;
-      double r;
-      x = qs*x;
-      r =        s5;
-      r = r*x2 + s4;
-      r = r*x2 + s3;
-      r = r*x2 + s2;
-      r = r*x2 + s1;
-      return x*r;
-    }
+//    static double sin_roquen_9(double v) {
+//      double i  = java.lang.Math.rint(v*PI_INV);
+//      double x  = v - i * Math.PI;
+//      double qs = 1-2*((int)i & 1);
+//      double x2 = x*x;
+//      double r;
+//      x = qs*x;
+//      r =        s5;
+//      r = r*x2 + s4;
+//      r = r*x2 + s3;
+//      r = r*x2 + s2;
+//      r = r*x2 + s1;
+//      return x*r;
+//    }
 
     private static final double k1 = Double.longBitsToDouble(-4628199217061079959L);
     private static final double k2 = Double.longBitsToDouble(4575957461383549981L);

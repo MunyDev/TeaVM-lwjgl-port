@@ -408,7 +408,9 @@ import java.nio.ByteBuffer;
 			Mouse.poll();
 			Keyboard.poll();
 			wasResized = false;
+			
 			jsWin.getDocument().setTitle(title);
+			
 		}
 
 		static void pollDevices() {
@@ -515,11 +517,11 @@ import java.nio.ByteBuffer;
 				@Override
 				public void handleEvent(Event evt) {
 					// TODO Auto-generated method stub
-					closeRequested = true;
-					jsWin.close();
+					
 				}
 	        	
 	        });
+	        
 	        CurrentContext.setCurrentContext((WebGL2RenderingContext) elem.getContext("webgl2"));
 	        jsWin.addEventListener("resize", new EventListener<Event>() {
 
@@ -529,7 +531,7 @@ import java.nio.ByteBuffer;
 					elem.setWidth(jsWin.getInnerWidth());
 					elem.setHeight(jsWin.getInnerHeight());
 					
-					((WebGL2RenderingContext) elem.getContext("webgl2")).viewport(0, 0, jsWin.getInnerWidth(), jsWin.getInnerHeight());
+//					((WebGL2RenderingContext) elem.getContext("webgl2")).viewport(0, 0, jsWin.getInnerWidth(), jsWin.getInnerHeight());
 					wasResized = true;
 					evt.preventDefault();
 					evt.stopPropagation();

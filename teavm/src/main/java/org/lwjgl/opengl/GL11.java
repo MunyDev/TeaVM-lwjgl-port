@@ -558,7 +558,7 @@ public class GL11 {
 	public static WebGL2RenderingContext ctx = (WebGL2RenderingContext) CurrentContext.getContext();
 	private static Batch currentBatch;
 	private static Matrix4f modelview = new Matrix4f();
-	private static Stack<Object> modelviewStack;
+	private static Stack<Object> modelviewStack = new Stack<Object>();
 	
 	private static Matrix4f projection = new Matrix4f();
 	private static Matrix4f currentMatrix = modelview;
@@ -971,7 +971,7 @@ public class GL11 {
 	public static void	glGetPolygonStipple(long mask_buffer_offset){
 
     }
-	static java.lang.String	glGetString(int name){
+	public static java.lang.String	glGetString(int name){
 		
 //		ConstantMapper cm = new ConstantMapper(new String[] {
 //			"GL_VENDOR",
@@ -1208,7 +1208,14 @@ public class GL11 {
 
     }
 	public static void	glMatrixMode(int mode){
-		
+		switch (mode) {
+		case GL_MODELVIEW:
+			currentMatrix = modelview;
+			break;
+		case GL_PROJECTION:
+			currentMatrix = projection;
+			break;
+		}
     }
 	public static void	glMultMatrix(java.nio.DoubleBuffer m){
 
@@ -1250,7 +1257,7 @@ public class GL11 {
 
     }
 	public static void	glOrtho(double left, double right, double bottom, double top, double zNear, double zFar){
-
+		currentMatrix.ortho((float) left,(float)right,(float)bottom,(float)top,(float)zNear, (float) zFar);
     }
 	public static void	glPassThrough(float token){
 
@@ -1454,13 +1461,13 @@ public class GL11 {
 		
     }
 	public static void	glRotatef(float angle, float x, float y, float z){
-
+		currentMatrix.rotate(org.joml.Math.toRadians(angle), x, y, z);
     }
 	public static void	glScaled(double x, double y, double z){
 
     }
 	public static void	glScalef(float x, float y, float z){
-		
+		currentMatrix.scale(x, y, z);
     }
 	public static void	glScissor(int x, int y, int width, int height){
 		ctx.scissor(x, y, width, height);
@@ -1640,7 +1647,7 @@ public class GL11 {
 		
     }
 	public static void	glTranslatef(float x, float y, float z){
-
+		currentMatrix.translate(x, y, z);
     }
 	public static void	glVertex2d(double x, double y){
 		currentBatch.vertex2f((float) x, (float) y);
