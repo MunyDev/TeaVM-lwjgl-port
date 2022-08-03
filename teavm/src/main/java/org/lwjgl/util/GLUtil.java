@@ -156,4 +156,11 @@ public class GLUtil {
 		
 		return arr;
 	}
+	public static void glWriteBufferToJArray(ArrayBuffer buf, byte[] b) {
+		int len = buf.getByteLength();
+		Uint8Array ua = Uint8Array.create(buf);
+		for (int i = 0; i < len; i++) {
+			b[i] = (byte) ua.get(i);
+		}
+	}
 }

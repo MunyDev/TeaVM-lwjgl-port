@@ -573,7 +573,7 @@ public class GL11 {
 		return;
 		
     }
-	static boolean	glAreTexturesResident(java.nio.IntBuffer textures, java.nio.ByteBuffer residences){
+public static  boolean	glAreTexturesResident(java.nio.IntBuffer textures, java.nio.ByteBuffer residences){
 		System.out.println("currently a stub!");
 
 		return false;
@@ -591,7 +591,7 @@ public class GL11 {
 		
 		
 		
-		ctx.bindTexture(target, (WebGLTexture) get(texture).getObject());
+		ctx.bindTexture(target, (WebGLTexture) getObject(texture));
     }
 	public static void	glBitmap(int width, int height, float xorig, float yorig, float xmove, float ymove, java.nio.ByteBuffer bitmap){
 		System.out.println("currently a stub!");
@@ -860,12 +860,12 @@ public class GL11 {
 	public static void	glFrustum(double left, double right, double bottom, double top, double zNear, double zFar){
 
     }
-	static int	glGenLists(int range){
+	public static int	glGenLists(int range){
 		
 		return 0;
     }
-	static WebGLTexture glGenTextures(){
-		return ctx.createTexture();
+	public static int glGenTextures(){
+		return newObject(GL_OBJECT_TEXTURES, ctx.createTexture());
     }
 	public static void	glGenTextures(java.nio.IntBuffer textures){
 		int len = textures.remaining();
@@ -875,7 +875,7 @@ public class GL11 {
 		
 		
     }
-	static boolean	glGetBoolean(int pname){
+	public static boolean	glGetBoolean(int pname){
 		return ctx.getParameter(pname).<JSBoolean> cast().booleanValue();
     }
 	public static void	glGetBoolean(int pname, java.nio.ByteBuffer params){
@@ -887,7 +887,7 @@ public class GL11 {
 	public static void	glGetClipPlane(int plane, java.nio.DoubleBuffer equation){
 
     }
-	static double	glGetDouble(int pname){
+	public static double	glGetDouble(int pname){
 		return (double) ctx.getParameterf(pname);
     }
 	public static void	glGetDouble(int pname, java.nio.DoubleBuffer params){
@@ -897,7 +897,7 @@ public class GL11 {
 	public static int	glGetError(){
 		return ctx.getError();
     }
-	static float glGetFloat(int pname) {
+	public static float glGetFloat(int pname) {
 		return ctx.getParameterf(pname);
     }
 	public static void	glGetFloat(int pname, java.nio.FloatBuffer params){
@@ -914,7 +914,7 @@ public class GL11 {
 		
 		
     }
-	static int	glGetInteger(int pname){
+	public static int	glGetInteger(int pname){
 		if (pname == GL11.GL_MAX_CLIP_PLANES) return 5;
 		return ctx.getParameteri(pname);
     }
@@ -961,7 +961,7 @@ public class GL11 {
 	public static void	glGetPixelMapusv(int map, long values_buffer_offset){
 
     }
-	static java.nio.ByteBuffer	glGetPointer(int pname, long result_size){
+public static  java.nio.ByteBuffer	glGetPointer(int pname, long result_size){
 		
 		return null;
     }
@@ -989,11 +989,11 @@ public class GL11 {
 	public static void	glGetTexEnv(int coord, int pname, java.nio.IntBuffer params){
 		return;
     }
-	static float glGetTexEnvf(int coord, int pname){
+public static  float glGetTexEnvf(int coord, int pname){
 		return 0;
 
     }
-	static int	glGetTexEnvi(int coord, int pname){
+public static  int	glGetTexEnvi(int coord, int pname){
 		return 0;
     }
 	public static void	glGetTexGen(int coord, int pname, java.nio.DoubleBuffer params){
@@ -1005,13 +1005,13 @@ public class GL11 {
 	public static void	glGetTexGen(int coord, int pname, java.nio.IntBuffer params){
 		return;
     }
-	static double	glGetTexGend(int coord, int pname){
+public static  double	glGetTexGend(int coord, int pname){
 		return 0;
     }
-	static float	glGetTexGenf(int coord, int pname){
+public static  float	glGetTexGenf(int coord, int pname){
 		return 0;
     }
-	static int	glGetTexGeni(int coord, int pname){
+public static  int	glGetTexGeni(int coord, int pname){
 		return 0;
     }
 	public static void	glGetTexImage(int target, int level, int format, int type, java.nio.ByteBuffer pixels){
@@ -1039,10 +1039,10 @@ public class GL11 {
 	public static void	glGetTexLevelParameter(int target, int level, int pname, java.nio.IntBuffer params){
 
     }
-	static float glGetTexLevelParameterf(int target, int level, int pname){
+public static  float glGetTexLevelParameterf(int target, int level, int pname){
 		return 0;
     }
-	static int	glGetTexLevelParameteri(int target, int level, int pname){
+public static  int	glGetTexLevelParameteri(int target, int level, int pname){
 		return 0;
     }
 	public static void	glGetTexParameter(int target, int pname, java.nio.FloatBuffer params){
@@ -1055,13 +1055,13 @@ public class GL11 {
 		params.put(s.intValue());
 		params.flip();
     }
-	static float glGetTexParameterf(int target, int pname){
+	public static float glGetTexParameterf(int target, int pname){
 		
 		return ctx.getTexParameter(target, pname).<JSNumber> cast().floatValue();
 		
 		
     }
-	static int glGetTexParameteri(int target, int pname){
+	public static int glGetTexParameteri(int target, int pname){
 		return ctx.getTexParameter(target, pname).<JSNumber> cast().intValue();
 		
 		
@@ -1113,13 +1113,13 @@ public class GL11 {
 	public static void	glInterleavedArrays(int format, int stride, java.nio.ShortBuffer pointer){
 
     }
-	static boolean	glIsEnabled(int cap){
+public static  boolean	glIsEnabled(int cap){
 		return ctx.isEnabled(cap);
     }
-	static boolean	glIsList(int list){
+public static  boolean	glIsList(int list){
 		return false;
     }
-	static boolean	glIsTexture(int texture){
+public static  boolean	glIsTexture(int texture){
 		return true;
     }
 	public static void	glLight(int light, int pname, java.nio.FloatBuffer params){
@@ -1385,7 +1385,7 @@ public class GL11 {
 		
 		
 	}
-	static Uint8Array glCreateBufferFromJava(ByteBuffer data) {
+public static  Uint8Array glCreateBufferFromJava(ByteBuffer data) {
 		Uint8Array arr = Uint8Array.create(data.remaining());
 		DataView dv = DataView.create(arr);
 		
@@ -1394,7 +1394,7 @@ public class GL11 {
 		}
 		return arr;
 	}
-	static Uint8Array glCreateBufferFromJava(FloatBuffer data) {
+public static  Uint8Array glCreateBufferFromJava(FloatBuffer data) {
 		Uint8Array arr = Uint8Array.create(data.remaining());
 		DataView dv = DataView.create(arr);
 		
@@ -1454,7 +1454,7 @@ public class GL11 {
 	public static void	glRecti(int x1, int y1, int x2, int y2){
 //		not supported
 	}
-	static int	glRenderMode(int mode){
+public static  int	glRenderMode(int mode){
 		return 0;
     }
 	public static void	glRotated(double angle, double x, double y, double z){

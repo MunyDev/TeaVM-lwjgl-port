@@ -62,32 +62,32 @@ public final class GL21 {
 	private GL21() {}
 
 	public static void glUniformMatrix2x3(int location, boolean transpose, FloatBuffer matrices) {
-		ctx.uniformMatrix2x3fv((WebGLUniformLocation) get(location).getObject() , transpose, Float32Array.create(GLUtil.glCreateBufferFromJava(matrices)));
+		ctx.uniformMatrix2x3fv((WebGLUniformLocation) getObject(location) , transpose, Float32Array.create(GLUtil.glCreateBufferFromJava(matrices)));
 	}
 	static native void nglUniformMatrix2x3fv(int location, int matrices_count, boolean transpose, long matrices, long function_pointer);
 
 	public static void glUniformMatrix3x2(int location, boolean transpose, FloatBuffer matrices) {
-		ctx.uniformMatrix3x2fv((WebGLUniformLocation) get(location).getObject(), transpose, Float32Array.create(GLUtil.glCreateBufferFromJava(matrices)));
+		ctx.uniformMatrix3x2fv((WebGLUniformLocation) getObject(location), transpose, Float32Array.create(GLUtil.glCreateBufferFromJava(matrices)));
 	}
 	static native void nglUniformMatrix3x2fv(int location, int matrices_count, boolean transpose, long matrices, long function_pointer);
 
 	public static void glUniformMatrix2x4(int location, boolean transpose, FloatBuffer matrices) {
-		ctx.uniformMatrix2x4fv((WebGLUniformLocation) get(location).getObject(), transpose, Float32Array.create(GLUtil.glCreateBufferFromJava(matrices)));
+		ctx.uniformMatrix2x4fv((WebGLUniformLocation) getObject(location), transpose, Float32Array.create(GLUtil.glCreateBufferFromJava(matrices)));
 	}
 	static native void nglUniformMatrix2x4fv(int location, int matrices_count, boolean transpose, long matrices, long function_pointer);
 
 	public static void glUniformMatrix4x2(int location, boolean transpose, FloatBuffer matrices) {
-		ctx.uniformMatrix4x2fv((WebGLUniformLocation) get(location).getObject(), transpose, Float32Array.create(GLUtil.glCreateBufferFromJava(matrices)));
+		ctx.uniformMatrix4x2fv((WebGLUniformLocation) getObject(location), transpose, Float32Array.create(GLUtil.glCreateBufferFromJava(matrices)));
 	}
 	static native void nglUniformMatrix4x2fv(int location, int matrices_count, boolean transpose, long matrices, long function_pointer);
 
 	public static void glUniformMatrix3x4(int location, boolean transpose, FloatBuffer matrices) {
-		ctx.uniformMatrix3x4fv((WebGLUniformLocation) get(location).getObject(), transpose, Float32Array.create(GLUtil.glCreateBufferFromJava(matrices)));
+		ctx.uniformMatrix3x4fv((WebGLUniformLocation) getObject(location), transpose, Float32Array.create(GLUtil.glCreateBufferFromJava(matrices)));
 	}
 	static native void nglUniformMatrix3x4fv(int location, int matrices_count, boolean transpose, long matrices, long function_pointer);
 
 	public static void glUniformMatrix4x3(int location, boolean transpose, FloatBuffer matrices) {
-		ctx.uniformMatrix4x3fv((WebGLUniformLocation) get(location).getObject(), transpose, Float32Array.create(GLUtil.glCreateBufferFromJava(matrices)), 0, 0);
+		ctx.uniformMatrix4x3fv((WebGLUniformLocation) getObject(location), transpose, Float32Array.create(GLUtil.glCreateBufferFromJava(matrices)), 0, 0);
 	}
 	static native void nglUniformMatrix4x3fv(int location, int matrices_count, boolean transpose, long matrices, long function_pointer);
 }

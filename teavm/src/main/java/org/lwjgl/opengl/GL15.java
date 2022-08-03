@@ -87,7 +87,7 @@ public final class GL15 {
 	private GL15() {}
 
 	public static void glBindBuffer(int target, int buffer) {
-		ctx.bindBuffer(ConstantMapper.cmBuffers.mapRealToWebGL(target), (WebGLBuffer) get(buffer).getObject());
+		ctx.bindBuffer(ConstantMapper.cmBuffers.mapRealToWebGL(target), (WebGLBuffer) getObject(buffer));
 	}
 	static native void nglBindBuffer(int target, int buffer, long function_pointer);
 
@@ -102,7 +102,7 @@ public final class GL15 {
 
 	/** Overloads glDeleteBuffers. */
 	public static void glDeleteBuffers(int buffer) {
-		ctx.deleteBuffer((WebGLBuffer) get(buffer).getObject());
+		ctx.deleteBuffer((WebGLBuffer) getObject(buffer));
 	}
 
 	public static void glGenBuffers(IntBuffer buffers) {
@@ -120,7 +120,7 @@ public final class GL15 {
 	}
 
 	public static boolean glIsBuffer(int buffer) {
-		return get(buffer).getType() == GL_OBJECT_BUFFERS;
+		return getType(buffer) == GL_OBJECT_BUFFERS;
 	}
 	static native boolean nglIsBuffer(int buffer, long function_pointer);
 
@@ -357,7 +357,7 @@ public final class GL15 {
 	}
 
 	public static void glDeleteQueries(IntBuffer ids) {
-		ctx.deleteQuery((WebGLQuery) get(ids.get()).getObject());
+		ctx.deleteQuery((WebGLQuery) getObject(ids.get()));
 
 
 
@@ -367,7 +367,7 @@ public final class GL15 {
 	/** Overloads glDeleteQueries. */
 	public static void glDeleteQueries(int id) {
 
-		ctx.deleteQuery((WebGLQuery) get(id).getObject());
+		ctx.deleteQuery((WebGLQuery) getObject(id));
 		
 		
 
@@ -385,7 +385,7 @@ public final class GL15 {
 
 	public static void glBeginQuery(int target, int id) {
 
-		ctx.beginQuery(target, (WebGLQuery) get(id).getObject());
+		ctx.beginQuery(target, (WebGLQuery) getObject(id));
 
 
 	}
@@ -430,7 +430,7 @@ public final class GL15 {
 
 	public static void glGetQueryObject(int id, int pname, IntBuffer params) {
 
-		params.put(((JSNumber) ctx.getQueryParameter((WebGLQuery) get(id).getObject(), pname)).intValue());
+		params.put(((JSNumber) ctx.getQueryParameter((WebGLQuery) getObject(id), pname)).intValue());
 
 
 
@@ -442,7 +442,7 @@ public final class GL15 {
 		
 		
 		
-		return ((JSNumber) ctx.getQueryParameter((WebGLQuery) get(id).getObject(), pname)).intValue();
+		return ((JSNumber) ctx.getQueryParameter((WebGLQuery) getObject(id), pname)).intValue();
 
 
 
@@ -450,7 +450,7 @@ public final class GL15 {
 	}
 
 	public static void glGetQueryObjectu(int id, int pname, IntBuffer params) {
-		params.put(((JSNumber) ctx.getQueryParameter((WebGLQuery) get(id).getObject(), pname)).intValue());
+		params.put(((JSNumber) ctx.getQueryParameter((WebGLQuery) getObject(id), pname)).intValue());
 
 
 
@@ -462,7 +462,7 @@ public final class GL15 {
 	public static int glGetQueryObjectui(int id, int pname) {
 
 
-		return ((JSNumber) ctx.getQueryParameter((WebGLQuery) get(id).getObject(), pname)).intValue();
+		return ((JSNumber) ctx.getQueryParameter((WebGLQuery) getObject(id), pname)).intValue();
 
 
 

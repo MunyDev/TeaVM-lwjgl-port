@@ -1,5 +1,6 @@
 package org.lwjgl.opengl;
 
+import org.teavm.jso.JSBody;
 import org.teavm.jso.JSObject;
 
 public class GLObjectBuffers {
@@ -25,36 +26,33 @@ public class GLObjectBuffers {
 //	public static WebGLQuery[] queries = new WebGLQuery[DEFAULT_SIZE];
 	
 	
-	private static GLObject[] objects = new GLObject[DEFAULT_SIZE * 5];
+//	private static GLObject[] objects = new GLObject[DEFAULT_SIZE * 5];
 //	private static int = 0;
 //	public static int[] lists = new int[DEFAULT_SIZE];
+	//Smart ass allocation
 	
+	static {
+		initialize();
+	}
+	@JSBody(script = "window.globjs = [];")
+	public static native int initialize();
 	/**
-	 * Creates an object and returns the id
+	 * Creates an object and returns the id using smarta*s allocation
 	 * @param type Specifies the type of the webgl object
 	 * @param obj The actual object
 	 * @return returns the id
 	 */
-	public static int newObject(int type, JSObject obj) {
-		int savedCount = objectCount;
-		
-		objects[savedCount] = new GLObject(obj, type);
-		
-		
-		objectCount = savedCount+1;
-		return savedCount;
-	}
+	@JSBody(script = "return window.globjs.push({type: type, object: obj}) - 1", params= {"type", "obj"})
+	public static native int newObject(int type, JSObject obj);
 	
-	public static GLObject get(int idx) {
-		return objects[idx];
-	}
+	@JSBody(script = "return window.globjs[idx].object;", params= {"idx"})
+	public static native JSObject getObject(int idx);
+	
+	@JSBody(script = "return window.globjs[idx].type;", params= {"idx"})
+	public static native int getType(int idx);
+	
 	
 	public static int find(JSObject obj) {
-		for (int i = 0; i < objects.length; i++) {
-			if (objects[i].getObject().equals(obj)) {
-				return i;
-			}
-		}
 		return 0;
 		
 	}

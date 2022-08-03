@@ -583,6 +583,7 @@ private static int x = -1;
 	        
 	        document.getBody().appendChild(ctx.getCanvas());
 	        count = 0;
+	        GLObjectBuffers.initialize();
 	        Window.requestAnimationFrame(new AnimationFrameCallback() {
 
 				@Override
