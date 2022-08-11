@@ -561,7 +561,7 @@ private static int x = -1;
 				public void handleEvent(Event evt) {
 					// TODO Auto-generated method stub
 					focused = true;
-//					System.out.println("hello world");
+
 					evt.preventDefault();
 					evt.stopPropagation();
 				}
@@ -588,6 +588,8 @@ private static int x = -1;
 	        document.getBody().appendChild(ctx.getCanvas());
 	        count = 0;
 	        GLObjectBuffers.initialize();
+	        width = ctx.getCanvas().getWidth();
+	        height = ctx.getCanvas().getHeight();
 	        Window.requestAnimationFrame(new AnimationFrameCallback() {
 
 				@Override
@@ -975,7 +977,7 @@ private static int x = -1;
 	 * This value will be updated after a call to Display.update().
 	 */
 	public static int getWidth() {
-		return jsWin.getInnerWidth();
+		return width;
 	}
 
 	/**
@@ -988,7 +990,7 @@ private static int x = -1;
 	 * This value will be updated after a call to Display.update().
 	 */
 	public static int getHeight() {
-		return jsWin.getInnerHeight();
+		return height;
 	}
 	
 	/**
