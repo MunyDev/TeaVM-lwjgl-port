@@ -1,7 +1,9 @@
 package org.lwjgl.input;
 
 
-	/*
+	import java.util.Arrays;
+
+/*
 	 * Copyright (c) 2002-2008 LWJGL Project
 	 * All rights reserved.
 	 *
@@ -572,7 +574,9 @@ import org.teavm.webgl2.WebGL2RenderingContext;
 		public static boolean isKeyDown(int key) {
 			return keyArr[key];
 		}
-
+		public static void onFocusLost() {
+			Arrays.fill(keyArr, false);
+		}
 		/**
 		 * Checks whether one of the state keys are "active"
 		 *

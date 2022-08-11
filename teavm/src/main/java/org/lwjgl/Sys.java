@@ -265,7 +265,7 @@ public final class Sys {
 	private static void nReadText(AsyncCallback<String> ac) {
 		
 		ClipboardCallback pc = (res)->{
-			System.out.println("clipboarded");
+//			System.out.println("clipboarded");
 			ac.complete(res);
 		};
 		nReadTextAsync(pc);

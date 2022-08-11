@@ -63,6 +63,7 @@ import org.lwjgl.Sys;
 import org.munydev.teavm.lwjgl.CurrentContext;
 
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 public final class Display {
 	private static boolean wasResized = false;
@@ -478,6 +479,7 @@ private static int x = -1;
 	
 	public static void create(Object... unused) throws Exception {
 //		realJSThread = Sys.getCurrentThread();
+		focused = false;
 		DisplayMode dm = getDisplayMode();
 		if (dm == null) {
 			dm = new DisplayMode(800, 600);
@@ -542,7 +544,8 @@ private static int x = -1;
 					// TODO Auto-generated method stub
 					elem.setWidth(jsWin.getInnerWidth());
 					elem.setHeight(jsWin.getInnerHeight());
-					
+					width = jsWin.getInnerWidth();
+					height = jsWin.getInnerHeight();
 //					((WebGL2RenderingContext) elem.getContext("webgl2")).viewport(0, 0, jsWin.getInnerWidth(), jsWin.getInnerHeight());
 					wasResized = true;
 					evt.preventDefault();
@@ -569,6 +572,7 @@ private static int x = -1;
 				@Override
 				public void handleEvent(Event evt) {
 					// TODO Auto-generated method stub
+					Keyboard.onFocusLost();
 					focused = false;
 					evt.preventDefault();
 					evt.stopPropagation();
