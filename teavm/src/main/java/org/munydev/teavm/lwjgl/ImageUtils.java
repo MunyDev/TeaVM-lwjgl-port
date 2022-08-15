@@ -8,7 +8,10 @@ import java.io.InputStream;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GLObjectBuffers;
 import org.lwjgl.util.GLUtil;
+import org.munydev.fs.FSFile;
+import org.munydev.fs.FSFileInputStream;
 
 import static org.lwjgl.opengl.GL11.*;
 import org.teavm.classlib.impl.Base64Impl;
@@ -25,6 +28,7 @@ import org.teavm.jso.dom.html.HTMLImageElement;
 import org.teavm.jso.typedarrays.ArrayBuffer;
 import org.teavm.jso.typedarrays.Uint8Array;
 import org.teavm.jso.webgl.WebGLRenderingContext;
+import org.teavm.jso.webgl.WebGLTexture;
 import org.teavm.webgl2.WebGL2RenderingContext;
 import org.teavm.jso.dom.events.EventListener;
 
@@ -53,6 +57,37 @@ public class ImageUtils {
 		xhr.open("GET", url, true);
 		xhr.send();
 	}
+	@SuppressWarnings("resource")
+	public static void loadImage(FSFile ff, int id) {
+		new FSFileInputStream(ff, (fin)->{
+//			byte[] b = GLUtil.glWriteArrayToJByteArray(fin.data);
+//			String url = "data:image/png;base64," + Base64.encodeBase64String(b);
+			
+			HTMLImageElement elem = createJSImage();
+			WebGLTexture wgt = (WebGLTexture) GLObjectBuffers.getObject(id);
+			ctx.bindTexture(GL_TEXTURE_2D, wgt);
+			Uint8Array rgb = Uint8Array.create(4);
+			rgb.set(new byte[] {(byte) 255, 0, 0, (byte) 255});
+			ctx.texImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, rgb, 0);
+			elem.addEventListener("load", (ev)->{
+				ctx.bindTexture(GL_TEXTURE_2D, wgt);
+				ctx.texImage2D(GL_TEXTURE_2D, 0, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, elem);
+				
+				if (isPowerOf2(elem.getWidth()) && isPowerOf2(elem.getHeight())) {
+					ctx.generateMipmap(GL_TEXTURE_2D);
+				}else {
+					GL11.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+					GL11.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+					GL11.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+					GL11.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+				}
+				fin.close();
+			});
+			elem.setSrc(fin.getUrl());
+			
+		});
+	}
+	
 	/**
 	 * Lets browser do the encoding
 	 * @param input Any input stream
@@ -107,6 +142,42 @@ public class ImageUtils {
 		elem.setSrc(url);
 		IOUtils.closeQuietly(input);
 		return texID;
+	}
+	/**
+	 * inefficient
+	 * @param in
+	 * @param texID
+	 */
+	public static void loadPng(InputStream in, int texID) {
+		WebGLTexture wgl = (WebGLTexture) GLObjectBuffers.getObject(texID);
+		byte[] b = new byte[200];
+		try {
+			b = IOUtils.toByteArray(in);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		String url = "data:image/png;base64,"+Base64.encodeBase64String(b);
+		HTMLImageElement hie = createJSImage();
+		System.out.println(url);
+		GL11.glBindTexture(GL_TEXTURE_2D, texID);
+//		ctx.texImage2D(GL_TEXTURE_2D, 0, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, hie);
+		hie.addEventListener("load", (ev)->{
+			ctx.bindTexture(WebGLRenderingContext.TEXTURE_2D, wgl);
+			ctx.texImage2D(GL_TEXTURE_2D, 0, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, hie);
+			
+			if (isPowerOf2(hie.getWidth()) && isPowerOf2(hie.getHeight())) {
+				ctx.generateMipmap(GL_TEXTURE_2D);
+			}else {
+				ctx.texParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+				ctx.texParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+				ctx.texParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+				ctx.texParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T, GL_REPEAT);
+				
+			}
+		});
+		hie.setSrc(url);
 	}
 	private static boolean isPowerOf2(int value) {
 		  return (value & (value - 1)) == 0;

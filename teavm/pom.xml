@@ -36,6 +36,11 @@
 		<version>1.15</version>
 		<scope>provided</scope>
 	</dependency>
+	<dependency>
+		<groupId>org.munydev.teavm.fs</groupId>
+		<artifactId>teavm-fs-port</artifactId>
+		<version>A1.0.0</version>
+	</dependency>
 	<!-- https://mvnrepository.com/artifact/org.joml/joml -->
 
 	
@@ -132,7 +137,7 @@
 
               <!-- Optimization level. Valid values are: SIMPLE, ADVANCED, FULL -->
               <optimizationLevel>SIMPLE</optimizationLevel>
-              
+              <entryPointName>inititalizeLWJGL</entryPointName>
             </configuration>
           </execution>
         </executions>

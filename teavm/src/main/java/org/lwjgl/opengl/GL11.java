@@ -749,6 +749,7 @@ public static  boolean	glAreTexturesResident(java.nio.IntBuffer textures, java.n
 		ctx.depthRange((float) zNear,(float) zFar);
     }
 	public static void	glDisable(int cap){
+		ctx.disable(cap);
 		return;
     }
 	public static void	glDisableClientState(int cap){
@@ -1494,10 +1495,10 @@ public static  int	glRenderMode(int mode){
 
     }
 	public static void	glTexCoord2d(double s, double t){
-
+//		currentBatch.texCoord2f(s, t);
     }
 	public static void	glTexCoord2f(float s, float t){
-
+		currentBatch.texCoord2f(s, t);
     }
 	public static void	glTexCoord3d(double s, double t, double r){
 
@@ -1578,22 +1579,22 @@ public static  int	glRenderMode(int mode){
 		System.out.println("1D textures are unsupported");
     }
 	public static void	glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, java.nio.ByteBuffer pixels){
-		ctx.texImage2D(target, level, internalformat, width, height, border, format, type, Uint8Array.create(GLUtil.glCreateBufferFromJava(pixels)), type);
+		ctx.texImage2D(target, level, internalformat, width, height, border, format, type, Uint8Array.create(GLUtil.glCreateBufferFromJava(pixels)), 0);
     }
 	public static void	glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, java.nio.DoubleBuffer pixels){
-		ctx.texImage2D(target, level, internalformat, width, height, border, format, type, Float64Array.create(GLUtil.glCreateBufferFromJava(pixels)), type);
+		ctx.texImage2D(target, level, internalformat, width, height, border, format, type, Float64Array.create(GLUtil.glCreateBufferFromJava(pixels)), 0);
     }
 	public static void	glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, java.nio.FloatBuffer pixels){
-		ctx.texImage2D(target, level, internalformat, width, height, border, format, type, Float32Array.create(GLUtil.glCreateBufferFromJava(pixels)), type);
+		ctx.texImage2D(target, level, internalformat, width, height, border, format, type, Float32Array.create(GLUtil.glCreateBufferFromJava(pixels)), 0);
     }
 	public static void	glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, java.nio.IntBuffer pixels){
-		ctx.texImage2D(target, level, internalformat, width, height, border, format, type, Int32Array.create(GLUtil.glCreateBufferFromJava(pixels)), type);
+		ctx.texImage2D(target, level, internalformat, width, height, border, format, type, Int32Array.create(GLUtil.glCreateBufferFromJava(pixels)), 0);
     }
 	public static void	glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, long pixels_buffer_offset){
 		
     }
 	public static void	glTexImage2D(int target, int level, int internalformat, int width, int height, int border, int format, int type, java.nio.ShortBuffer pixels){
-		ctx.texImage2D(target, level, internalformat, width, height, border, format, type, Int16Array.create(GLUtil.glCreateBufferFromJava(pixels)), type);
+		ctx.texImage2D(target, level, internalformat, width, height, border, format, type, Int16Array.create(GLUtil.glCreateBufferFromJava(pixels)), 0);
     }
 	public static void	glTexParameter(int target, int pname, java.nio.FloatBuffer param){
 		ctx.texParameterf(target, pname, param.get());

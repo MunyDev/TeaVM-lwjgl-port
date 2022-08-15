@@ -4,6 +4,8 @@ package org.lwjgl.util;
 
 import java.nio.*;
 
+import org.teavm.jso.JSBody;
+import org.teavm.jso.JSObject;
 import org.teavm.jso.typedarrays.*;
 
 public class GLUtil {
@@ -109,12 +111,18 @@ public class GLUtil {
 			d.put(val);
 		}
 	}
+	
+	@JSBody(script="window.console.log(obj);", params= {"obj"})
+	public static native void log(JSObject obj);
+	
 	public static ArrayBuffer glCreateBufferFromJava(ByteBuffer data) {
+		System.out.println(data.remaining());
 		ArrayBuffer arr = ArrayBuffer.create(data.remaining() * Byte.BYTES);
 		Uint8Array dv = Uint8Array.create(arr);
 		byte[] exp = new byte[data.remaining()];
 		data.get(exp);
 		dv.set(exp);
+		log(dv);
 		return arr;
 	}
 	public static ArrayBuffer glCreateBufferFromJava(FloatBuffer data) {
