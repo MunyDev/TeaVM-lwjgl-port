@@ -36,7 +36,7 @@ public class Batch {
 	private static boolean initialized = false;
 	private static WebGLShader vertexShader;
 	private static WebGLShader fragmentShader;
-	public static final int DEFAULT_LENGTH = 4096; //Big enough
+	public static final int DEFAULT_LENGTH = 65536; //Big enough
 	public WebGLUniformLocation hasTexCoords, hasNormals, hasColors;
 	public boolean hasTexCoordsb = false, hasNormalsb = false, hasColorsb = false;
 	private int numVertices = 0;
@@ -141,7 +141,7 @@ public class Batch {
 //		String fsource;
 		VBO = ctx.createBuffer();
 		
-		batch = ByteBuffer.allocateDirect(DEFAULT_LENGTH).order(ByteOrder.nativeOrder()).asFloatBuffer();
+		batch = ByteBuffer.allocate(DEFAULT_LENGTH).order(ByteOrder.nativeOrder()).asFloatBuffer();
 		ctx.bindBuffer(ARRAY_BUFFER, VBO);
 		ctx.bufferData(ARRAY_BUFFER, DEFAULT_LENGTH, DYNAMIC_DRAW);
 //		ConstantMapper cm = ConstantMapper.cmRenderModes;
@@ -223,6 +223,9 @@ public class Batch {
 		
 		WebGLBuffer wglb = ctx.createBuffer();
 //		log(Float32Array.create(GLUtil.glCreateBufferFromJava(batch)));GL11.glV
+		if (batch.remaining() == 0) {
+			return;
+		}
 		ctx.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, wglb);
 		ctx.bufferData(WebGLRenderingContext.ARRAY_BUFFER, GLUtil.glCreateBufferFromJava(batch), DYNAMIC_DRAW);
 		int vertexAttrib = ctx.getAttribLocation(wglp1, "vertices");
