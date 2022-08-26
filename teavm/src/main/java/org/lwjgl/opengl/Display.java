@@ -357,6 +357,9 @@ private static int x = -1;
 	}
 	@JSBody(script = "return window.document.visibilityState == \"visible\";")
 	public static native boolean nisVisible();
+	
+	@JSBody(script = "let ptrLock = canvas.requestPointerLock(); if (ptrLock instanceof Promise){ptrLock.catch(()=>{});};", params= {"canvas"})
+	public static native void requestLock(HTMLCanvasElement elem);
 	/** @return true if the window is visible, false if not */
 	public static boolean isVisible() {
 		return nisVisible();

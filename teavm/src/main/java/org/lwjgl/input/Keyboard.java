@@ -47,6 +47,7 @@ import org.lwjgl.opengl.Display;
 import org.munydev.teavm.lwjgl.CurrentContext;
 import org.teavm.jso.dom.events.EventListener;
 import org.teavm.jso.dom.events.KeyboardEvent;
+import org.teavm.jso.webgl.WebGLRenderingContext;
 import org.teavm.webgl2.WebGL2RenderingContext;
 
 	/**
@@ -482,7 +483,7 @@ import org.teavm.webgl2.WebGL2RenderingContext;
 				@Override
 				public void handleEvent(KeyboardEvent evt) {
 					// TODO Auto-generated method stub
-					if (Mouse.isSupposedToBeGrabbed && evt.getCode() != "Escape") ((WebGL2RenderingContext) CurrentContext.getContext()).getCanvas().requestPointerLock();
+					if (Mouse.isSupposedToBeGrabbed && evt.getCode() != "Escape") Display.requestLock(((WebGLRenderingContext)CurrentContext.getContext()).getCanvas());
 					if (evt.isRepeat()) return;
 					
 					if (keyMap.containsKey(evt.getCode())) {

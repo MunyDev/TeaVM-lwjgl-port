@@ -10,6 +10,7 @@ import java.util.Map;
 import org.teavm.jso.dom.html.HTMLCanvasElement;
 import org.teavm.jso.dom.html.HTMLDocument;
 import org.teavm.jso.webgl.WebGLRenderingContext;
+import org.lwjgl.opengl.Display;
 import org.munydev.teavm.lwjgl.CurrentContext;
 import org.teavm.jso.dom.events.*;
 
@@ -200,7 +201,7 @@ public class Mouse {
 			}
 			
 		});
-		hce.addEventListener("pointerlockchange", new EventListener<Event>() {
+		HTMLDocument.current().addEventListener("pointerlockchange", new EventListener<Event>() {
 
 			@Override
 			public void handleEvent(Event evt) {
@@ -227,7 +228,8 @@ public class Mouse {
 				eventButton = evt.getButton();
 				eventState = true;
 				if (isSupposedToBeGrabbed) {
-					((WebGLRenderingContext)CurrentContext.getContext()).getCanvas().requestPointerLock();
+					Display.requestLock(((WebGLRenderingContext)CurrentContext.getContext()).getCanvas());
+					
 				}
 				evt.preventDefault();
 				evt.stopPropagation();
@@ -285,7 +287,7 @@ public class Mouse {
 			public void handleEvent(MouseEvent evt) {
 				// TODO Auto-generated method stub
 				if (isSupposedToBeGrabbed) {
-					((WebGLRenderingContext)CurrentContext.getContext()).getCanvas().requestPointerLock();
+					Display.requestLock(((WebGLRenderingContext)CurrentContext.getContext()).getCanvas());
 				}
 				evt.preventDefault();
 				evt.stopPropagation();
