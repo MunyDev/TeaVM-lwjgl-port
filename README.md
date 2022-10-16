@@ -31,6 +31,7 @@ For these featurs a new repo will be created for this called TeaVM-FS-Port
 ### Fonts
  - TeaVM-Font-Port
  -Loads fonts using browser apis.
- 
+ ## Requirements
+ This requires the TeaVM-FS-Port and the TeaVM-Font-Port to build a jar file. You need these because they are not in the central repository!  
  Use this as a library by looking in the packages section.
  DON'T USE TESTING, USE org.munydev.ports.lwjgl
